@@ -1912,92 +1912,52 @@ const PipelineTemp = () => {
                                 </Box>
                               )}
                             </Box> */}
+                            
+
+
                             <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 2 }}>
                               {stage.automations.length > 0 && (
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                                   {stage.automations.map((automation, idx) => (
-                                    <Box>
-                                      <Card key={idx} sx={{ width: '100%', }}>
-                                        <CardContent>
-                                          <Typography variant="h6" component="div">
-                                            <b
-                                              onClick={() => {
-                                                handleUpdateDrawer();
-                                                setAutomationEditType(automation.type);
-                                                setAutomationSelectEdit(automation.template.label);
-
-                                              }}
-                                              style={{ cursor: 'pointer' }}
-                                            >
-                                              {automation.type}
-                                              {console.log("vinayak test ", automation.template.label)}
-                                            </b>
+                                    <Card key={idx} sx={{ width: '100%', }}>
+                                      <CardContent>
+                                        <Typography variant="h6" component="div">
+                                          <b>{automation.type}</b>
+                                        </Typography>
+                                        {automation.template && (
+                                          <Typography color="text.secondary">
+                                            {automation.template.label}
                                           </Typography>
-                                          {automation.template && (
-                                            <Typography color="text.secondary">
-                                              {automation.template.label}
-                                            </Typography>
-                                          )}
-                                          {/* Display tags with tag color and name */}
-                                          {automation.tags && automation.tags.length > 0 && (
-                                            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", marginTop: 2 }}>
-                                              <Typography variant="body2">Conditions:</Typography>
-                                              {automation.tags.map((tag) => (
-                                                <Box
-                                                  key={tag._id}
-                                                  sx={{
-                                                    backgroundColor: tag.tagColour,
-                                                    color: "#fff",
-                                                    fontSize: "12px",
-                                                    fontWeight: "600",
-                                                    textAlign: "center",
-                                                    padding: "3px 8px",
-                                                    borderRadius: "12px",
-                                                    marginBottom: "4px",
-                                                  }}
-                                                >
-                                                  {tag.tagName}
-                                                </Box>
-                                              ))}
-                                            </Box>
-                                          )}
-                                        </CardContent>
-                                      </Card>
-
-                                      {/* edit automation drawer */}
-                                      <Drawer
-                                        anchor="right"
-                                        open={updateDrawer}
-                                        onClose={handleUpdateDrawerClose}
-                                        PaperProps={{
-                                          id: "tag-drawer",
-                                          sx: {
-                                            borderRadius: isSmallScreen
-                                              ? "0"
-                                              : "10px 0 0 10px",
-                                            width: isSmallScreen ? "100%" : 500,
-                                            maxWidth: "100%",
-                                            [theme.breakpoints.down("sm")]: {
-                                              width: "100%",
-                                            },
-                                          },
-                                        }}
-                                      >
-                                        <Typography>Automation Edit</Typography>
-                                        {automation.type}
-
-
-                                        {renderActionContentedit(automationSelectEditType, automationSelectEdit, index)}
-
-                                      </Drawer>
-                                    </Box>
+                                        )}
+                                        {/* Display tags with tag color and name */}
+                                        {automation.tags && automation.tags.length > 0 && (
+                                          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", marginTop: 2 }}>
+                                            <Typography variant="body2">Conditions:</Typography>
+                                            {automation.tags.map((tag) => (
+                                              <Box
+                                                key={tag._id}
+                                                sx={{
+                                                  backgroundColor: tag.tagColour,
+                                                  color: "#fff",
+                                                  fontSize: "12px",
+                                                  fontWeight: "600",
+                                                  textAlign: "center",
+                                                  padding: "3px 8px",
+                                                  borderRadius: "12px",
+                                                  marginBottom: "4px",
+                                                }}
+                                              >
+                                                {tag.tagName}
+                                              </Box>
+                                            ))}
+                                          </Box>
+                                        )}
+                                      </CardContent>
+                                    </Card>
                                   ))}
                                 </Box>
                               )}
                             </Box>
-
-
-                            {/* update drwer automation */}
 
 
                             <Typography variant="h6" sx={{ fontSize: '15px', mt: 2, fontWeight: 'bold' }}>Automove</Typography>
@@ -2056,3 +2016,91 @@ const PipelineTemp = () => {
 };
 
 export default PipelineTemp;
+
+
+
+
+
+{/* <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 2 }}>
+                              {stage.automations.length > 0 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+                                  {stage.automations.map((automation, idx) => (
+                                    <Box>
+                                      <Card key={idx} sx={{ width: '100%', }}>
+                                        <CardContent>
+                                          <Typography variant="h6" component="div">
+                                            <b
+                                              onClick={() => {
+                                                handleUpdateDrawer();
+                                                setAutomationEditType(automation.type);
+                                                setAutomationSelectEdit(automation.template.label);
+
+                                              }}
+                                              style={{ cursor: 'pointer' }}
+                                            >
+                                              {automation.type}
+                                              {console.log("vinayak test ", automation.template.label)}
+                                            </b>
+                                          </Typography>
+                                          {automation.template && (
+                                            <Typography color="text.secondary">
+                                              {automation.template.label}
+                                            </Typography>
+                                          )}
+                                        
+                                          {automation.tags && automation.tags.length > 0 && (
+                                            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", marginTop: 2 }}>
+                                              <Typography variant="body2">Conditions:</Typography>
+                                              {automation.tags.map((tag) => (
+                                                <Box
+                                                  key={tag._id}
+                                                  sx={{
+                                                    backgroundColor: tag.tagColour,
+                                                    color: "#fff",
+                                                    fontSize: "12px",
+                                                    fontWeight: "600",
+                                                    textAlign: "center",
+                                                    padding: "3px 8px",
+                                                    borderRadius: "12px",
+                                                    marginBottom: "4px",
+                                                  }}
+                                                >
+                                                  {tag.tagName}
+                                                </Box>
+                                              ))}
+                                            </Box>
+                                          )}
+                                        </CardContent>
+                                      </Card>
+
+                                    
+                                      <Drawer
+                                        anchor="right"
+                                        open={updateDrawer}
+                                        onClose={handleUpdateDrawerClose}
+                                        PaperProps={{
+                                          id: "tag-drawer",
+                                          sx: {
+                                            borderRadius: isSmallScreen
+                                              ? "0"
+                                              : "10px 0 0 10px",
+                                            width: isSmallScreen ? "100%" : 500,
+                                            maxWidth: "100%",
+                                            [theme.breakpoints.down("sm")]: {
+                                              width: "100%",
+                                            },
+                                          },
+                                        }}
+                                      >
+                                        <Typography>Automation Edit</Typography>
+                                        {automation.type}
+
+
+                                        {renderActionContentedit(automationSelectEditType, automationSelectEdit, index)}
+
+                                      </Drawer>
+                                    </Box>
+                                  ))}
+                                </Box>
+                              )}
+                            </Box> */}

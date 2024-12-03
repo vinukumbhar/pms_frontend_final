@@ -9,7 +9,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { Divider, IconButton, FormControlLabel, MenuItem, InputLabel, InputAdornment, Checkbox, Box, Switch, Chip, Button, CircularProgress, Drawer, TextField, Autocomplete, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {  Modal,Divider, IconButton, FormControlLabel, MenuItem, InputLabel, InputAdornment, Checkbox, Box, Switch, Chip, Button, CircularProgress, Drawer, TextField, Autocomplete, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 // import Select from 'react-select';
 import CloseIcon from "@mui/icons-material/Close";
 import { differenceInMinutes, differenceInHours, differenceInDays } from "date-fns";
@@ -741,11 +741,19 @@ const Pipeline = ({ charLimit = 4000 }) => {
     const dueDateFormatted = formatDate(job.DueDate);
 
     const [isHovered, setIsHovered] = useState(false);
+    const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
     const handleDelete = (_id) => {
-      const requestOptions = {
-        method: "DELETE",
-        redirect: "follow",
-      };
+
+     
+        const requestOptions = {
+          method: "DELETE",
+          redirect: "follow",
+        };
+
+      
 
       fetch(`${JOBS_API}/workflow/jobs/job/` + _id, requestOptions)
         .then((response) => {
@@ -763,6 +771,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
           console.error(error);
           toast.error("Failed to delete item");
         });
+      
     };
 
 
@@ -1269,7 +1278,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
       <Box className={`job-card ${isDragging ? "dragging" : ""}`} ref={drag} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onDrop={updateLastUpdatedTime}>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "10px" }}>
           <Typography color={"black"}>{job.Account.join(", ")}</Typography>
-          {isHovered ? <RiDeleteBin5Line onClick={() => handleDelete(job.id)} style={{ cursor: "pointer" }} /> : <span className="automation-batch">1</span>}
+          {isHovered ? <RiDeleteBin5Line  onClick={handleOpen} style={{ cursor: "pointer" }} /> : <span className="automation-batch">1</span>}
         </Box>
 
         <Typography sx={{ fontWeight: "bold", marginBottom: "8px", cursor: "pointer" }} color={"black"} onClick={() => handleEditJobCard(job.id)}>
@@ -1296,6 +1305,40 @@ const Pipeline = ({ charLimit = 4000 }) => {
           {timeAgo()}
         </Typography>
 
+        <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 300,
+            bgcolor: "background.paper",
+            p: 4,
+            boxShadow: 24,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h6" component="h2" mb={2}>
+            Confirm Deletion
+          </Typography>
+          <Typography variant="body1" mb={4}>
+            Are you sure you want to delete this job?
+          </Typography>
+          <Box display="flex" gap={3} ml={15}>
+            <Button variant="text" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(job.id)}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
 
         {/* edit job */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -1202,7 +1202,7 @@ const Invoices = ({ charLimit = 4000 }) => {
               <Button variant="contained" color="primary" onClick={createinvoice}>
                 Save
               </Button>
-              <Button variant="outlined">Cancel</Button>
+              <Button variant="outlined" onClick={handleClose}>Cancel</Button>
             </Box>
           </Box>
         </Box>
