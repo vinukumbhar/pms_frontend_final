@@ -1,0 +1,22 @@
+
+  .right-container .login-logo {
+    display: none;
+  }
+  /* ::-webkit-scrollbar {
+    display: none; 
+} */
+  @media only screen and (max-width: 768px) {
+    .right-container .login-logo {
+      display: block;
+    }
+
+    .storeBtn {
+      flex-direction: column;
+    }
+  }
+  
+
+
+
+  
+  

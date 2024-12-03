@@ -1,0 +1,23 @@
+
+.light-theme{
+ 
+    --color-sidebar-bg:  #ffffff;
+
+    --color-text: #000000;
+   
+  }
+  
+  .dark-theme{
+    
+    --color-sidebar-bg: #1a1a1a;
+   
+    --color-text: #ffffff;
+   
+  }
+
+#tag-drawer{
+    background-color: var(--color-sidebar-bg);
+}
+.custom-label{
+  color: red;
+}

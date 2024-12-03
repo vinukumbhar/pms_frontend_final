@@ -1,0 +1,63 @@
+/* @import '../../App.css'; */
+@import url('../../App.css');
+
+
+.jobtemp-form{
+    
+    /* margin: 50px; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+     border: 2px solid #c6c7c7; 
+    border-radius: 10px;
+    margin: 20px;
+    
+}
+
+
+
+.create-job-form{
+    padding: 10px;
+    border-right: 2px solid #c6c7c7; ;
+}
+.jobtempShortcodes{
+   color:var( --primary-color) ; 
+   font-weight: bold;
+   margin: 20px;
+   display: flex;
+   align-items: center;
+   gap:5px;
+   cursor: pointer;
+}
+
+.starts_due-date-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.job-template-switch-container{
+  display: flex;
+  align-items: center;
+  gap:10px
+}
+button {
+    font-weight: 550;
+    border-radius: 10px;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  
+  button.save {
+    background-color: rgb(58, 145, 245);
+    color: #fff;
+  }
+  
+  button.cancel {
+    background-color: transparent;
+    color: black; 
+    border:1px solid #c6c7c7
+  }
+ 

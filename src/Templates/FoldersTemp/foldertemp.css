@@ -1,0 +1,249 @@
+.folder-temp {
+  border: 1px solid #928f8f;
+  border-radius: 10px;
+}
+
+.folder-temp .folder-temp-header {
+  padding: 10px;
+}
+
+.folder-temp .under-line {
+  border-top: 1px solid #928f8f;
+}
+
+.folder-temp .folder-temp-container {
+  padding: 15px;
+}
+
+.folder-label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.folder-label label {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.folder-label input[type="text"] {
+  padding: 8px 12px;
+  border: 2px solid rgb(100, 149, 237);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* Optional: Add styles for placeholder text */
+.folder-label input[type="text"]::placeholder {
+  color: #999;
+}
+
+.create-folder {
+  margin-top: 10px;
+}
+
+.folder-table {
+  margin-top: 20px;
+}
+
+.folder-btns {
+  padding: 15px;
+}
+
+.temp_buttons {
+  margin-top: 15px;
+}
+
+.form-container {
+  margin-top: 20px;
+}
+
+.folder-form-container {
+  position: fixed;
+  top: 0;
+  right: -500px;
+  width: 500px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: right 0.3s ease-in-out;
+  z-index: 100;
+  padding: 20px;
+}
+
+.folder-form-open {
+  right: 0;
+}
+
+.folder-form-container .folder-header {
+  display: flex;
+  justify-content: space-between;
+}
+.folder-container {
+  margin-top: 20px;
+}
+
+.client_upload_documents {
+  position: relative;
+}
+
+.shared_docs {
+  position: relative;
+}
+
+.private {
+  position: relative;
+}
+
+.create-folder-buttons,
+.temp_buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* css for toggle HiDotsVertical icon */
+.dropdown-options {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px #4f546733;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  z-index: 1;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.dropdown-options span {
+  display: block;
+  cursor: pointer;
+  margin-bottom: 15px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.uploads-documents-links {
+  display: flex;
+  gap: 20px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 10px;
+    width: 95%;
+  }
+}
+
+.main-content {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+}
+
+/* Responsive sidebar */
+@media (max-width: 768px) {
+  .sidebarfolder {
+    width: 95%;
+    /* Take up full width */
+  }
+}
+
+/* Main content styling */
+.main-content {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+}
+
+.close-icon {
+  position: absolute;
+  /* top: 10px; */
+  left: 800px;
+  cursor: pointer;
+}
+
+.Save {
+  color: #1976d3;
+  border: 1px solid #1976d3;
+  border-radius: 12px;
+  background-color: white;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cnsl {
+  color: #1976d3;
+  border: 1px solid #1976d3;
+  border-radius: 12px;
+  background-color: white;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.client_upload_documents p {
+  font-size: 13px;
+  color: #1976d3;
+}
+
+.shared_docs p {
+  font-size: 13px;
+  color: #1976d3;
+}
+
+.private p {
+  font-size: 13px;
+  color: #1976d3;
+}
+
+@media (max-width: 768px) {
+  .sidebarfolder {
+    width: 100%;
+    /* Take up full width */
+    margin-bottom: 10px;
+    /* Add space between sidebar and main content */
+  }
+
+  .folder-form {
+    width: 75%;
+  }
+}
+
+.upload-form-container {
+  position: fixed;
+  top: 0;
+  right: -500px;
+  width: 500px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: right 0.3s ease-in-out;
+  z-index: 100;
+  padding: 20px;
+}
+.upload-form-open {
+  right: 0;
+}
+.upload-form-container .folder-header {
+  display: flex;
+  justify-content: space-between;
+}
+.uploads-btns {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+.upload-container {
+  margin-top: 25px;
+}

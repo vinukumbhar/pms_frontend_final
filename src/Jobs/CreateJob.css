@@ -1,0 +1,36 @@
+/* CreateJob.css */
+
+/* Container styles for smaller screens */
+@media (max-width: 768px) {
+    .left-side-container,
+    .right-side-container {
+      width: 100%;
+      
+    }
+  
+    .MuiGrid-container {
+      display: flex;
+      flex-direction: column;
+   
+      /* align-items: center; */
+    }
+  
+    .MuiGrid-item {
+      width: 100%;
+      margin-left: 0 !important; /* Override margin-left for Grid items */
+    }
+  
+    .MuiBox-root {
+      width: 100%;
+      margin-top: 16px !important; /* Override margin-top for Box */
+    }
+  
+    .MuiTypography-h5 {
+      font-size: 1.2rem;
+    }
+  
+    .MuiButton-root {
+      width: 100%;
+    }
+  }
+  

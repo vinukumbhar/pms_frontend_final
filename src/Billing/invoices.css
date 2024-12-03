@@ -1,0 +1,7 @@
+/* .discount-amount{
+    color: green;
+    font-weight:bold ;
+} */
+.create-invoice::-webkit-scrollbar{
+display: none;
+}

@@ -1,0 +1,61 @@
+
+
+.stage {
+  height: 100vh;
+  overflow-y: auto;
+  min-width: 180px;
+  display: flex;
+
+  flex-direction: column;
+  /* border: 1px solid #000; */
+  border-radius: 8px;
+  /* background-color: #fafafa; */
+  /* background-color: var(--color-header-bg); */
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  transition: background-color 0.3s ease;
+}
+
+.stage::-webkit-scrollbar {
+  display: none;
+}
+
+.stage-container {
+  /* border: 1px solid red; */
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* .stage-name {
+  color:#5499c7;
+} */
+
+.job-card {
+  width: 150px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: move;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card:hover,
+.stepsCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
+.automation-batch{
+  background-color: red;
+  border-radius: 50%;
+  padding: 2px 7px;
+  color: #fff;
+  font-size: 15px;
+}
+.jobs-add-container::-webkit-scrollbar{
+  display: none;
+}

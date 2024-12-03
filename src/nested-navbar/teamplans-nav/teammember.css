@@ -1,0 +1,41 @@
+.team-form-container {
+    position: fixed;
+    top: 0;
+    right: -550px; 
+    width: 550px;
+    height: 100%;
+    background-color: var( --table-tr-background);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    transition: right 0.3s ease-in-out;
+    border-radius: 10px 0 0 10px;
+  
+  }
+  
+  .team-form-open {
+    right: 0;
+  }
+   p{
+    color: var( --text-color);
+  }
+  .team-form-container .team-header{
+    display: flex;
+    justify-content: space-between;
+    background: #ccc;
+    padding: 20px;
+  }
+  .team-form-container .close-form-icon{
+    cursor: pointer;
+    font-size: 25px;
+  }
+  .team-content-form{
+    padding: 20px;
+  }
+  .rights-switches{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+  .rights-switches .grid-one{
+    padding: 10px 0;
+  }

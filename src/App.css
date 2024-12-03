@@ -1,0 +1,105 @@
+.light-theme {
+  --color-sidebar-bg: #ffffff;
+  --color-header-bg: #ffffff;
+  --color-main-bg: #ffffff;
+  --color-text: #000000;
+  --color-menu-icon: #000000;
+  --color-navbar-temp: #1976d2;
+  --color-stage-back: #fafafa;
+}
+
+.dark-theme {
+  --color-sidebar-bg: #1a1a1a;
+  --color-header-bg: #333333;
+  --color-main-bg: #121212;
+  --color-text: #ffffff;
+  --color-menu-icon: #000000;
+  --color-navbar-temp: #ffffff;
+  --color-stage-back: #333333;
+}
+
+#steps-label {
+  color: var(--color-text);
+}
+
+.priority-custom-label,
+.pipeline-lable,
+.tag-input-label,
+.email-input-label,
+.task-input-label,
+.jobtemp-input-label,
+.custom-input-label,
+.organizer-input-label,
+.job-input-label {
+  color: var(--color-text);
+  font-size: 1.1rem;
+}
+
+.vertical-line {
+  border-left: 1px solid var(--color-text);
+}
+.stage {
+  background-color: var(--color-stage-back);
+  color: var(--color-text);
+}
+
+.firmtemp-nav a {
+  color: var(--color-navbar-temp);
+}
+.input-label {
+  color: var(--color-text);
+}
+
+/* .stage{
+  background-color: red;
+} */
+
+.automove-dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  top: 280px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* margin-top: 5px; */
+  z-index: 1; /* Ensure the dropdown appears above other elements */
+  max-height: 200px; /* Limit the height */
+  overflow-y: auto; /* Enable scrolling */
+  width: 200px; /* Match the width of the parent element */
+}
+.automove-dropdown li {
+  list-style: none;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-left: 8px;
+}
+.automove-dropdown2 {
+  /* position: absolute; */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  top: 280px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* margin-top: 5px; */
+  z-index: 1; /* Ensure the dropdown appears above other elements */
+  max-height: 200px; /* Limit the height */
+  overflow-y: auto; /* Enable scrolling */
+  width: 200px; /* Match the width of the parent element */
+}
+.automove-dropdown2 li {
+  cursor: pointer;
+  margin-top: 5px;
+  margin-left: 8px;
+}
+
+.table-wrapper {
+  position: relative;
+  overflow-x: auto; /* Allows horizontal scrolling */
+}
+
+.fixed-column {
+  position: sticky;
+  left: 0;
+  background-color: white; /* Ensure background is white */
+  z-index: 1; /* Keeps the fixed column on top */
+}

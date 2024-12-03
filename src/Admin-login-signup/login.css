@@ -1,0 +1,123 @@
+.loginpage {
+  display: flex;
+
+  flex-direction: row;
+}
+
+.wbtext {
+  color: white;
+  font-family: sans-serif;
+  font-size: 50px;
+  font-weight: 700;
+}
+
+.sociallogos {
+  color: white;
+  height: 45px;
+  width: 45px;
+}
+
+.fontchange {
+  color: white;
+  width: 500px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 100px;
+}
+
+.loginas {
+  padding: 10px;
+  height: 50px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-evenly;
+
+  width: 400px;
+}
+
+.logininfo {
+  height: 100vh;
+  background-color: dodgerblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logininput {
+  padding: 10%;
+}
+
+@media only screen and (max-width: 768px) {
+  .fontchange {
+    width: 80%;
+  }
+
+  .LOGO {
+    width: 200px;
+    height: auto;
+  }
+
+  .sociallogos {
+    width: 45px;
+    height: 45px;
+  }
+
+  .wbtext {
+    font-size: 30px;
+  }
+
+  .loginpage {
+    flex-direction: column-reverse;
+  }
+
+  .loginas {
+    width: 80%;
+  }
+
+  .logininfo {
+    width: 100%;
+  }
+
+  .logininput {
+    width: 100%;
+    padding: 0;
+  }
+
+  .loginalign {
+    width: 40vh;
+  }
+}
+.donthaveacc {
+  text-align: center;
+}
+.route-links {
+  text-decoration: none;
+  color: blue;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 570px) {
+  .loginpage {
+    flex-direction: column-reverse;
+  }
+
+  .logininfo {
+    width: 100%;
+  }
+
+  .logininput {
+    width: 100%;
+  }
+
+  .loginalign {
+    width: 100%;
+  }
+
+  .sociallogos {
+    width: 30px;
+    height: 30px;
+  }
+}

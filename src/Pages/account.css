@@ -1,0 +1,8 @@
+.MRT_TableHeadCellFilterContainer {
+    /* background-color: lightblue; */
+    /* margin-top: 10px; */
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    /* border-radius: 5px; */
+  }

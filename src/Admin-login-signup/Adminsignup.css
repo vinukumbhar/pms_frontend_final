@@ -1,0 +1,96 @@
+/* ToggleButton.css */
+
+  .case5 .slider-toggle-button.active {
+    /* background-color: #2ecc71; */
+    background-color: #043a77;
+  }
+  .case5 .selectbar {
+    width: 800px;
+    margin-left: 100px;
+    margin-top: 30px;
+  }
+  .case5 .selection {
+    margin-left: 100px;
+    margin-top: 30px;
+  }
+  
+  @media screen and (max-width: 480px) {
+    .case5 .selectbar {
+      width: 360px;
+      margin-left: 15px;
+    }
+    .case5 .selection {
+      margin-top: 30px;
+    }
+  }
+
+
+  .case7toggle-button.active {
+    /* background-color: #2ecc71; */
+    background-color: #043a77;
+  }
+
+  /* //todo==============================case4================= */
+.case8 {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* background-color: #f4f4f4; */
+  }
+  .case8 .container {
+    width: 500px;
+    padding: 20px;
+    /* background-color: #fff; */
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    border-radius: 30px;
+    text-align: left;
+  }
+  .case8 label {
+    position: relative;
+    display: block;
+    text-align: left;
+    font-size: small;
+    font-weight: 500;
+    color: gray;
+  }
+  
+  .case8 select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  
+  @media screen and (max-width: 480px) {
+    .case8 .container {
+      width: 400px;
+      padding: 20px;
+      /* background-color: #fff; */
+      /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+      border-radius: 30px;
+      text-align: center;
+    }
+  }
+  
+  
+  
+  
+  @media only screen and (max-width: 900px) {
+  
+    .message {
+  
+      justify-content: center;
+      margin-left: 5%;
+    }
+  
+    .message p {
+  
+      font-size: 14px;
+      width: 300px;
+    }
+  }

@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.6d8a228e.css",
+    "main.js": "/static/js/main.dc0f685f.js",
+    "static/js/239.d4d38b47.chunk.js": "/static/js/239.d4d38b47.chunk.js",
+    "static/js/213.4ca773a8.chunk.js": "/static/js/213.4ca773a8.chunk.js",
+    "static/js/455.c9c4b70e.chunk.js": "/static/js/455.c9c4b70e.chunk.js",
+    "static/js/453.cfa224d8.chunk.js": "/static/js/453.cfa224d8.chunk.js",
+    "static/media/png": "/static/media/1e7b63404cd2fb8e6525b2fd4ee4d286.b0275d38b7b78d6dd461.png",
+    "static/media/setting.png": "/static/media/setting.e3878db69aa4923956e5.png",
+    "static/media/logoAdmin.png": "/static/media/logoAdmin.de2fd20adde844f8f29c.png",
+    "static/media/apple.png": "/static/media/apple.99c9ac4599ed3135214a.png",
+    "static/media/android.png": "/static/media/android.07adca2a47c42c491fad.png",
+    "index.html": "/index.html",
+    "static/media/Logo.svg": "/static/media/Logo.3f4c9508ad22666e1bc65c5931f68ffc.svg",
+    "main.6d8a228e.css.map": "/static/css/main.6d8a228e.css.map",
+    "main.dc0f685f.js.map": "/static/js/main.dc0f685f.js.map",
+    "239.d4d38b47.chunk.js.map": "/static/js/239.d4d38b47.chunk.js.map",
+    "213.4ca773a8.chunk.js.map": "/static/js/213.4ca773a8.chunk.js.map",
+    "455.c9c4b70e.chunk.js.map": "/static/js/455.c9c4b70e.chunk.js.map",
+    "453.cfa224d8.chunk.js.map": "/static/js/453.cfa224d8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6d8a228e.css",
+    "static/js/main.dc0f685f.js"
+  ]
+}
