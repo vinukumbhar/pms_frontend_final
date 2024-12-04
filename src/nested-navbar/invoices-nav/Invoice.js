@@ -149,7 +149,7 @@ const Invoice = () => {
 
   const handlePrint = async (_id) => {
     try {
-      const response = await fetch(`${INVOICES_API}/workflow/invoices/invoice/${_id}`);
+      const response = await fetch(`${INVOICES_API}/workflow/invoices/invoice/invoiceforprint/${_id}`);
       const invoiceData = await response.json();
       console.log(invoiceData);
       const accountId = invoiceData.invoice.account;

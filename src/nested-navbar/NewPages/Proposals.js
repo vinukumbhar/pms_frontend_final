@@ -72,7 +72,7 @@ const Proposals = () => {
   };
   const handlePrint = async (_id) => {
     try {
-      const url = `${PROPOSAL_API}/proposalandels/proposalaccountwise/${_id}`;
+      const url = `${PROPOSAL_API}/proposalandels/proposalaccountwise/proposalaccountwiseforprint/${_id}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch proposal for printing");
