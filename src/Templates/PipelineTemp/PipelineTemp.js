@@ -254,6 +254,7 @@ const PipelineTemp = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [tempSelectedTags, setTempSelectedTags] = useState([]);
+
   const handleAddConditions = () => {
     setIsConditionsFormOpen(!isConditionsFormOpen);
   };
@@ -1229,6 +1230,7 @@ const PipelineTemp = () => {
     // Implement logic for editing here
     // console.log("Edit action triggered for template id: ", templateId);
     navigate('PipelineTemplateUpdate/' + _id)
+    
   };
 
 

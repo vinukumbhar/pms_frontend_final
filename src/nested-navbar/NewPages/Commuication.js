@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { FiPlusCircle } from "react-icons/fi";
 import {
   Container, Box, Button, Typography, Chip, Drawer, TextField, InputLabel, Autocomplete, Switch, FormControlLabel, Divider, List, ListItem, ListItemText, Popover, IconButton, Checkbox,
@@ -25,9 +25,32 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import { LoginContext } from '../../Sidebar/Context/Context'
 
 const Communication = () => {
+  const { logindata } = useContext(LoginContext);
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
+  const [username, setUsername] = useState("");
+  console.log(logindata)
+  const fetchUserData = async (id) => {
+   
+    const myHeaders = new Headers();
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    const url = `${LOGIN_API}/common/user/${id}`;
+    fetch(url , requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("id", result);
+        
+        // console.log(userData)
+        setUsername(result.username);
+      });
+  };
   const CHATTOCLIENT_API = process.env.REACT_APP_CHAT_API;
   // REACT_APP_CHAT_API
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -224,6 +247,7 @@ const Communication = () => {
   useEffect(() => {
     fetchChatTemplates();
     fetchAccountsData()
+    fetchUserData(logindata.user.id)
   }, []);
 
   useEffect(() => {
@@ -333,7 +357,7 @@ const Communication = () => {
     const raw = JSON.stringify({
       accountid: data,
       chattemplateid: templateId,
-      username: accountName,
+      username: username,
       "viewchatlink": "/login"
     });
 
@@ -358,7 +382,7 @@ const Communication = () => {
     const raw = JSON.stringify({
       accountid: data,
       chattemplateid: templateId,
-      username: accountName,
+      username: username,
       "viewchatlink": "/login"
     });
     console.log(raw)

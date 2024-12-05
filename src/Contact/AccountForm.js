@@ -315,6 +315,66 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
   //   }
   //   //todo contact
   // };
+
+  // const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
+  const SEVER_PORT = process.env.REACT_APP_SERVER_URI
+
+
+ 
+  const clientCreatedmail = (email) => {
+    const port = window.location.port;
+    const urlportlogin = `${SEVER_PORT}/`;
+    console.log(urlportlogin)
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const url = urlportlogin;
+    const raw = JSON.stringify({
+      email: email,
+      url: url,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    const urlusersavedmail = `${LOGIN_API}/clientsavedemail/`;
+    fetch(urlusersavedmail, requestOptions)
+      .then((response) => response.json())
+
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const updateAcountUserId = (UserId, accountuserid) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      userid: UserId,
+    });
+
+    const requestOptions = {
+      method: "PATCH",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    // const Url = ${LOGIN_API}/admin/adminsignup;
+    fetch(`${ACCOUNT_API}/accounts/accountdetails/${accountuserid}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+      })
+
+      .catch((error) => console.error(error));
+  };
   const handleSubmit = () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -562,7 +622,40 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
     // Update combined values
     setCombinedValues((prevCombinedValues) => [...prevCombinedValues, ...selectedTags]);
   };
+  const newUser = (accountid, email, firstName) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
+    const raw = JSON.stringify({
+        username: firstName, // Use the first name as username
+        email, // Use the provided email
+        password: firstName, // Replace with a dynamic password logic if needed
+        role: "Client",
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+    };
+
+    const url = `${LOGIN_API}/common/login/signup`;
+
+    fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            console.log(result._id);
+
+            // Update account with the newly created user ID
+            updateAcountUserId(result._id, accountid);
+
+            // Optional: Trigger user created email notification
+            // userCreatedmail();
+        })
+        .catch((error) => console.error(error));
+};
   const handleContactAddPhoneNumber = () => {
     setPhoneNumbers((prevPhoneNumbers) => [...prevPhoneNumbers, { id: Date.now(), phone: "", isPrimary: false }]);
   };
@@ -583,8 +676,21 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
         console.log("Success:", data);
         handleDrawerClose();
         handleNewDrawerClose();
+        // const contactIds = data.newContacts.map((contact) => contact._id);
+        // updateContactstoAccount(contactIds);
+         // Extract contacts with login: true
+         const filteredContacts = data.newContacts.filter((contact) => contact.login);
+
+         console.log("Filtered Contacts:", filteredContacts);
+
+         // Call newUser for each filtered contact
+         filteredContacts.forEach((contact) => {
+             newUser(contact.accountid, contact.email, contact.firstName);
+             clientCreatedmail(contact.email)
+         });
         const contactIds = data.newContacts.map((contact) => contact._id);
         updateContactstoAccount(contactIds);
+        // toast.success("Contact created successfully!");
         toast.success("Contact created successfully!");
 
         navigate("/clients/accounts");
