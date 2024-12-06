@@ -23,7 +23,8 @@ import axios from 'axios';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { CiMenuKebab } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import { RxCross2 } from "react-icons/rx";
 const PipelineTemp = () => {
 
   const EMAIL_API = process.env.REACT_APP_EMAIL_TEMP_URL;
@@ -125,12 +126,70 @@ const PipelineTemp = () => {
 
   //Automation code
   const [anchorEl, setAnchorEl] = useState(null);
+  const [ehitAnchorEl, setEditAnchorEl] = useState(null);
+  const [isConditionsEditFormOpen, setIsConditionsEditFormOpen] = useState(false)
+  const [addNewAutomation, setAddNewAutomation] = useState(null);
+  const handleAddAutomationClick = (event) => {
+    setAddNewAutomation(event.currentTarget);
+  }
+  const handleEditClick = (event, index) => {
+    setEditAnchorEl(event.currentTarget);
+    SetStageSelected(index);  // Save the selected stage index
+    console.log(index)
+  };
+  const handleEditConditions = (index) => {
+    const currentAutomation = selectedAutomationData[index];
+    setStageAutomationTags(currentAutomation.tags || []); // Use existing tags or default to an empty array
+    setIsConditionsEditFormOpen(true); // Open the drawer
+  }
+  const handleDeleteAutomation = (index) => {
+    const updatedAutomations = selectedAutomationData.filter((_, i) => i !== index);
+    setSelectedAutomationData(updatedAutomations);
+  };
+  const handleEditGoBack = () => {
+    setIsConditionsEditFormOpen(false);
+  };
+  const handleMenuItemSelect = (type) => {
+    let newAutomation = {};
 
-  // const handleClick = (event, index) => {
-  //   setAnchorEl(event.currentTarget);
-  //   SetStageSelected(index);  // Save the selected stage index
-  //   console.log(index)
-  // };
+    switch (type) {
+      case "Send Email":
+        newAutomation = { type: "Send Email", template: null, tags: [] };
+        break;
+      case "Send Invoice":
+        newAutomation = { type: "Send Invoice", template: null, tags: [] };
+        break;
+      case "Send Proposal/Els":
+        newAutomation = { type: "Send Proposal/Els", template: null, tags: [] };
+        break;
+      case "Create Organizer":
+        newAutomation = { type: "Create Organizer", template: null, tags: [] };
+        break;
+      default:
+        break;
+    }
+
+    setSelectedAutomationData([...selectedAutomationData, newAutomation]);
+    setEditAnchorEl(null); // Close the menu
+    setIsEditDrawerOpen(true); // Open the edit drawer
+  };
+  const handleEditClose = () => {
+    setEditAnchorEl(null);
+  };
+  const handleAddNewClose = () => {
+    setAddNewAutomation(null)
+  }
+  
+  const handleAutomationOptionClick = (actionType) => {
+    SetAutomationSelect(actionType);// Perform the action based on the selected option
+    handleAddNewClose(); // Close the dropdown
+  };
+  const handleEditTemplateChange = (index, newValue) => {
+    const updatedData = [...selectedAutomationData];
+    updatedData[index].template = newValue;
+    setSelectedAutomationData(updatedData);
+  };
+
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
   const [selectedAutomationData, setSelectedAutomationData] = useState([]);
   // const handleClick = (event, index, actionType) => {
@@ -144,29 +203,168 @@ const PipelineTemp = () => {
   //   }
   //   console.log(index);
   // };
+  const [editingStageIndex, setEditingStageIndex] = useState(null);
   const handleClick = (event, index, actionType) => {
     setAnchorEl(event.currentTarget); // Opens the menu
     SetStageSelected(index); // Stores the selected stage index
 
-    // if (actionType === "edit") {
-    //     // Ensure automation data exists before accessing
-    //     const automations = stages[index]?.automations || [];
-    //     setSelectedAutomationData(automations); // Populate drawer with automations
-    //     setIsEditDrawerOpen(true); // Open the edit automation drawer
-    // }
     if (actionType === "edit") {
       const automations = stages[index]?.automations || [];
+      console.log("edit darwer", index)
       if (automations.length > 0) { // Only proceed if automations exist
         setSelectedAutomationData(automations); // Populate drawer with automations
         setIsEditDrawerOpen(true); // Open the edit automation drawer
         setAnchorEl(null)
+        setEditingStageIndex(index)
+        console.log("edit stage",index)
       } else {
         console.log("No automations available to edit for this stage.");
       }
     }
     console.log("Stage Index:", index);
   };
+  // const handleEditCheckboxChange = (tag) => {
+  //   // Check if the tag is already selected in tempSelectedTags
+  //   setTempSelectedTags((prevTags) => {
+  //     const isSelected = prevTags.some((selectedTag) => selectedTag._id === tag._id);
 
+  //     // If the tag is already selected, remove it
+  //     if (isSelected) {
+  //       return prevTags.filter((selectedTag) => selectedTag._id !== tag._id);
+  //     }
+
+  //     // If the tag is not selected, add it
+  //     return [...prevTags, tag];
+  //   });
+
+  //   // Sync changes with stageAutomationTags
+  //   setStageAutomationTags((prevTags) => {
+  //     const isInStage = prevTags.some((existingTag) => existingTag._id === tag._id);
+
+  //     // If the tag exists in stageAutomationTags and is being unchecked, remove it
+  //     if (isInStage && tempSelectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
+  //       return prevTags.filter((existingTag) => existingTag._id !== tag._id);
+  //     }
+
+  //     // Otherwise, return the original stageAutomationTags
+  //     return prevTags;
+  //   });
+  // };
+
+  const handleEditCheckboxChange = (tag, index) => {
+    // Find the selected automation by index
+    const updatedAutomation = [...selectedAutomationData];
+    const automation = updatedAutomation[index];
+
+    // Check if the tag is already selected
+    const isTagSelected = automation.tags.some((existingTag) => existingTag._id === tag._id);
+
+    if (isTagSelected) {
+      // Remove the tag if already selected
+      automation.tags = automation.tags.filter((existingTag) => existingTag._id !== tag._id);
+    } else {
+      // Add the tag if not selected
+      automation.tags.push(tag);
+    }
+
+    // Update the state with the modified automation
+    setSelectedAutomationData(updatedAutomation);
+  };
+  // const handleEditAddTags = () => {
+  //   const updatedTags = [
+  //     ...stageAutomationTags,
+  //     ...tempSelectedTags.filter(
+  //       (newTag) => !stageAutomationTags.some((existingTag) => existingTag._id === newTag._id)
+  //     ),
+  //   ];
+
+  //   console.log("Merged Tags:", updatedTags);
+
+  //   // Update the tags in the selected automation object
+  //   setSelectedAutomationData((prevData) =>
+  //     prevData.map((automation) => {
+  //       if (selectedAutomationData.includes(automation)) {
+  //         return {
+  //           ...automation,
+  //           tags: updatedTags, // Add updated tags to automation
+  //         };
+  //       }
+  //       return automation;
+  //     })
+  //   );
+
+  //   setIsConditionsEditFormOpen(false); // Close the drawer
+
+  // };
+
+
+  const [selectedAutomationIndex, setSelectedAutomationIndex] = useState(null);
+
+  const handleEditAddTags = () => {
+    const updatedTags = [
+      ...selectedAutomationData[selectedAutomationIndex].tags,  // Only update tags for the selected automation
+      ...tempSelectedTags.filter(
+        (newTag) => !selectedAutomationData[selectedAutomationIndex].tags.some(
+          (existingTag) => existingTag._id === newTag._id
+        )
+      ),
+    ];
+
+    console.log("Updated Tags for Selected Automation:", updatedTags);
+
+    // Update the tags for the selected automation only
+    setSelectedAutomationData((prevData) =>
+      prevData.map((automation, idx) => {
+        if (idx === selectedAutomationIndex) {
+          return {
+            ...automation,
+            tags: updatedTags, // Add updated tags to the selected automation
+          };
+        }
+        return automation;
+      })
+    );
+
+    setTempSelectedTags([]); // Clear the temporary selected tags
+    setIsConditionsEditFormOpen(false); // Close the drawer
+  };
+
+
+  // const handleEditSaveAutomation = (index) => {
+  //   console.log("save automation",index)
+  //   // Ensure the automation data has been updated
+  //   const updatedStages = [...stages];  // Create a copy of stages array
+  //   updatedStages[index].automations = selectedAutomationData; // Update the automations for the specific stage
+
+  //   // Set the new stages array
+  //   setStages(updatedStages);
+
+  //   // Close the drawer after saving the automation
+  //   setIsEditDrawerOpen(false);
+  //   toast.success("automation edited successfully")
+  // };
+
+ 
+  const handleEditSaveAutomation = () => {
+    if (editingStageIndex === null) return; // Ensure the stage index is valid
+    
+    console.log("Save automation for stage:", editingStageIndex);
+  
+    // Update the automations for the selected stage
+    const updatedStages = [...stages];
+    updatedStages[editingStageIndex].automations = selectedAutomationData;
+  
+    // Update the stages state
+    setStages(updatedStages);
+  
+    // Close the drawer and show success message
+    setIsEditDrawerOpen(false);
+    toast.success("Automation edited successfully");
+  };
+  
+  // When opening the drawer, set the correct stage index
+  
+  
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -175,6 +373,7 @@ const PipelineTemp = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [automationSelect, SetAutomationSelect] = useState();
   const [stageSelected, SetStageSelected] = useState();
+
   const handleDrawerOpen = (option, index) => {
     setIsDrawerOpen(true);
     SetAutomationSelect(option);
@@ -184,12 +383,7 @@ const PipelineTemp = () => {
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
   }
-  const handleUpdateDrawer = () => {
-    setupdateDrawer(true)
-  }
-  const handleUpdateDrawerClose = () => {
-    setupdateDrawer(false)
-  }
+
   const handleAddAutomation = (stageSelected, option) => {
     // Handle option action here
     console.log("Adding automation to stage index:", stageSelected);
@@ -290,6 +484,7 @@ const PipelineTemp = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [tempSelectedTags, setTempSelectedTags] = useState([]);
+  const [stageAutomationTags, setStageAutomationTags] = useState([]);
 
   const handleAddConditions = () => {
     setIsConditionsFormOpen(!isConditionsFormOpen);
@@ -299,11 +494,13 @@ const PipelineTemp = () => {
     setIsConditionsFormOpen(false);
   };
 
+
   const handleCheckboxChange = (tag) => {
     const updatedSelectedTags = tempSelectedTags.includes(tag) ? tempSelectedTags.filter((t) => t._id !== tag._id) : [...tempSelectedTags, tag];
     setTempSelectedTags(updatedSelectedTags);
     setIsAnyCheckboxChecked(updatedSelectedTags.length > 0);
   };
+
 
   const handleAddTags = () => {
     setSelectedTags([...selectedTags, ...tempSelectedTags.filter((tag) => !selectedTags.some((t) => t._id === tag._id))]);
@@ -361,6 +558,7 @@ const PipelineTemp = () => {
           <>
 
             <Grid item ml={2}>
+              {automationSelect}
               <Typography mb={1}>Select template</Typography>
               <Autocomplete
                 options={invoiceTemplateOptions}
@@ -456,6 +654,7 @@ const PipelineTemp = () => {
           <Box p={2}>
 
             <Grid item >
+            {automationSelect}
               <Typography mb={1}>Select template</Typography>
               <Autocomplete
                 options={proposalElsOptions}
@@ -553,6 +752,7 @@ const PipelineTemp = () => {
           <>
             <Box p={2}>
               <Grid item >
+              {automationSelect}
                 <Typography mb={1}>Select template</Typography>
                 <Autocomplete
                   options={emailTemplateOptions}
@@ -749,42 +949,10 @@ const PipelineTemp = () => {
         return null;
     }
   };
-  const handleTemplateChange = (index, newValue) => {
-    const updatedData = [...selectedAutomationData];
-    updatedData[index].template = newValue;
-    setSelectedAutomationData(updatedData);
-  };
-// handleTemplateChange
-const handleEditTemplateChange = (index, newValue) => {
-  const updatedData = [...selectedAutomationData];
-  updatedData[index].template = newValue;
-  setSelectedAutomationData(updatedData);
-};
 
-  const handleSaveAutomation = (index) => {
-    return () => {
-      const updatedStages = [...stages];
-      const selectedAutomation = {
-        type: automationSelect, // The type of automation (e.g., "Send Email")
-        template: selectedtemp ? { label: selectedtemp.label, value: selectedtemp.value } : null, // Store label and value of selected template
-        tags: selectedTags.map(tag => ({ // Map selectedTags to include necessary tag data
-          _id: tag._id,
-          tagName: tag.tagName,
-          tagColour: tag.tagColour,
-        })),
-      };
-      updatedStages[index].automations.push(selectedAutomation);
-      setStages(updatedStages);
-      console.log("Automation saved for stage:", index, selectedAutomation);
-      setselectedTemp(null); // Clear the selected template after saving
-      setSelectedTags([])
-      setIsAnyCheckboxChecked(false)
-      handleDrawerClose();
-    };
-  };
+  // handleTemplateChange
 
-  
-  // const handleEditSaveAutomation  = (index) => {
+  // const handleSaveAutomation = (index) => {
   //   return () => {
   //     const updatedStages = [...stages];
   //     const selectedAutomation = {
@@ -808,19 +976,67 @@ const handleEditTemplateChange = (index, newValue) => {
 
 
 
-  const handleEditSaveAutomation = (index) => {
-    // Ensure the automation data has been updated
-    const updatedStages = [...stages];  // Create a copy of stages array
-    updatedStages[index].automations = selectedAutomationData; // Update the automations for the specific stage
+
+  const handleSaveAutomation = (index) => {
+    return () => {
+      const updatedStages = [...stages];
+      console.log("Updated Stages before update:", updatedStages);
   
-    // Set the new stages array
-    setStages(updatedStages);
+      const selectedAutomation = {
+        type: automationSelect,
+        template: selectedtemp ? { label: selectedtemp.label, value: selectedtemp.value } : null,
+        tags: selectedTags.map(tag => ({
+          _id: tag._id,
+          tagName: tag.tagName,
+          tagColour: tag.tagColour,
+        })),
+      };
   
-    // Close the drawer after saving the automation
-    setIsEditDrawerOpen(false);
-    toast.success("automation edited successfully")
+      // Make sure the right stage is getting updated
+      updatedStages[index] = {
+        // ...updatedStages[index], // Ensure we keep the other properties of the stage intact
+        automations: [...updatedStages[index].automations, selectedAutomation], // Add the new automation to automations
+      };
+  
+      setStages(updatedStages);
+      console.log("Automation saved for stage:", index, selectedAutomation);
+  
+      // Reset form fields
+      setselectedTemp(null);
+      setSelectedTags([]);
+      setIsAnyCheckboxChecked(false);
+      handleDrawerClose();
+    };
   };
-  
+
+  // const handleEditCheckboxChange = (tag) => {
+  //   console.log("Tag clicked:", tag);
+
+  //   // Update tempSelectedTags based on selection/deselection
+  //   setTempSelectedTags((prevTags) => {
+  //     const isSelected = prevTags.some((selectedTag) => selectedTag._id === tag._id);
+  //     if (isSelected) {
+  //       console.log("Removing tag:", tag);
+  //       return prevTags.filter((selectedTag) => selectedTag._id !== tag._id);
+  //     } else {
+  //       console.log("Adding tag:", tag);
+  //       return [...prevTags, tag];
+  //     }
+  //   });
+
+  //   // Update stageAutomationTags for immediate visual feedback if needed
+  //   setStageAutomationTags((prevTags) => {
+  //     if (!prevTags.some((existingTag) => existingTag._id === tag._id)) {
+  //       console.log("Adding to stageAutomationTags:", tag);
+  //       return [...prevTags, tag];
+  //     }
+  //     return prevTags;
+  //   });
+  // };
+
+
+
+
   const handleStageNameChange = (e, index) => {
     const newStages = [...stages]; // Create a copy of the stages array
     newStages[index].name = e.target.value; // Update the name of the specific stage
@@ -1670,15 +1886,12 @@ const handleEditTemplateChange = (index, newValue) => {
                                 },
                               }}
                             >
-                              {automationSelect}
-
+                              {/* {automationSelect} */}
+                              <Box>Add Automation</Box>
 
                               {renderActionContent(automationSelect, index)}
-
-                              <Box
-                                sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}
-                                role="presentation"
-                              ></Box>
+                             
+                            
                             </Drawer>
                             <Drawer
                               anchor="right"
@@ -1697,103 +1910,208 @@ const handleEditTemplateChange = (index, newValue) => {
                               }}
                             >
                               <Box sx={{ padding: "20px" }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                                  Edit Automations
-                                </Typography>
-                               
-                                <Grid container spacing={2}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                                    Edit Automations{stageSelected}
+                                  </Typography>
+                                  <RxCross2 onClick={() => setIsEditDrawerOpen(false)} style={{ fontSize: '30px', cursor: 'pointer' }} />
+                                </Box>
+
+
+                                <Box >
                                   {selectedAutomationData.length > 0 ? (
                                     selectedAutomationData.map((automation, index) => (
-                                      <Grid
-                                        item
-                                        xs={12}
-                                        key={index}
-                                        sx={{
-                                          border: "1px solid #ddd",
-                                          borderRadius: "8px",
-                                          padding: 2,
-                                          marginBottom: 2,
-                                        }}
-                                      >
-                                        {/* Automation Type */}
-                                        <Typography >
-                                          {automation.type || "No Type"}
-                                        </Typography>
-                                        {/* Select Template */}
-                                        <Typography variant="body2" sx={{ marginTop: 2 }}>
-                                          Select Template
-                                        </Typography>
-                                        <Autocomplete
-                                        options={
-                                          // Use a switch or if condition to change the options based on automation.type
-                                          automation.type === "Send Email"
-                                            ? emailTemplateOptions
-                                            : automation.type === "Send Invoice"
-                                            ? invoiceTemplateOptions
-                                            : [] // Default to an empty array if the type doesn't match
-                                        }
-                                          // options={invoiceTemplateOptions}
-                                          getOptionLabel={(option) => option.label}
-                                          value={automation.template || null}
-                                          onChange={(event, newValue) => handleEditTemplateChange(index, newValue)}
-                                          renderInput={(params) => (
-                                            <TextField
-                                              {...params}
-                                              variant="outlined"
-                                              size="small"
-                                              placeholder="Select Template"
-                                            />
-                                          )}
-                                        />
+                                      <Box>
+                                        <Box
+                                          key={index}
+                                          sx={{
+                                            border: "2px solid #ddd",
+                                            borderRadius: "8px",
+                                            padding: 2,
+                                            marginBottom: 2,
+                                          }}
+                                        >
+                                          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                            <Typography>{index + 1}.{automation.type || "No Type"}</Typography>
+                                            <IconButton onClick={() => handleDeleteAutomation(index)}>
+                                              <DeleteIcon color="error" />
+                                            </IconButton>
+                                          </Box>
+                                          <Typography variant="body2" sx={{ marginTop: 2 }}>
+                                            Select Template
+                                          </Typography>
+                                          <Autocomplete
 
-                                        {automation.tags && automation.tags.length > 0 && (
-                                          <Box sx={{ marginTop: "10px" }}>
-                                            <Typography variant="body2">Only For:</Typography>
-                                            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                                              {automation.tags.map((tag) => (
-                                                <Chip
+                                            options={
+                                              automation.type === "Send Email"
+                                                ? emailTemplateOptions
+                                                : automation.type === "Send Invoice"
+                                                  ? invoiceTemplateOptions
+                                                  : automation.type === "Create Organizer"
+                                                    ? organizerOptions
+                                                    : automation.type === "Send Proposal/Els"
+                                                      ? proposalElsOptions
+                                                      : []
+                                            }
+                                            getOptionLabel={(option) => option.label}
+                                            value={automation.template || null}
+                                            onChange={(event, newValue) => handleEditTemplateChange(index, newValue)}
+                                            renderInput={(params) => (
+                                              <TextField
+                                                {...params}
+                                                variant="outlined"
+                                                size="small"
+                                                placeholder="Select Template"
+                                              />
+                                            )}
+                                          />
+
+                                          {automation.tags && automation.tags.length > 0 && (
+                                            <Box sx={{ marginTop: "10px" }}>
+                                              <Typography variant="body2">Only For:</Typography>
+                                              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                                                {automation.tags.map((tag) => (
+                                                  <Chip
+                                                    key={tag._id}
+                                                    label={tag.tagName}
+                                                    sx={{
+                                                      backgroundColor: tag.tagColour,
+                                                      color: "#fff",
+                                                      fontWeight: "500",
+                                                      borderRadius: "20px",
+                                                      marginRight: 1,
+                                                    }}
+                                                  />
+                                                ))}
+                                              </Box>
+                                            </Box>
+                                          )}
+                                          <Button
+                                            variant="text"
+                                            sx={{ marginTop: 2 }}
+                                            // onClick={() => handleEditConditions(index)}
+                                            onClick={() => {
+                                              setSelectedAutomationIndex(index);  // Set the selected index here
+                                              handleEditConditions(index);
+                                            }}
+                                          >
+                                            Add Conditions
+                                          </Button>
+                                        </Box>
+                                        <Drawer anchor="right" open={isConditionsEditFormOpen} onClose={handleEditGoBack} PaperProps={{ sx: { width: "550px", padding: 2 } }}>
+                                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                            <IconButton onClick={handleEditGoBack}>
+                                              <IoMdArrowRoundBack fontSize="large" color="blue" />
+                                            </IconButton>
+                                            <Typography variant="h6">Add conditions</Typography>
+                                          </Box>
+
+                                          <Box sx={{ padding: 2 }}>
+                                            <Typography variant="body1">Apply automation only for accounts with these tags</Typography>
+                                            <TextField
+                                              fullWidth
+                                              size="small"
+                                              variant="outlined"
+                                              placeholder="Search..."
+                                              value={searchTerm}
+                                              onChange={handleSearchChange}
+                                              InputProps={{
+                                                startAdornment: <AiOutlineSearch style={{ marginRight: 8 }} />,
+                                              }}
+                                              sx={{ marginTop: 2 }}
+                                            />
+
+                                            <Box sx={{ marginTop: 2 }}>
+                                              {filteredTags.map((tag) => (
+                                                <Box
                                                   key={tag._id}
-                                                  label={tag.tagName}
                                                   sx={{
-                                                    backgroundColor: tag.tagColour,
-                                                    color: "#fff",
-                                                    fontWeight: "500",
-                                                    borderRadius: "20px",
-                                                    marginRight: 1,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 3,
+                                                    borderBottom: "1px solid grey",
+                                                    paddingBottom: 1,
                                                   }}
-                                                />
+                                                >
+
+                                                  <Checkbox
+                                                    // checked={
+                                                    //   stageAutomationTags.some((existingTag) => existingTag._id === tag._id) ||
+                                                    //   tempSelectedTags.some((selectedTag) => selectedTag._id === tag._id)
+                                                    // }
+                                                    // onChange={() => handleEditCheckboxChange(tag)}
+
+                                                    checked={selectedAutomationData[index]?.tags.some(
+                                                      (existingTag) => existingTag._id === tag._id
+                                                    )}
+                                                    onChange={() => handleEditCheckboxChange(tag, index)}
+                                                  />
+
+
+                                                  <Chip
+                                                    label={tag.tagName}
+                                                    sx={{
+                                                      backgroundColor: tag.tagColour,
+                                                      color: "#fff",
+                                                      fontWeight: "500",
+                                                      borderRadius: "20px",
+                                                      marginRight: 1,
+                                                    }}
+                                                  />
+                                                </Box>
                                               ))}
                                             </Box>
+
+                                            <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
+                                              <Button variant="contained" color="primary" onClick={() => {
+                                                handleEditAddTags();
+                                                // Clear the selected tags
+                                                setTempSelectedTags([]);
+                                              }}>
+                                                Add
+                                              </Button>
+                                              <Button variant="outlined" color="primary" onClick={handleEditGoBack}>
+                                                Cancel
+                                              </Button>
+                                            </Box>
                                           </Box>
-                                        )}
-
-                                        {/* Add Conditions */}
-                                        <Button
-                                          variant="text"
-                                          sx={{ marginTop: 2 }}
-                                          onClick={() => handleAddConditions(index)}
-                                        >
-                                          Add Conditions
-                                        </Button>
-
-                                        {/* Save Automation */}
-                                        <Button
-                                          variant="contained"
-                                          sx={{ marginTop: 2 }}
-                                          onClick={() => handleEditSaveAutomation(index)}
-                                        >
-                                          Save Automation
-                                        </Button>
-                                      </Grid>
+                                        </Drawer>
+                                      </Box>
                                     ))
                                   ) : (
                                     <Typography variant="body2" sx={{ marginTop: 2 }}>
                                       No automations selected.
                                     </Typography>
                                   )}
-                                </Grid>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                                  <Button
+                                    variant="text"
+                                    sx={{ marginTop: 2 }}
+                                    onClick={(e) => handleEditClick(e)}
+                                  >
+                                    Add Automations
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    sx={{ marginTop: 2 }}
+                                    onClick={() => handleEditSaveAutomation()}
+                                  >
+                                    Save Automation
+                                  </Button>
 
+                                </Box>
+                                <Menu
+                                  anchorEl={ehitAnchorEl}
+                                  open={Boolean(ehitAnchorEl)}
+                                  onClose={handleEditClose}
+                                >
+                                  <MenuItem onClick={() => handleMenuItemSelect("Send Email")}>Send Email</MenuItem>
+                                  <MenuItem onClick={() => handleMenuItemSelect("Send Invoice")}>Send Invoice</MenuItem>
+                                  <MenuItem onClick={() => handleMenuItemSelect("Send Proposal/Els")}>Send Proposal/Els</MenuItem>
+                                  <MenuItem onClick={() => handleMenuItemSelect("Create Organizer")}>Create Organizer</MenuItem>
 
+                                </Menu>
                               </Box>
                             </Drawer>
 
@@ -1804,7 +2122,7 @@ const handleEditTemplateChange = (index, newValue) => {
                                     <Card key={idx} sx={{ width: '100%', }}>
                                       <CardContent>
                                         <Typography variant="h6" component="div">
-                                          <b>{automation.type}</b>
+                                          <b>{idx + 1}.{automation.type}</b>
                                         </Typography>
                                         {automation.template && (
                                           <Typography color="text.secondary">
