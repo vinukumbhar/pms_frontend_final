@@ -7,7 +7,7 @@ import { GoDotFill } from "react-icons/go";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
-
+import { CircularProgress } from "@mui/material";
 const Clientfacing = () => {
   const CLIENT_FACING_API = process.env.REACT_APP_CLIENT_FACING_URL;
   const [clientFacingJobs, setClientFacingJobs] = useState([]);
@@ -47,9 +47,10 @@ const Clientfacing = () => {
   const handleColorChange = (event) => {
     setSelectedColor(event.target.value);
   };
-
+  const [loading, setLoading] = useState(true);
   // const fetchData = async () => {
   const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${CLIENT_FACING_API}/workflow/clientfacingjobstatus/`);
       if (!response.ok) {
@@ -60,6 +61,9 @@ const Clientfacing = () => {
       console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -204,6 +208,8 @@ const Clientfacing = () => {
         </Box>
 
         {/* Display Current Status */}
+        {loading ? (
+          <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):(
         <Box>
           {clientFacingJobs.map((job) => (
             <Box key={job._id} style={{ padding: "10px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "15px" }}>
@@ -222,6 +228,8 @@ const Clientfacing = () => {
             </Box>
           ))}
         </Box>
+        )
+        }
         <Drawer
           anchor="right"
           open={isDrawerOpen}

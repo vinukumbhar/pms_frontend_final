@@ -12,7 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-
+import { CircularProgress } from "@mui/material";
 import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import { CiMenuKebab } from "react-icons/ci";
 import EditCalendarRoundedIcon from "@mui/icons-material/EditCalendarRounded";
@@ -340,11 +340,13 @@ const JobTemp = ({ charLimit = 4000 }) => {
   }));
   //get all templateName Record
   const [JobTemplates, setJobTemplates] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+   
   useEffect(() => {
     fetchJobTemplatesData();
   }, []);
   const fetchJobTemplatesData = async () => {
+    setLoading(true);
     try {
       const url = `${JOBS_API}/workflow/jobtemplate/jobtemplate`;
 
@@ -357,6 +359,9 @@ const JobTemp = ({ charLimit = 4000 }) => {
       console.log(data);
     } catch (error) {
       console.error("Error fetching job templates:", error);
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -731,8 +736,10 @@ const JobTemp = ({ charLimit = 4000 }) => {
             <Button variant="contained" color="primary" onClick={handleCreateJobTemplate} sx={{ mb: 3 }}>
               Job Template
             </Button>
-
-            <MaterialReactTable columns={columns} table={table} />
+            {loading ? (
+  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+}
+            {/* <MaterialReactTable columns={columns} table={table} /> */}
           </Box>
         ) : (
           <Box sx={{ mt: 2 }}>

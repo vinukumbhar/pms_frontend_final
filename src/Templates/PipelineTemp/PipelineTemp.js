@@ -626,9 +626,9 @@ const PipelineTemp = () => {
                   sx={{ marginTop: 2 }}
                 />
 
-                <Box sx={{ marginTop: 2 }}>
+                <Box sx={{ marginTop: 2 , height:'68vh', overflowY:'auto'}}>
                   {filteredTags.map((tag) => (
-                    <Box key={tag._id} sx={{ display: "flex", alignItems: "center", gap: 3, borderBottom: "1px solid grey", paddingBottom: 1 }}>
+                    <Box key={tag._id} sx={{ display: "flex", alignItems: "center", gap: 3, borderBottom: "1px solid grey", paddingBottom: 1,}}>
                       <Checkbox checked={tempSelectedTags.includes(tag)} onChange={() => handleCheckboxChange(tag)} />
                       <Chip label={tag.tagName} sx={{ backgroundColor: tag.tagColour, color: "#fff", fontWeight: "500", borderRadius: "20px", marginRight: 1 }} />
                     </Box>
@@ -724,7 +724,7 @@ const PipelineTemp = () => {
                   sx={{ marginTop: 2 }}
                 />
 
-                <Box sx={{ marginTop: 2 }}>
+                <Box sx={{ marginTop: 2 ,height:'68vh', overflowY:'auto'}}>
                   {filteredTags.map((tag) => (
                     <Box key={tag._id} sx={{ display: "flex", alignItems: "center", gap: 3, borderBottom: "1px solid grey", paddingBottom: 1 }}>
                       <Checkbox checked={tempSelectedTags.includes(tag)} onChange={() => handleCheckboxChange(tag)} />
@@ -823,7 +823,7 @@ const PipelineTemp = () => {
                   sx={{ marginTop: 2 }}
                 />
 
-                <Box sx={{ marginTop: 2 }}>
+                <Box sx={{ marginTop: 2,height:'68vh', overflowY:'auto' }}>
                   {filteredTags.map((tag) => (
                     <Box key={tag._id} sx={{ display: "flex", alignItems: "center", gap: 3, borderBottom: "1px solid grey", paddingBottom: 1 }}>
                       <Checkbox checked={tempSelectedTags.includes(tag)} onChange={() => handleCheckboxChange(tag)} />
@@ -921,7 +921,7 @@ const PipelineTemp = () => {
                   sx={{ marginTop: 2 }}
                 />
 
-                <Box sx={{ marginTop: 2 }}>
+                <Box sx={{ marginTop: 2 ,height:'68vh', overflowY:'auto'}}>
                   {filteredTags.map((tag) => (
                     <Box key={tag._id} sx={{ display: "flex", alignItems: "center", gap: 3, borderBottom: "1px solid grey", paddingBottom: 1 }}>
                       <Checkbox checked={tempSelectedTags.includes(tag)} onChange={() => handleCheckboxChange(tag)} />
@@ -2019,7 +2019,7 @@ const PipelineTemp = () => {
                                               sx={{ marginTop: 2 }}
                                             />
 
-                                            <Box sx={{ marginTop: 2 }}>
+                                            <Box sx={{ marginTop: 2 ,height:'68vh', overflowY:'auto'}}>
                                               {filteredTags.map((tag) => (
                                                 <Box
                                                   key={tag._id}

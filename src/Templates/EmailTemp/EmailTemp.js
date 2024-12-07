@@ -28,7 +28,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'; // For fi
 import DeleteIcon from '@mui/icons-material/Delete'; // For delete icon
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-
+import { CircularProgress } from "@mui/material";
 const EmailTemp = () => {
 
 
@@ -364,7 +364,11 @@ const EmailTemp = () => {
 
     }
     const [emailTemplates, setEmailTemplates] = useState([]);
+    const [loading, setLoading] = useState(true);
+   
+   
     const fetchEmailTemplates = async () => {
+        setLoading(true);
         try {
             const url = `${EMAIL_API}/workflow/emailtemplate/`;
             const response = await fetch(url);
@@ -379,6 +383,9 @@ const EmailTemp = () => {
             console.error('Error fetching email templates:', error);
 
         }
+        finally {
+            setLoading(false); // Stop loader
+          }
     };
 
     useEffect(() => {
@@ -596,8 +603,10 @@ console.log(selectedFiles)
                     <Button variant="contained" color="primary" onClick={handleCreateTemplate} sx={{ mb: 3 }}>
                         Create Template
                     </Button>
-                    <MaterialReactTable columns={columns} table={table} />
-
+                    {/* <MaterialReactTable columns={columns} table={table} /> */}
+                    {loading ? (
+  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+}
                 </Box>
             ) : (
                 <>

@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { IoClose } from "react-icons/io5";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-
+import { CircularProgress } from "@mui/material";
 import { toast } from 'react-toastify';
 
 const Tags = () => {
@@ -32,12 +32,13 @@ const Tags = () => {
   ];
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const [loading, setLoading] = useState(true); // Loader state
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
+    setLoading(true); // Start loader
     try {
       const response = await fetch(`${TAGS_API}/tags/accountcountoftag/account`);
       const data = await response.json();
@@ -46,6 +47,9 @@ const Tags = () => {
 
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -185,7 +189,7 @@ const Tags = () => {
     if (!validateForm()) {
         return; 
     } 
-
+    setLoading(true); // Start loader
     // Proceed only if an option is selected
     if (selectedOption) {
         const { tagName, tagColour } = selectedOption;
@@ -227,7 +231,8 @@ const Tags = () => {
       .catch((error) => {
         console.error(error);
         toast.error(error.message);
-      });
+      })
+      .finally(() => setLoading(false)); // Stop loader
   };
 
   const handleUpdatesumbit = () => {
@@ -358,8 +363,11 @@ const Tags = () => {
         <Button variant="contained" onClick={handleDrawerOpen}>Add Tag</Button>
       </Box>
 
-
-      <MaterialReactTable columns={columns} table={table} />
+<Box >
+{loading ? (
+  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+}
+      </Box>
       <Drawer
         anchor='right'
         open={isDrawerOpen}
@@ -454,10 +462,18 @@ const Tags = () => {
                 </Select>
 
               </Box>
-              <Box sx={{ pt: 5, display: 'flex', alignItems: 'center', gap: 5 }}>
+              {/* <Box sx={{ pt: 5, display: 'flex', alignItems: 'center', gap: 5 }}>
                 <Button onClick={handleSubmit} variant="contained" color="primary">Submit</Button>
                 <Button onClick={handleClear} variant="outlined">Clear</Button>
-              </Box>
+              </Box> */}
+               <Box sx={{ pt: 5, display: "flex", alignItems: "center", gap: 5 }}>
+              <Button onClick={handleSubmit} variant="contained" color="primary" disabled={loading}>
+                {loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : "Submit"}
+              </Button>
+              <Button onClick={handleClear} variant="outlined" disabled={loading}>
+                Clear
+              </Button>
+            </Box>
             </Box>
           </Box>
         </Box>

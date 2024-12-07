@@ -347,10 +347,10 @@ const Communication = () => {
     setSelectedAccount((prevSelected) => prevSelected.filter((value) => value !== valueToDelete));
   };
   const [chatId, setChatId] = useState()
-
+console.log("new chat id",chatId)
 
   // mail for drawer btn
-  const sendSaveChatMail = () => {
+  const sendSaveChatMail = (chatId) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -358,7 +358,9 @@ const Communication = () => {
       accountid: data,
       chattemplateid: templateId,
       username: username,
-      "viewchatlink": "/login"
+      chatId:chatId,
+      "viewchatlink": "/login",
+
     });
 
     const requestOptions = {
@@ -367,7 +369,7 @@ const Communication = () => {
       body: raw,
       redirect: "follow"
     };
-
+console.log(raw)
     fetch(`${CHATTOCLIENT_API}/securechatsend`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
@@ -375,7 +377,7 @@ const Communication = () => {
   }
 
   // mail for msgs
-  const securemessagechatsend = () => {
+  const securemessagechatsend = (chatId) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -383,7 +385,9 @@ const Communication = () => {
       accountid: data,
       chattemplateid: templateId,
       username: username,
-      "viewchatlink": "/login"
+      "viewchatlink": "/login",
+      chatId:chatId
+
     });
     console.log(raw)
     const requestOptions = {
@@ -445,8 +449,10 @@ const Communication = () => {
       })
       .then((result) => {
         console.log(result);
+        console.log("chat id",result.newChats._id)
+        setChatId(result.newChats._id)
         toast.success("New Chat created successfully");
-        sendSaveChatMail()
+        sendSaveChatMail(result.newChats._id)
         setIsSubmitted(true);
         accountwiseChatlist(data, isActiveTrue);
         handleClose()
@@ -637,7 +643,7 @@ const Communication = () => {
       .then((result) => {
 
         console.log("Response:", result);
-        securemessagechatsend()
+        securemessagechatsend(chatId)
         setAdminChatSubject(result.updatedChats.chatsubject);
         setAdminChatDiscription(result.updatedChats.description);
         setExpanded(true);
@@ -683,7 +689,7 @@ const Communication = () => {
       .then((result) => {
 
         console.log("Response:", result);
-        securemessagechatsend()
+        // securemessagechatsend()
         setAdminChatSubject(result.updatedChats.chatsubject);
         setAdminChatDiscription(result.updatedChats.description);
         setExpanded(true);
