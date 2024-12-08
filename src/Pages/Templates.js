@@ -34,22 +34,28 @@ const Templates = () => {
             },
           }}
         >
+           <NavLink to="/firmtemp/templates/tags">Tag</NavLink>
           <NavLink to="/firmtemp/templates/tasks"> Tasks</NavLink>
-          <NavLink to="/firmtemp/templates/tags">Tag</NavLink>
+         
           <NavLink to="/firmtemp/templates/emails">Emails</NavLink>
-          <NavLink to="/firmtemp/templates/jobs">Jobs</NavLink>
-          {/* Client-facing job statuses */}
           <NavLink to="/firmtemp/templates/clientfacing">Client-facing job statuses</NavLink>
+          <NavLink to="/firmtemp/templates/jobs">Jobs</NavLink>
+          <NavLink to="/firmtemp/templates/chats">Chats</NavLink>
+          <NavLink to="/firmtemp/templates/folders">Folders</NavLink>
+          <NavLink to="/firmtemp/templates/invoices">Invoices</NavLink>
+          <NavLink to="/firmtemp/templates/proposals">Proposals & Els</NavLink>
+         
+          <NavLink to="/firmtemp/templates/organizers">Organizers</NavLink>
+     
           <NavLink to="/firmtemp/templates/pipelines">Pipelines</NavLink>
 
-          <NavLink to="/firmtemp/templates/folders">Folders</NavLink>
-          <NavLink to="/firmtemp/templates/chats">Chats</NavLink>
+        
+     
 
-          <NavLink to="/firmtemp/templates/invoices">Invoices</NavLink>
+       
           {/* <NavLink to='/firmtemp/templates/recurring-invoices'  >Recurring invoices</NavLink>
                     <NavLink to='/firmtemp/templates/signatures'  >Signatures</NavLink> */}
-          <NavLink to="/firmtemp/templates/proposals">Proposals & Els</NavLink>
-          <NavLink to="/firmtemp/templates/organizers">Organizers</NavLink>
+       
         </Box>
       </Box>
       <Box sx={{ pt: 5 }}>

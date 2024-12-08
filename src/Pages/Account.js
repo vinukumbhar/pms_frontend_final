@@ -20,6 +20,7 @@ import { useTheme } from "@mui/material/styles";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { CircularProgress } from "@mui/material";
 import { LoginContext } from '../Sidebar/Context/Context.js'
 const FixedColumnTable = () => {
   const theme = useTheme();
@@ -48,14 +49,18 @@ const FixedColumnTable = () => {
 
   const [isActiveTrue, setIsActiveTrue] = useState(true);
   const [anchorE2, setAnchorE2] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${ACCOUNT_API}/accounts/account/accountdetailslist/${isActiveTrue}`);
       setAccountData(response.data.accountlist);
       console.log(response.data.accountlist);
     } catch (error) {
       console.log("Error:", error);
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -831,7 +836,7 @@ console.log(raw)
           </div>
         )}
       </div>
-      <TableContainer component={Paper} style={{ width: "100%", overflowX: "auto" }}>
+      {loading ? (  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <TableContainer component={Paper} style={{ width: "100%", overflowX: "auto" }}>
         <Table style={{ tableLayout: "fixed", width: "100%" }}>
           <TableHead>
             <TableRow>
@@ -987,7 +992,8 @@ console.log(raw)
             })}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>)}
+     
       <TablePagination rowsPerPageOptions={[5, 10, 15]} component="div" count={sortedData.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} />
 
       <Drawer

@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 
 import { toast } from "react-toastify";
-
+import { CircularProgress } from "@mui/material";
 import { Menu, MenuItem, Box, Button, Typography, Container, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Grid, TextField, InputLabel, Autocomplete, Switch, FormControlLabel, Divider, useMediaQuery, List, ListItem, ListItemText, Popover, Checkbox, Alert } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -186,8 +186,9 @@ const InvoiceTemp = () => {
   };
   //get all templateName Record
   const [invoiceTemplates, setInvoiceTemplates] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const fetchInvoiceTemplates = async () => {
+    setLoading(true);
     try {
       const url = `${INVOICE_API}/workflow/invoicetemp/invoicetemplate`;
 
@@ -200,6 +201,9 @@ const InvoiceTemp = () => {
       console.log(data);
     } catch (error) {
       console.error("Error fetching Invoice Templates:", error);
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -941,8 +945,10 @@ const InvoiceTemp = () => {
           <Button variant="contained" color="primary" onClick={handleCreateInvoiceTemp} sx={{ mb: 3 }}>
             Create Invoice Template
           </Button>
-
-          <MaterialReactTable columns={columns} table={table} />
+          {loading ? (
+  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+}
+          {/* <MaterialReactTable columns={columns} table={table} /> */}
         </Box>
       ) : (
         <Box sx={{ mt: 2 }}>

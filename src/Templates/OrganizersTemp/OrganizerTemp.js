@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Section from './organizertempSection';
 import { toast } from 'react-toastify';
+import { CircularProgress } from "@mui/material";
 import 'react-toastify/dist/ReactToastify.css';
 import {ListItemText,ListItem,List,Popover,
   Box, Button, TextField, IconButton, Typography, Alert, Table, TableBody, TableCell, TableHead, TableRow, Paper, Dialog,
@@ -386,7 +387,9 @@ const OrganizersTemp = () => {
       .catch((error) => console.error(error));
   }
   const [organizerTemplatesData, setOrganizerTemplatesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const fetchOrganizerTemplates = async () => {
+    setLoading(true);
     try {
       const url = `${ORGANIZER_TEMP_API}/workflow/organizers/organizertemplate`;
       const response = await fetch(url);
@@ -400,6 +403,9 @@ const OrganizersTemp = () => {
     } catch (error) {
       console.error('Error fetching email templates:', error);
 
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
   const handleEdit = (_id) => {
@@ -917,7 +923,7 @@ const OrganizersTemp = () => {
           <Button variant="contained" onClick={handleCreateInvoiceClick} sx={{ mb: 3 }}>Create Template</Button>
           {/* <MaterialReactTable columns={columns} table={table} /> */}
           <Paper>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            {loading ? (<Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell><strong>Template Name</strong></TableCell>
@@ -976,7 +982,8 @@ const OrganizersTemp = () => {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table>)}
+           
           </Paper>
 
         </Box>

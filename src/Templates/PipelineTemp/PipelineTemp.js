@@ -12,6 +12,7 @@ import {
   useMediaQuery,
   useTheme, Alert, Drawer, Checkbox, Chip, Menu, MenuItem, Card, CardContent,
 } from '@mui/material';
+import { CircularProgress } from "@mui/material";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -1232,12 +1233,13 @@ const PipelineTemp = () => {
 
 
   const [pipelineData, setPipelineData] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchPipelineData();
   }, []);
 
   const fetchPipelineData = async () => {
+    setLoading(true);
     try {
 
       const url = `${PIPELINE_API}/workflow/pipeline/pipelines`;
@@ -1249,6 +1251,9 @@ const PipelineTemp = () => {
       setPipelineData(data.pipeline);
     } catch (error) {
       console.error('Error fetching pipeline data:', error);
+    }
+    finally {
+      setLoading(false); // Stop loader
     }
   };
   const handleEdit = (_id) => {
@@ -1414,8 +1419,10 @@ const PipelineTemp = () => {
             Create Pipeline
           </Button>
 
-          <MaterialReactTable columns={columns} table={table} />
-
+          {/* <MaterialReactTable columns={columns} table={table} /> */}
+          {loading ? (
+  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+}
 
         </Box>
       ) : (

@@ -110,10 +110,11 @@ const App = () => {
           <Route path="workflow/pipelines" element={<Pipeline />} />
           <Route path="/organizerpreview" element={<PreviewOrganizer />} />
           <Route path="firmtemp/templates" element={<Templates />}>
+          <Route path="tags" element={<Tags />} />
             <Route path="tasks" element={<Tasks />} />
-            <Route path="tasks" element={<Tasks />} />
+          
             <Route path="tasks/taskTempUpdate/:_id" element={<TasksUpdate />} />
-            <Route path="tags" element={<Tags />} />
+           
             <Route path="emails" element={<EmailTemp />} />
             <Route path="emails/emailTempUpdate/:_id" element={<EmailTempUpdate />} />
             <Route path="jobs" element={<JobTemp />} />

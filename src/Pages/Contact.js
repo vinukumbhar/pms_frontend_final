@@ -235,37 +235,105 @@ const ContactTable = () => {
           />
         ),
       },
-
       {
         accessorKey: "tags",
         header: "Tags",
         Cell: ({ cell }) => {
           const tags = cell.row.original.tags.flat();
+          const firstTag = tags[0];
+          const remainingCount = tags.length - 1;
+      
           return (
-            <div>
-              {tags.map((tag) => (
+            <Tooltip
+            title={
+              <div>
+                {tags.map((tag) => (
+                  <span
+                    key={tag._id}
+                    style={{
+                      display: "block",
+                      backgroundColor: tag.tagColour,
+                      color: "#fff",
+                      padding: "2px 4px",
+                      margin: "2px 0",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    {tag.tagName}
+                  </span>
+                ))}
+              </div>
+            }
+            arrow
+            placement="top"
+          >
+              <span>
                 <span
-                  key={tag._id}
                   style={{
-                    backgroundColor: tag.tagColour,
+                    backgroundColor: firstTag.tagColour,
                     color: "#fff",
                     padding: "2px 4px",
-                    margin: "0 2px",
                     borderRadius: "60px",
+                    marginRight: "4px",
                   }}
                 >
-                  {tag.tagName}
+                  {firstTag.tagName}
                 </span>
-              ))}
-            </div>
+                {remainingCount > 0 && (
+                  <span style={{ cursor: "pointer", textDecoration: "underline" }}>
+                    +{remainingCount}
+                  </span>
+                )}
+              </span>
+            </Tooltip>
           );
         },
-
+        // Cell: ({ cell }) => {
+        //   const tags = cell.row.original.tags.flat();
+        //   return (
+        //     <Tooltip
+        //       title={
+        //         <div>
+        //           {tags.map((tag) => (
+        //             <span
+        //               key={tag._id}
+        //               style={{
+        //                 display: "block",
+        //                 backgroundColor: tag.tagColour,
+        //                 color: "#fff",
+        //                 padding: "2px 4px",
+        //                 margin: "2px 0",
+        //                 borderRadius: "4px",
+        //               }}
+        //             >
+        //               {tag.tagName}
+        //             </span>
+        //           ))}
+        //         </div>
+        //       }
+        //       arrow
+        //     >
+        //       <span
+        //         style={{
+        //           cursor: "pointer",
+        //           textDecoration: "underline",
+        //         }}
+        //       >
+        //         {tags.length} tag{tags.length > 1 ? "s" : ""}
+        //       </span>
+        //     </Tooltip>
+        //   );
+        // },
+      
         filterFn: (row, columnId, filterValue) => {
           const tags = row.original.tags.flat();
-          return tags.some((tag) => filterValue.some((value) => tag.tagName.toLowerCase().includes(value.label.toLowerCase())));
+          return tags.some((tag) =>
+            filterValue.some((value) =>
+              tag.tagName.toLowerCase().includes(value.label.toLowerCase())
+            )
+          );
         },
-
+      
         Filter: ({ column }) => (
           <Autocomplete
             multiple
@@ -273,7 +341,9 @@ const ContactTable = () => {
             onChange={(event, newValue) => {
               column.setFilterValue(newValue); // Set the filter value to the selected tags
             }}
-            renderInput={(params) => <TextField {...params} placeholder="Select Tags" variant="outlined" size="small" />}
+            renderInput={(params) => (
+              <TextField {...params} placeholder="Select Tags" variant="outlined" size="small" />
+            )}
             renderOption={(props, option) => (
               <li {...props} style={{ cursor: "pointer" }}>
                 <span
@@ -290,7 +360,64 @@ const ContactTable = () => {
             )}
           />
         ),
-      },
+      }
+      ,
+
+      // {
+      //   accessorKey: "tags",
+      //   header: "Tags",
+      //   Cell: ({ cell }) => {
+      //     const tags = cell.row.original.tags.flat();
+      //     return (
+      //       <div>
+      //         {tags.map((tag) => (
+      //           <span
+      //             key={tag._id}
+      //             style={{
+      //               backgroundColor: tag.tagColour,
+      //               color: "#fff",
+      //               padding: "2px 4px",
+      //               margin: "0 2px",
+      //               borderRadius: "60px",
+      //             }}
+      //           >
+      //             {tag.tagName}
+      //           </span>
+      //         ))}
+      //       </div>
+      //     );
+      //   },
+
+      //   filterFn: (row, columnId, filterValue) => {
+      //     const tags = row.original.tags.flat();
+      //     return tags.some((tag) => filterValue.some((value) => tag.tagName.toLowerCase().includes(value.label.toLowerCase())));
+      //   },
+
+      //   Filter: ({ column }) => (
+      //     <Autocomplete
+      //       multiple
+      //       options={tagsOptions}
+      //       onChange={(event, newValue) => {
+      //         column.setFilterValue(newValue); // Set the filter value to the selected tags
+      //       }}
+      //       renderInput={(params) => <TextField {...params} placeholder="Select Tags" variant="outlined" size="small" />}
+      //       renderOption={(props, option) => (
+      //         <li {...props} style={{ cursor: "pointer" }}>
+      //           <span
+      //             style={{
+      //               backgroundColor: option.colour,
+      //               color: "#fff",
+      //               padding: "2px 4px",
+      //               borderRadius: "4px",
+      //             }}
+      //           >
+      //             {option.label}
+      //           </span>
+      //         </li>
+      //       )}
+      //     />
+      //   ),
+      // },
       {
         accessorKey: "companyName",
         header: "Company Name",

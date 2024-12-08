@@ -303,9 +303,11 @@ const ChatTemp = () => {
     setSelectedUser('');
     setInputText('');
     setNoOfReminder('');
-
+    setSubtaskSwitch(false)
     setDescription('');
     setDaysuntilNextReminder('');
+    subtasks([])
+    setCheckedSubtasks([])
   }
   //**  save chat code */
   const savechat = async () => {
