@@ -306,7 +306,7 @@ const ChatTemp = () => {
     setSubtaskSwitch(false)
     setDescription('');
     setDaysuntilNextReminder('');
-    subtasks([])
+    // subtasks([])
     setCheckedSubtasks([])
   }
   //**  save chat code */
@@ -314,6 +314,7 @@ const ChatTemp = () => {
     if (!validateForm()) {
       return; // Prevent form submission if validation fails
     }
+    
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -347,7 +348,7 @@ checked: checkedSubtasks.includes(id), // Check if ID is in the checkedSubtasks 
     const url = `${CHAT_API}/Workflow/chats/chattemplate`;
     fetch(url, requestOptions)
       .then((response) => {
-        console.log(response)
+      
         if (!response.ok) {
           throw new Error(response.statusText);
         }
@@ -357,10 +358,11 @@ checked: checkedSubtasks.includes(id), // Check if ID is in the checkedSubtasks 
         console.log(result.message)
         // toast.success("Invoice created successfully");
         if (result && result.message === "ChatTemplate created successfully") {
+        
+          toast.success("ChatTemplate created successfully");
           handleClearTemplate();
           fetchChatTemplates();
-          toast.success("ChatTemplate created successfully");
-          // handleCloseChatTemp()
+          //  handleCloseChatTemp()
           setShowForm(false);
         } else {
           toast.error(result.message || "Failed to create Chat Template");

@@ -7,8 +7,8 @@
 // import { toast } from 'react-toastify';
 
 // const Documents = () => {
-//   const API_KEY = process.env.REACT_APP_API_IP;
-//   const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE
+  // const API_KEY = process.env.REACT_APP_API_IP;
+  // const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE
 //   const [folderTemplates, setFolderTemplates] = useState([]);
 //   const [selectedTemplate, setSelectedTemplate] = useState(null);
 //   const { data } = useParams();
@@ -655,7 +655,7 @@ const Documents = () => {
         redirect: "follow"
       };
 
-      fetch("http://127.0.0.1:8002/clientdocs/clients/deleteSubFolder", requestOptions)
+      fetch(`${DOCS_MANAGMENTS}/clientdocs/clients/deleteSubFolder`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           console.log(result)
@@ -695,7 +695,7 @@ const Documents = () => {
         redirect: "follow"
       };
 console.log(raw)
-      fetch("http://127.0.0.1:8002/clientdocs/clients/folders/newfolder", requestOptions)
+      fetch(`${DOCS_MANAGMENTS}/clientdocs/clients/folders/newfolder`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           console.log(result)
@@ -848,7 +848,7 @@ console.log(raw)
       redirect: "follow"
     };
 
-    fetch("http://127.0.0.1:8002/clientdocs/clients/folders", requestOptions)
+    fetch(`${DOCS_MANAGMENTS}/clientdocs/clients/folders`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result)
