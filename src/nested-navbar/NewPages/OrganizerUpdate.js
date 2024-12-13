@@ -1394,7 +1394,7 @@ const CreateOrganizerUpdate = ({ OrganizerData, onClose }) => {
 
   const fileInputRef = useRef(null); // Reference to the hidden file input
   const [message, setMessage] = useState("");
-
+  const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE
   const handleFileUpload = async (event) => {
     const file = event.target.files[0]; // Get the selected file
     if (!file) {
@@ -1407,7 +1407,7 @@ const CreateOrganizerUpdate = ({ OrganizerData, onClose }) => {
     formData.append("accountId", data); // Replace with dynamic account ID
 
     try {
-      const response = await axios.post("http://127.0.0.1:8002/api/files/upload", formData, {
+      const response = await axios.post(`${DOCS_MANAGMENTS}/api/files/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setMessage(response.data.message);

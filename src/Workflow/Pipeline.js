@@ -206,6 +206,8 @@ const Pipeline = ({ charLimit = 4000 }) => {
     const PROPOSAL_ACCOUNT_API = process.env.REACT_APP_PROPOSAL_URL;
     const ORGANIZER_TEMP_API = process.env.REACT_APP_ORGANIZER_TEMP_URL;
     const AUTOMATION_API = process.env.REACT_APP_AUTOMATION_API;
+    const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
+
     const [automationType, setAutomationType] = useState([])
     const [automationTemp, setAutomationTemp] = useState('')
     const [automationAccountId, setAutomationAccountId] = useState('')
@@ -214,13 +216,14 @@ const Pipeline = ({ charLimit = 4000 }) => {
 
     const[accountTags,setAccountTags]= useState([]);
 
-    const AccountsTag=()=>{
+    const AccountsTag=(accountId)=>{
+      console.log(accountId)
       const requestOptions = {
         method: "GET",
         redirect: "follow"
       };
       
-      fetch("http://127.0.0.1:7000/accounts/accountdetails/accountdetailslist/listbyid/6731a63a9401e115181da177", requestOptions)
+      fetch(`${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyid/${accountId}`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           console.log(result)
@@ -231,7 +234,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
         .catch((error) => console.error(error));
     }
     useEffect(() => {
-      AccountsTag()
+      AccountsTag(accountId)
     }, []);
     const handleAutomationSelection = (index) => {
       setSelectedAutomationIndices((prevSelected) =>
@@ -254,7 +257,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
       }
       setAutomationAccountId(accountId);
     }, [automations]);
-
+console.log("account id automation",accountId)
     // fetch invoive temp by id
     const fetchinvoicetempbyid = async (automationTemp) => {
       const requestOptions = {

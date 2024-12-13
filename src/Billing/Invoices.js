@@ -19,6 +19,7 @@ import { RxCross2 } from "react-icons/rx";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import CreatableSelect from "react-select/creatable";
 import { useNavigate } from "react-router-dom";
+import PlagiarismIcon from '@mui/icons-material/Plagiarism';
 const Invoices = ({ charLimit = 4000 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Invoices = ({ charLimit = 4000 }) => {
   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const SERVICE_API = process.env.REACT_APP_SERVICES_URL;
   const INVOICE_NEW = process.env.REACT_APP_INVOICES_URL;
+  const CONTACT_API= process.env.REACT_APP_CONTACTS_URL;
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [payInvoice, setIsPayInvoice] = useState(false);
@@ -902,6 +904,55 @@ const Invoices = ({ charLimit = 4000 }) => {
 
   console.log(totalamount);
 
+
+  const [firstContactEmail, setFirstContactEmail] = useState("");
+
+  const contactMail = () => {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+  
+    console.log("Calling API with ID:", selectedaccount?.value); // Debug log
+  
+    fetch(`${CONTACT_API}/accounts/accountdetails/accountdetailslist/listbyid/${selectedaccount?.value}`, requestOptions)
+      .then((response) => {
+        console.log("Response status:", response.status); // Debug log
+        return response.json();
+      })
+      .then((result) => {
+        console.log("API Result:", result); // Debug log
+        
+        if (result?.accountlist?.Contacts && Array.isArray(result.accountlist.Contacts)) {
+          const email = result.accountlist.Contacts[0]?.email;
+          if (email) {
+            console.log("First Contact Email:", email); // Debug log
+            setFirstContactEmail(email); // Update state
+          } else {
+            console.error("First contact does not have an email.");
+            setFirstContactEmail("[CONTACT EMAIL]"); // Handle missing email
+          }
+        } else {
+          console.error("No contacts found in the response.");
+          setFirstContactEmail("[CONTACT EMAIL]"); // Handle missing contacts
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching contacts:", error);
+        setFirstContactEmail("Error fetching email"); // Handle fetch error
+      });
+  };
+  
+  useEffect(() => {
+    if (selectedaccount?.value) {
+      contactMail();
+    }
+  }, [selectedaccount]);
+ //preview drawer
+ const [previewDrawerOpen, setpreviewDrawerOpen] = useState(false);
+ const handleOpenpreviewDrawer = () => setpreviewDrawerOpen(true);
+ const handleClosepreviewDrawer = () => setpreviewDrawerOpen(false);
+
   return (
     <Box>
       <Button type="button" variant="contained" onClick={handleOpen}>
@@ -922,13 +973,197 @@ const Invoices = ({ charLimit = 4000 }) => {
           },
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 2 }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 2 }}>
           <Typography variant="h6">Create Invoice</Typography>
           <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
-        </Box>
+        </Box> */}
+         <Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 2,
+    m:2
+  }}
+>
+  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+    Create invoice
+  </Typography>
+
+  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+    <Box
+      onClick={handleOpenpreviewDrawer}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer",
+        color: "primary.main",
+      }}
+    >
+      <PlagiarismIcon sx={{ marginRight: 0.5 }} fontSize="small" />
+      <Typography color="primary">Preview</Typography>
+    </Box>
+
+   
+
+    <Box onClick={handleClose} sx={{ cursor: "pointer" }}>
+      <CloseIcon />
+    </Box>
+  </Box>
+</Box>
         <Divider />
+
+        <Box>
+          <Drawer
+            anchor="right"
+            open={previewDrawerOpen}
+            onClose={handleClosepreviewDrawer}
+            PaperProps={{
+              sx: {
+                width: 800,
+                p: 2,
+                background: '#f8fafc',
+
+              },
+            }}
+          >
+            <Box sx={{ padding: 4 }}>
+              {/* Invoice Header */}
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography>Preview</Typography>
+                <CloseIcon sx={{ cursor: "pointer", color: "rgb(24, 118, 211)" }} onClick={handleClosepreviewDrawer} />
+              </Box>
+              <Divider sx={{ mt: 2 }} />
+
+              {/* Table */}
+              <TableContainer component={Paper} sx={{ background: '#fdfdfd', marginBottom: 4, height: { xs: '50vh', md: 'auto' }, mt: 4 }}>
+                <Typography
+                  variant="h5"
+                  sx={{ color: '#ff6700', fontWeight: 'bold', marginBottom: 2, ml: 2, mt: 2 }}
+                >
+                  Invoice
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }}>
+                    {selectedaccount?.label || '[ACCOUNT NAME]'}
+                  </Typography>
+                  <Typography fontSize={13}>
+                    Invoice number: <Typography component="span" sx={{ color: '#cbd5e1', mr: 2, marginBottom: 2, fontSize: 13 }}>[INVOICE_NUMBER]</Typography>
+                  </Typography>
+                </Box>
+
+
+
+                {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }} >{firstContactEmail || "No email available"}</Typography>
+                  <Typography fontSize={13}>
+                    Date: <Typography component="span" sx={{ mr: 2, marginBottom: 2, fontSize: 13 }}>
+                      {startDate ? startDate.format('YYYY-MM-DD') : 'N/A'}
+                    </Typography>
+                  </Typography>
+                </Box> */}
+
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }} >{firstContactEmail || "[CONTACT EMAIL]"}</Typography>
+                  <Typography fontSize={13}>
+                    Date: <Typography component="span" sx={{ mr: 2, marginBottom: 2, fontSize: 13 }}>
+                      {startDate ? startDate.format('YYYY-MM-DD') : ''}
+                    </Typography>
+                  </Typography>
+                </Box>
+
+                <Box sx={{ ml: 2, marginBottom: 5, }} >
+                  <Typography sx={{ fontSize: 13 }}>Description: {description}</Typography>
+                </Box>
+
+                <Table sx={{ marginBottom: 5 }} >
+                  <TableHead >
+                    <TableRow sx={{ background: "#fff8f5" }}>
+                      <TableCell>
+                        <strong>Product/Service</strong>
+                      </TableCell>
+
+                      <TableCell>
+                        <strong>Description</strong>
+                      </TableCell>
+
+                      <TableCell align="right">
+                        <strong>Rate ($)</strong>
+                      </TableCell>
+                      <TableCell align="right">
+                        <strong>Qty</strong>
+                      </TableCell>
+                      <TableCell align="right">
+                        <strong>Amount</strong>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{row.productName}</TableCell>
+                        <TableCell>{row.description}</TableCell>
+                        <TableCell align="right">{row.rate || '$0.00'}</TableCell>
+                        <TableCell align="right">{row.qty || '1'}</TableCell>
+                        <TableCell align="right">{row.amount || '$0.00'}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              {/* Summary Section */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                  marginRight: 3,
+                  mt: 0
+                }}
+              >
+                <Typography sx={{ textAlign: 'right', width: '100%' }}>
+                  <strong>Subtotal:</strong> ${subtotal || '0.00'}
+                </Typography>
+                <Typography sx={{ textAlign: 'right', width: '100%' }}>
+                  <strong>Tax Rate:</strong> {taxRate || '0.00'}%
+                </Typography>
+                <Typography sx={{ textAlign: 'right', width: '100%' }}>
+                  <strong>Tax Total:</strong> ${taxTotal?.toFixed(2) || '0.00'}
+                </Typography>
+                <Typography
+                  sx={{ textAlign: 'right', fontWeight: 'bold', width: '100%', marginTop: 1 }}
+                >
+                  <strong>Total:</strong> ${totalAmount || '0.00'}
+                </Typography>
+              </Box>
+
+
+              {/* Footer Buttons */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginTop: 3,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={createinvoice}
+
+                >
+                  Save & Exit
+                </Button>
+
+              </Box>
+            </Box>
+          </Drawer>
+        </Box>
         <Box mt={3} p={2} sx={{ height: "80vh", overflowY: "auto" }} className="create-invoice">
           <Box>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
