@@ -12,6 +12,32 @@ import { toast } from 'react-toastify';
 
 const Tags = () => {
 
+  const [data, setData] = useState(null);
+  // useEffect(() => {
+  //   // Retrieving object from localStorage
+  //   const storedData = localStorage.getItem('usersrestrictions');
+  //   if (storedData) {
+  //     setData(JSON.parse(storedData)); // Parse the JSON string back to an object
+  //   }
+  // }, []); 
+  useEffect(() => {
+    // Retrieving object from localStorage
+    const storedData = localStorage.getItem('usersrestrictions');
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setData(parsedData); // Parse the JSON string back to an object
+      } catch (error) {
+        console.error('Error parsing localStorage data:', error);
+        setData(null); // Fallback to null if parsing fails
+      }
+    } else {
+      setData({}); // Default to an empty object if nothing is in localStorage
+    }
+  }, []);
+  const [manageTags, setManageTags]= useState(true)
+  console.log("user janavi",data.teammember.manageTags)
+  // const isManageTagsAllowed = data.teammember?.manageTags ?? false;
   const TAGS_API = process.env.REACT_APP_TAGS_TEMP_URL;
 
   const [tags, setTags] = useState([]);
@@ -83,6 +109,11 @@ const Tags = () => {
 
   const handleDrawerOpen = () => {
     setIsDrawerOpen(true);
+    // if (!isManageTagsAllowed) {
+    //   alert('You are a restricted user and cannot perform this action.');
+    // } else {
+    //   setIsDrawerOpen(true);
+    // }
   };
 
   const handleDrawerClose = () => {
@@ -360,7 +391,7 @@ const Tags = () => {
         }}
       >
         <Typography variant="h6">Tags</Typography>
-        <Button variant="contained" onClick={handleDrawerOpen}>Add Tag</Button>
+        <Button variant="contained" onClick={handleDrawerOpen}  disabled={!data.teammember.manageTags} >Add Tag</Button>
       </Box>
 
 <Box >

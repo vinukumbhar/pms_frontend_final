@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { AiOutlineLogout } from "react-icons/ai";
 import { LoginContext } from '../Sidebar/Context/Context'
 import user from "../Images/user.jpg";
+import SearchComponent from "./Search";
 function Sidebar() {
   const navigate = useNavigate();
   const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
@@ -252,6 +253,9 @@ function Sidebar() {
             <IconButton >
               {isDarkMode ? <Brightness7 onClick={toggleTheme}/> : <Brightness4 onClick={toggleTheme}/>}
             </IconButton>
+          </Box>
+          <Box>
+            <SearchComponent/>
           </Box>
         </Box>
       </header>

@@ -2306,135 +2306,135 @@
 // //                             </Box> */}
 
 
-// import React from 'react';
-// import {
-//   Box,
-//   Grid,
-//   Card,
-//   CardContent,
-//   Typography,
-//   Avatar,
-//   List,
-//   ListItem,
-//   ListItemAvatar,
-//   ListItemText,
-//   Divider,
-// } from '@mui/material';
-// import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-// import EventIcon from '@mui/icons-material/Event';
-// import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import React from 'react';
+import {
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Avatar,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+} from '@mui/material';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import EventIcon from '@mui/icons-material/Event';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
-// const InsightsPage = () => {
-//   return (
-//     <Box sx={{ padding: 4 }}>
-//       <Typography variant="h4" gutterBottom >
-//         Insights Dashboard
-//       </Typography>
+const InsightsPage = () => {
+  return (
+    <Box sx={{ padding: 4 }}>
+      <Typography variant="h4" gutterBottom >
+        Insights Dashboard
+      </Typography>
 
-//       <Grid container spacing={4} mt={3}>
-//         {/* Top Insights */}
-//         <Grid item xs={12} md={6} lg={4}>
-//           <Card>
-//             <CardContent>
-//               <Typography variant="h6" gutterBottom>
-//                 Top Insights
-//               </Typography>
-//               <List>
-//                 <ListItem>
-//                   <ListItemAvatar>
-//                     <Avatar>
-//                       <AccountBalanceIcon />
-//                     </Avatar>
-//                   </ListItemAvatar>
-//                   <ListItemText
-//                     primary="Tax Savings This Month"
-//                     secondary="Saved $12,000 for clients"
-//                   />
-//                 </ListItem>
-//                 <Divider variant="inset" component="li" />
-//                 <ListItem>
-//                   <ListItemAvatar>
-//                     <Avatar>
-//                       <TrendingUpIcon />
-//                     </Avatar>
-//                   </ListItemAvatar>
-//                   <ListItemText
-//                     primary="Trending Deductions"
-//                     secondary="Home Office, EV Tax Credit"
-//                   />
-//                 </ListItem>
-//               </List>
-//             </CardContent>
-//           </Card>
-//         </Grid>
+      <Grid container spacing={4} mt={3}>
+        {/* Top Insights */}
+        <Grid item xs={12} md={6} lg={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Top Insights
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <AccountBalanceIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Tax Savings This Month"
+                    secondary="Saved $12,000 for clients"
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <TrendingUpIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Trending Deductions"
+                    secondary="Home Office, EV Tax Credit"
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
 
-//         {/* Recent Activities */}
-//         <Grid item xs={12} md={6} lg={4}>
-//           <Card>
-//             <CardContent>
-//               <Typography variant="h6" gutterBottom>
-//                 Recent Activities
-//               </Typography>
-//               <List>
-//                 <ListItem>
-//                   <ListItemAvatar>
-//                     <Avatar>
-//                       <EventIcon />
-//                     </Avatar>
-//                   </ListItemAvatar>
-//                   <ListItemText
-//                     primary="Filed Returns"
-//                     secondary="25 clients processed this week"
-//                   />
-//                 </ListItem>
-//                 <Divider variant="inset" component="li" />
-//                 <ListItem>
-//                   <ListItemAvatar>
-//                     <Avatar>
-//                       <EventIcon />
-//                     </Avatar>
-//                   </ListItemAvatar>
-//                   <ListItemText
-//                     primary="Scheduled Meetings"
-//                     secondary="3 meetings scheduled for today"
-//                   />
-//                 </ListItem>
-//               </List>
-//             </CardContent>
-//           </Card>
-//         </Grid>
+        {/* Recent Activities */}
+        <Grid item xs={12} md={6} lg={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Recent Activities
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <EventIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Filed Returns"
+                    secondary="25 clients processed this week"
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <EventIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Scheduled Meetings"
+                    secondary="3 meetings scheduled for today"
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
 
-//         {/* Trending Topics */}
-//         <Grid item xs={12} lg={4}>
-//           <Card>
-//             <CardContent>
-//               <Typography variant="h6" gutterBottom>
-//                 Trending Topics
-//               </Typography>
-//               <List>
-//                 <ListItem>
-//                   <ListItemText
-//                     primary="Understanding the 2024 Tax Reforms"
-//                     secondary="Popular among small business owners"
-//                   />
-//                 </ListItem>
-//                 <Divider component="li" />
-//                 <ListItem>
-//                   <ListItemText
-//                     primary="Maximizing Tax Deductions for Freelancers"
-//                     secondary="A hot topic this quarter"
-//                   />
-//                 </ListItem>
-//               </List>
-//             </CardContent>
-//           </Card>
-//         </Grid>
-//       </Grid>
-//     </Box>
-//   );
-// };
+        {/* Trending Topics */}
+        <Grid item xs={12} lg={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Trending Topics
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="Understanding the 2024 Tax Reforms"
+                    secondary="Popular among small business owners"
+                  />
+                </ListItem>
+                <Divider component="li" />
+                <ListItem>
+                  <ListItemText
+                    primary="Maximizing Tax Deductions for Freelancers"
+                    secondary="A hot topic this quarter"
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
 
-// export default InsightsPage;
+export default InsightsPage;
 
 
 // import React, { useState } from "react";
@@ -2546,72 +2546,374 @@
 
 
 
-import React, { useState } from "react";
-import { Autocomplete, TextField, Box, Typography, List, ListItem, ListItemText, CircularProgress, Divider } from "@mui/material";
-import axios from "axios";
+// import React, { useState } from "react";
+// import { Autocomplete, TextField, Box, Typography,  CircularProgress,  } from "@mui/material";
+// import axios from "axios";
 
-const SearchComponent = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [accounts, setAccounts] = useState([]);
-  const [contacts, setContacts] = useState([]);
-  const [error, setError] = useState(null);
-  const [options, setOptions] = useState([]);
+// const SearchComponent = () => {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [accounts, setAccounts] = useState([]);
+//   const [contacts, setContacts] = useState([]);
+//   const [error, setError] = useState(null);
+//   const [options, setOptions] = useState([]);
 
-  const handleSearch = async (query) => {
-    setSearchQuery(query);
-    if (query.trim() === "") {
-      setAccounts([]);
-      setContacts([]);
-      setOptions([]);
-      return;
-    }
+//   const handleSearch = async (query) => {
+//     setSearchQuery(query);
+//     if (query.trim() === "") {
+//       setAccounts([]);
+//       setContacts([]);
+//       setOptions([]);
+//       return;
+//     }
 
-    setLoading(true);
-    setError(null);
+//     setLoading(true);
+//     setError(null);
 
-    try {
-      const [accountsResponse, contactsResponse] = await Promise.all([
-        axios.get(`http://127.0.0.1:7000/accounts/accountdetails`, { params: { search: query } }),
-        axios.get(`http://127.0.0.1:7000/contacts/`, { params: { search: query } }),
-      ]);
+//     try {
+//       const [accountsResponse, contactsResponse] = await Promise.all([
+//         axios.get(`http://127.0.0.1:7000/accounts/accountdetails`, { params: { search: query } }),
+//         axios.get(`http://127.0.0.1:7000/contacts/`, { params: { search: query } }),
+//       ]);
 
-      const accountsData = accountsResponse.data.accounts || [];
-      const contactsData = contactsResponse.data.contacts || [];
+//       const accountsData = accountsResponse.data.accounts || [];
+//       const contactsData = contactsResponse.data.contacts || [];
 
-      setAccounts(accountsData);
-      setContacts(contactsData);
+//       setAccounts(accountsData);
+//       setContacts(contactsData);
 
-      // Combine accounts and contacts for autocomplete options
-      // const combinedOptions = [
-      //   ...accountsData.map((account) => ({ label: account.accountName, type: "Account", id: account.id })),
-      //   ...contactsData.map((contact) => ({ label: contact.contactName, type: "Contact", id: contact.id })),
-      // ];
-      const combinedOptions = [
-        ...accountsData.map((account) => ({ label: account.accountName, type: "Account", id: account._id })),
-        ...contactsData.map((contact) => ({
-          label: `${contact.contactName} (${contact.email || "No Email"})`,
-          type: "Contact",
+      
+//       const combinedOptions = [
+//         ...accountsData.map((account) => ({ label: account.accountName, type: "Account", id: account._id })),
+//         ...contactsData.map((contact) => ({
+//           label: `${contact.contactName} (${contact.email || "No Email"})`,
+//           type: "Contact",
          
-          id: contact._id,
-        })),
-      ];
-      setOptions(combinedOptions);
-    } catch (err) {
-      setError("Failed to fetch results. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+//           id: contact._id,
+//         })),
+//       ];
+//       setOptions(combinedOptions);
+//     } catch (err) {
+//       setError("Failed to fetch results. Please try again.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  return (
-    <Box sx={{ padding: 2, maxWidth: 600, margin: "auto", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
-      <Autocomplete
-        freeSolo
-        options={options}
-        loading={loading}
-        onInputChange={(event, newInputValue) => handleSearch(newInputValue)}
-        // renderOption={(props, option) => (
+//   return (
+//     <Box sx={{ padding: 2, maxWidth: 600, margin: "auto", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+//       <Autocomplete
+//         freeSolo
+//         options={options}
+//         loading={loading}
+//         onInputChange={(event, newInputValue) => handleSearch(newInputValue)}
+//         groupBy={(option) => option.type}
+//         getOptionLabel={(option) => option.label}
+//         renderInput={(params) => (
+//           <TextField
+//             {...params}
+//             label="Search Accounts and Contacts"
+//             variant="outlined"
+//             fullWidth
+//             sx={{ marginBottom: 2 }}
+//             InputProps={{
+//               ...params.InputProps,
+//               endAdornment: (
+//                 <>
+//                   {loading ? <CircularProgress size={20} /> : null}
+//                   {params.InputProps.endAdornment}
+//                 </>
+//               ),
+//             }}
+//           />
+//         )}
+//         renderOption={(props, option) => (
+//           <Box component="li" {...props} sx={{ display: "flex", justifyContent: "space-between", padding: "4px 8px" }}>
+//             <span style={{color:'red'}}>{option.label}</span>
+            
+//           </Box>
+//         )}
+//       />
+
+//       {error && <Typography color="error">{error}</Typography>}
+
+     
+//     </Box>
+//   );
+// };
+
+// export default SearchComponent;
+
+
+
+// import React, { useState,useEffect } from "react";
+// import { Drawer,Box, TextField, CircularProgress, Typography, Button, Autocomplete } from "@mui/material";
+// import axios from "axios";
+// import ContactForm from "./UpdateContact"
+// import { useNavigate } from "react-router-dom";
+// const SearchComponent = () => {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [accounts, setAccounts] = useState([]);
+//   const [contacts, setContacts] = useState([]);
+//   const [error, setError] = useState(null);
+//   const [options, setOptions] = useState([]);
+//   const [selectedType, setSelectedType] = useState("Account"); // "All", "Account", "Contact"
+//   const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
+//    const [contactData, setContactData] = useState([]);
+//   const fetchContacts = async () => {
+//     try {
+//       const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
+//       setContactData(response.data.contactlist);
+//       console.log(response.data.contactlist);
+//     } catch (error) {
+//       console.error("API Error:", error);
+//       // toast.error('Failed to fetch contacts');
+//     }
+//   };
+//   useEffect(() => {
+//     fetchContacts();
+//   }, []);
+//   const handleContactUpdated = () => {
+//     fetchContacts(); // Refetch contacts when updated
+//   };
+//   const handleSearch = async (query) => {
+//     setSearchQuery(query);
+//     if (query.trim() === "") {
+//       setAccounts([]);
+//       setContacts([]);
+//       setOptions([]);
+//       return;
+//     }
+
+//     setLoading(true);
+//     setError(null);
+
+//     try {
+//       const [accountsResponse, contactsResponse] = await Promise.all([
+//         axios.get(`http://127.0.0.1:7000/accounts/accountdetails`, { params: { search: query } }),
+//         axios.get(`http://127.0.0.1:7000/contacts/`, { params: { search: query } }),
+//       ]);
+
+//       const accountsData = accountsResponse.data.accounts || [];
+//       const contactsData = contactsResponse.data.contacts || [];
+
+//       setAccounts(accountsData);
+//       setContacts(contactsData);
+
+//       const combinedOptions = [
+//         ...accountsData.map((account) => ({ label: account.accountName, type: "Account", id: account._id })),
+//         ...contactsData.map((contact) => ({
+//           label: `${contact.contactName} (${contact.email || "No Email"})`,
+//           type: "Contact",
+//           id: contact._id,
+//         })),
+//       ];
+//       setOptions(combinedOptions);
+//     } catch (err) {
+//       setError("Failed to fetch results. Please try again.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+//  // Trigger a search whenever `selectedType` or `searchQuery` changes
+//  useEffect(() => {
+//   if (searchQuery.trim() !== "") {
+//     handleSearch(searchQuery);
+//   }
+// }, [selectedType]);
+//   const filteredOptions = selectedType === "All" ? options : options.filter((opt) => opt.type === selectedType);
+//   const navigate = useNavigate();
+// // Handle option selection
+// const handleOptionSelect = (event, value) => {
+//   if (value) {
+//     console.log("Selected option:", value);
+//     if (value.type === "Account") {
+//       // Navigate to the account overview page with the account ID
+//       navigate(`/accountsdash/overview/${value.id}`);
+//     } else if (value.type === "Contact") {
+//       // // Open the drawer and set the selected contact
+//       // setSelectedContact(value);
+//       // setIsDrawerOpen(true);
+//       handleClick(value.id);
+//     }
+//   }
+// };
+// const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for drawer visibility
+// const [selectedContact, setSelectedContact] = useState(null); 
+// // Handle fetching contact data when a contact option is clicked
+// const handleClick = async (id) => {
+//   try {
+//     const url = `${CONTACT_API}/contacts/${id}`;
+//     const response = await fetch(url);
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch data");
+//     }
+//     const data = await response.json();
+//     setSelectedContact(data.contact);
+//     console.log(data.contact); // Debug: Log the contact data
+//     selectedContacts();
+//     setIsDrawerOpen(true); // Open the drawer after setting the contact data
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// };
+//  // Effect for selected contact
+//  useEffect(() => {
+//   if (selectedContact) {
+//     selectedContacts();
+//   }
+// }, [selectedContact]);
+
+// const selectedContacts = () => {
+//   if (selectedContact) {
+//     console.log("Selected contact:", selectedContact);
+//     // You can add more functionality for when the contact is selected, like updating the UI
+//   }
+// };
+
+// // Close the drawer
+// const handleCloseDrawer = () => {
+//   setIsDrawerOpen(false);
+//   setSelectedContact(null); // Optionally clear selected contact when closing the drawer
+// };
+//   return (
+//     <Box sx={{ padding: 2, maxWidth: 600, margin: "auto", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+//       <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+       
+//         <Button
+//           variant={selectedType === "Account" ? "contained" : "outlined"}
+//           onClick={() => setSelectedType("Account")}
+//         >
+//           Accounts
+//         </Button>
+//         <Button
+//           variant={selectedType === "Contact" ? "contained" : "outlined"}
+//           onClick={() => setSelectedType("Contact")}
+//         >
+//           Contacts
+//         </Button>
+//       </Box>
+
+//       <Autocomplete
+//         freeSolo
+//         options={filteredOptions}
+//         loading={loading}
+//         onInputChange={(event, newInputValue) => {
+//           setSearchQuery(newInputValue); // Update search query
+//           handleSearch(newInputValue); // Trigger search
+//         }}
+//         // onInputChange={(event, newInputValue) => handleSearch(newInputValue)}
+//         groupBy={(option) => option.type}
+//         getOptionLabel={(option) => option.label}
+//         renderInput={(params) => (
+//           <TextField
+//             {...params}
+//             label="Search Accounts and Contacts"
+//             variant="outlined"
+//             fullWidth
+//             sx={{ marginBottom: 2 }}
+//             InputProps={{
+//               ...params.InputProps,
+//               endAdornment: (
+//                 <>
+//                   {loading ? <CircularProgress size={20} /> : null}
+//                   {params.InputProps.endAdornment}
+//                 </>
+//               ),
+//             }}
+//           />
+//         )}
+//         renderOption={(props, option) => (
+//           <Box component="li" {...props} sx={{ display: "flex", justifyContent: "space-between", padding: "4px 8px" }}>
+//             <span>{option.label}</span>
+            
+//           </Box>
+//         )}
+//         onChange={handleOptionSelect}
+//       />
+
+//       {error && <Typography color="error">{error}</Typography>}
+
+//       {/* Drawer for displaying Contact details */}
+//       <Drawer
+//         anchor="right"
+//         open={isDrawerOpen}
+//         onClose={handleCloseDrawer}
+//         sx={{
+//           width: 300,
+//           flexShrink: 0,
+//           "& .MuiDrawer-paper": {
+//             width: 300,
+//             padding: 2,
+//             display: "flex",
+//             flexDirection: "column",
+//           },
+//         }}
+//       >
+//         {selectedContact && (
+//           <ContactForm
+//             selectedContact={selectedContact}
+//             // uniqueTags={uniqueTags}
+//             // Pass additional props needed by ContactForm
+//             handleTagChange={() => {}}
+//             handlePhoneNumberChange={() => {}}
+//             handleDeletePhoneNumber={() => {}}
+//             handleAddPhoneNumber={() => {}}
+//             handleCountryChange={() => {}}
+//             sendingData={() => {}}
+//             handleClose={() => setIsDrawerOpen(false)}
+//             // isSmallScreen={isMobile}
+//             onContactUpdated={handleContactUpdated}
+//           />
+//         )}
+//       </Drawer>
+//     </Box>
+//   );
+// };
+
+// export default SearchComponent;
+
+
+
+
+// <Box sx={{ marginTop: 3 }}>
+// <Typography variant="h6" sx={{ marginBottom: 1, fontWeight: "bold" }}>
+//   Accounts ({accounts.length})
+// </Typography>
+// {accounts.length === 0 && !loading && searchQuery.trim() !== "" ? (
+//   <Typography>No accounts found.</Typography>
+// ) : (
+//   <List>
+//     {accounts.map((account) => (
+//       <ListItem key={account.id}>
+//         <ListItemText primary={account.accountName} secondary={account.details} />
+//       </ListItem>
+//     ))}
+//   </List>
+// )}
+// </Box>
+
+// <Divider sx={{ marginY: 2 }} />
+
+// <Box>
+// <Typography variant="h6" sx={{ marginBottom: 1, fontWeight: "bold" }}>
+//   Contacts ({contacts.length})
+// </Typography>
+// {contacts.length === 0 && !loading && searchQuery.trim() !== "" ? (
+//   <Typography>No contacts found.</Typography>
+// ) : (
+//   <List>
+//     {contacts.map((contact) => (
+//       <ListItem key={contact.id}>
+//         <ListItemText primary={contact.contactName} secondary={contact.email} />
+//       </ListItem>
+//     ))}
+//   </List>
+// )}
+// </Box>
+
+  // renderOption={(props, option) => (
         //   <li {...props}>
         //     <Box>
         //       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
@@ -2626,70 +2928,6 @@ const SearchComponent = () => {
         //     </Box>
         //   </li>
         // )}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search Accounts and Contacts"
-            variant="outlined"
-            fullWidth
-            sx={{ marginBottom: 2 }}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {loading ? <CircularProgress size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            }}
-          />
-        )}
-      />
-
-      {error && <Typography color="error">{error}</Typography>}
-
-      <Box sx={{ marginTop: 3 }}>
-        <Typography variant="h6" sx={{ marginBottom: 1, fontWeight: "bold" }}>
-          Accounts ({accounts.length})
-        </Typography>
-        {accounts.length === 0 && !loading && searchQuery.trim() !== "" ? (
-          <Typography>No accounts found.</Typography>
-        ) : (
-          <List>
-            {accounts.map((account) => (
-              <ListItem key={account.id}>
-                <ListItemText primary={account.accountName} secondary={account.details} />
-              </ListItem>
-            ))}
-          </List>
-        )}
-      </Box>
-
-      <Divider sx={{ marginY: 2 }} />
-
-      <Box>
-        <Typography variant="h6" sx={{ marginBottom: 1, fontWeight: "bold" }}>
-          Contacts ({contacts.length})
-        </Typography>
-        {contacts.length === 0 && !loading && searchQuery.trim() !== "" ? (
-          <Typography>No contacts found.</Typography>
-        ) : (
-          <List>
-            {contacts.map((contact) => (
-              <ListItem key={contact.id}>
-                <ListItemText primary={contact.contactName} secondary={contact.email} />
-              </ListItem>
-            ))}
-          </List>
-        )}
-      </Box>
-    </Box>
-  );
-};
-
-export default SearchComponent;
-
-
 //     <Box sx={{ padding: 2, maxWidth: 600, margin: "auto" }}>
 //       <TextField
 //         label="Search Accounts and Contacts"

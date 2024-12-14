@@ -19,6 +19,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import android from "../Images/android.png";
 import apple from "../Images/apple.png";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 const Login = () => {
   const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
   const history = useNavigate();
@@ -80,10 +81,56 @@ const Login = () => {
       });
 
       const res = await data.json();
-      console.log(res);
+      // console.log("test token",res.result.token);
+// Decode the token
+const user = jwtDecode(res.result.token);
 
+// Access the payload
+console.log("test decode",user);
+
+// Function to handle different roles
+function handleUserRole(role) {
+  switch (role) {
+    case "Admin":
+      console.log("User is an Admin.");
+      // Add logic specific to Admin here
+      break;
+    case "TeamMember":
+      
+
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow"
+      };
+      
+      fetch(`http://127.0.0.1:8880/admin/teammemberbyuserid/${user.id}`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+        toast.success("Your TeamMember")
+        toast.info("Restricated Mode")
+          console.log("teammember data",result)
+          localStorage.setItem("usersrestrictions",JSON.stringify(result) );
+        })
+        .catch((error) => console.error(error));
+      console.log("User is a Team Member.");
+      // Add logic specific to TeamMember here
+      break;
+    case "Client":
+      console.log("User is a Client.");
+      // Add logic specific to Client here
+      break;
+    default:
+      console.log("Unknown role.");
+      // Handle unknown or undefined role
+      break;
+  }
+}
+
+// Testing the function
+handleUserRole(user.role);
       if (res.status === 200) {
         localStorage.setItem("usersdatatoken", res.result.token);
+        
         Cookies.set("userToken", res.result.token);
         history("/");
         setInpval({ ...inpval, email: "", password: "" });
@@ -212,6 +259,7 @@ const Login = () => {
                     <em>Select</em>
                   </MenuItem>
                   <MenuItem value="1min">1 minute</MenuItem>
+                  <MenuItem value="5min">5 minute</MenuItem>
                   <MenuItem value="30min">30 minutes</MenuItem>
                   <MenuItem value="4hours">4 hours</MenuItem>
                   <MenuItem value="8hours">8 hours</MenuItem>

@@ -84,14 +84,25 @@ const ContactForm = ({ onContactUpdated, selectedContact, handleClose, isSmallSc
       //   }))
       // );
 
-      const flatPhoneNumbers = selectedContact.phoneNumbers?.flat(2) || []; // Flatten to ensure no nested arrays
-      setPhoneNumbers(
-        flatPhoneNumbers.map((phoneObj) => ({
-          id: Date.now() + Math.random(), // Improved unique ID generation
-          phone: String(phoneObj.phone), // Access the phone property correctly
-          isPrimary: false, // Set based on your logic
-        }))
-      );
+      // const flatPhoneNumbers = selectedContact.phoneNumbers?.flat(2) || []; // Flatten to ensure no nested arrays
+      // setPhoneNumbers(
+      //   flatPhoneNumbers.map((phoneObj) => ({
+      //     id: Date.now() + Math.random(), // Improved unique ID generation
+      //     phone: String(phoneObj.phone), // Access the phone property correctly
+      //     isPrimary: false, // Set based on your logic
+      //   }))
+      // );
+
+      const flatPhoneNumbers = selectedContact.phoneNumbers?.flat() || [];
+setPhoneNumbers(
+  flatPhoneNumbers.map((phoneObj, index) => ({
+    id: index, // Or generate a more unique ID
+    phone: phoneObj, // Assuming phoneObj itself is a string or a simple object
+    isPrimary: false, // Set accordingly
+  }))
+);
+
+      console.log(flatPhoneNumbers)
 
       const flatTags = selectedContact.tags?.[0] || [];
       setTagsNew(
