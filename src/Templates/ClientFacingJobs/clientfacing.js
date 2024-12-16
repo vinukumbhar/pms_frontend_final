@@ -51,6 +51,7 @@ const Clientfacing = () => {
   // const fetchData = async () => {
   const fetchData = async () => {
     setLoading(true);
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const response = await fetch(`${CLIENT_FACING_API}/workflow/clientfacingjobstatus/`);
       if (!response.ok) {
@@ -63,6 +64,7 @@ const Clientfacing = () => {
       console.error("Error fetching data:", error);
     }
     finally {
+      await loaderDelay;
       setLoading(false); // Stop loader
     }
   };

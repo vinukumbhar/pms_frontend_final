@@ -190,6 +190,7 @@ const InvoiceTemp = () => {
   const [loading, setLoading] = useState(true);
   const fetchInvoiceTemplates = async () => {
     setLoading(true);
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const url = `${INVOICE_API}/workflow/invoicetemp/invoicetemplate`;
 
@@ -204,6 +205,7 @@ const InvoiceTemp = () => {
       console.error("Error fetching Invoice Templates:", error);
     }
     finally {
+      await loaderDelay;
       setLoading(false); // Stop loader
     }
   };

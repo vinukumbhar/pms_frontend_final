@@ -390,6 +390,7 @@ const OrganizersTemp = () => {
   const [loading, setLoading] = useState(true);
   const fetchOrganizerTemplates = async () => {
     setLoading(true);
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const url = `${ORGANIZER_TEMP_API}/workflow/organizers/organizertemplate`;
       const response = await fetch(url);
@@ -405,6 +406,7 @@ const OrganizersTemp = () => {
 
     }
     finally {
+      await loaderDelay;
       setLoading(false); // Stop loader
     }
   };

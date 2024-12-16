@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CiMenuKebab } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
+import { CircularProgress } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import EditorShortcodes from "../Texteditor/EditorShortcodes";
 import { useTheme } from "@mui/material/styles";
@@ -415,8 +416,11 @@ const MyStepper = () => {
   useEffect(() => {
     fetchPrprosalsAllData();
   }, []);
-
+ const [loading, setLoading] = useState(true); // Loader state
   const fetchPrprosalsAllData = async () => {
+    setLoading(true); // Start loader
+
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const url = `${PROPOSAL_API}/workflow/proposalesandels/proposalesandels`;
 
@@ -429,6 +433,11 @@ const MyStepper = () => {
       console.log(data);
     } catch (error) {
       console.error("Error fetching Proposals  templates:", error);
+    }
+    finally {
+      // Wait for the fetch and the 3-second timer to complete
+      await loaderDelay;
+      setLoading(false); // Stop loader
     }
   };
 
@@ -1901,7 +1910,10 @@ const MyStepper = () => {
             Create Template
           </Button>
           <Box mt={4}>
-            <MaterialReactTable columns={columns} table={table} />
+            {loading ? (
+              <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+            }
+            {/* <MaterialReactTable columns={columns} table={table} /> */}
           </Box>
         </Box>
       )}

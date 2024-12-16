@@ -9,7 +9,7 @@ import FolderList from "./FolderList";
 import TemplateName from "./TemplateName";
 import { Box, Typography, Paper } from "@mui/material";
 import FolderTempEdit from "./FolderTempEdit";
-
+import { CircularProgress } from "@mui/material";
 const FolderTemp = () => {
   const API_KEY = process.env.REACT_APP_API_IP;
   const [isOpenClientDocs, setIsOpenClientDocs] = useState(false);
@@ -32,9 +32,12 @@ const FolderTemp = () => {
 
   //get all templateName Record
   const [folderTemplates, setFolderTemplates] = useState([]);
-
+const [loading, setLoading] = useState(true); // Loader state
   useEffect(() => {
     async function fetchFolderTemplates() {
+      setLoading(true); // Start loader
+
+      const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
       try {
         const url = `${API_KEY}/common/folder`;
         const response = await fetch(url);
@@ -45,6 +48,11 @@ const FolderTemp = () => {
         setFolderTemplates(data.folderTemplates);
       } catch (error) {
         console.error("Error fetching folder templates:", error);
+      }
+      finally {
+        // Wait for the fetch and the 3-second timer to complete
+        await loaderDelay;
+        setLoading(false); // Stop loader
       }
     }
 
@@ -152,7 +160,27 @@ const FolderTemp = () => {
         </Box>
 
         <Box>
-          {showTable && <FolderTemplateTable handleCreateTemplate={handleCreateTemplate} folderTemplates={folderTemplates} handleEdit={handleEdit} />}
+        {loading ? (
+       <div
+       style={{
+         display: "flex",
+         justifyContent: "center",
+         alignItems: "center",
+        //  height: "80vh", // Full viewport height
+       }}
+     >
+       <CircularProgress />
+     </div>
+      ) : (
+        showTable && (
+          <FolderTemplateTable
+            handleCreateTemplate={handleCreateTemplate}
+            folderTemplates={folderTemplates}
+            handleEdit={handleEdit}
+          />
+        )
+      )}
+          {/* {showTable && <FolderTemplateTable handleCreateTemplate={handleCreateTemplate} folderTemplates={folderTemplates} handleEdit={handleEdit} />} */}
           {templateName && <TemplateName handleSaveTemplate={handleSaveTemplate} handleCancel={handleCancel} tempName={tempName} setTempName={setTempName} />}
 
           {folderList && <FolderList tempName={tempName} folderData={folderData} fetchAllFolders={fetchAllFolders} templateId={templateId} />}

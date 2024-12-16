@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import {MaterialReactTable,useMaterialReactTable} from 'material-react-table';
 import { CiMenuKebab } from "react-icons/ci";
 
-
+import { CircularProgress } from "@mui/material";
 
 
 const Service = () => {
@@ -179,9 +179,12 @@ const Service = () => {
     const [ServiceTemplates, setServiceTemplates] = useState([]);
     useEffect(() => {
         fetchServicesData()
-      })
-    
+      }, [])
+    const [loading, setLoading] = useState(true);
       const fetchServicesData = async () => {
+        setLoading(true); // Start loader
+
+        const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
         try {
           const url = `${SERVICE_API}/workflow/services/servicetemplate` ;
     
@@ -194,6 +197,11 @@ const Service = () => {
          
         } catch (error) {
           console.error("Error fetching service templates:", error);
+        }
+        finally {
+          // Wait for the fetch and the 3-second timer to complete
+          await loaderDelay;
+          setLoading(false); // Stop loader
         }
       };
       const [tempIdget, setTempIdGet] = useState("");
@@ -350,12 +358,14 @@ const Service = () => {
                 Create Service
             </Button>
             <Box>
-           
-            <MaterialReactTable
+           {loading ? (
+             <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+           }
+            {/* <MaterialReactTable
             columns={columns}
             
             table={table}
-          />
+          /> */}
             </Box>
             <Drawer
                 anchor="right"

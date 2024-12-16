@@ -28,6 +28,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiPlusCircle } from "react-icons/fi";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
+import { CircularProgress } from "@mui/material";
 const Tasks = () => {
   const TASK_API = process.env.REACT_APP_TASK_TEMP_URL;
   const USER_API = process.env.REACT_APP_USER_URL;
@@ -223,8 +224,12 @@ const Tasks = () => {
   const [TaskTemplates, setTaskTemplates] = useState([]);
   useEffect(() => {
     fetchTaskData();
-  })
+  }, [])
+    const [loading, setLoading] = useState(true);
   const fetchTaskData = async () => {
+    setLoading(true); // Start loader
+
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const url = `${TASK_API}/workflow/tasks/tasktemplate/`;
       const response = await fetch(url);
@@ -237,6 +242,11 @@ const Tasks = () => {
       );
     } catch (error) {
       console.error("Error fetching task templates:", error);
+    }
+    finally {
+      // Wait for the fetch and the 3-second timer to complete
+      await loaderDelay;
+      setLoading(false); // Stop loader
     }
   };
   const createTaskTemp = () => {
@@ -610,7 +620,10 @@ checked: checkedSubtasks.includes(id), // Check if ID is in the checkedSubtasks 
             <Button variant="contained" color="primary" onClick={handleCreateTask} sx={{ mb: 3 }}>
               Create Task Template
             </Button>
-            <MaterialReactTable columns={columns} table={table} />
+            {loading ? (
+              <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+            }
+            {/* <MaterialReactTable columns={columns} table={table} /> */}
           </Box>
         ) : (
           <Box sx={{ mt: 2 }}>

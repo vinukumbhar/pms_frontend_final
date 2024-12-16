@@ -1240,6 +1240,7 @@ const PipelineTemp = () => {
 
   const fetchPipelineData = async () => {
     setLoading(true);
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
 
       const url = `${PIPELINE_API}/workflow/pipeline/pipelines`;
@@ -1253,6 +1254,7 @@ const PipelineTemp = () => {
       console.error('Error fetching pipeline data:', error);
     }
     finally {
+      await loaderDelay;
       setLoading(false); // Stop loader
     }
   };

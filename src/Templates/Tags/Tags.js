@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo ,useContext} from 'react';
 import './tag.css'
 import { Box, Button, Typography, Drawer, Select, MenuItem, IconButton, TextField,Alert } from '@mui/material';
 import { FiSettings } from "react-icons/fi";
@@ -9,35 +9,11 @@ import { IoClose } from "react-icons/io5";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { CircularProgress } from "@mui/material";
 import { toast } from 'react-toastify';
-
+import { LoginContext } from "../../Sidebar/Context/Context";
 const Tags = () => {
 
-  const [data, setData] = useState(null);
-  // useEffect(() => {
-  //   // Retrieving object from localStorage
-  //   const storedData = localStorage.getItem('usersrestrictions');
-  //   if (storedData) {
-  //     setData(JSON.parse(storedData)); // Parse the JSON string back to an object
-  //   }
-  // }, []); 
-  useEffect(() => {
-    // Retrieving object from localStorage
-    const storedData = localStorage.getItem('usersrestrictions');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setData(parsedData); // Parse the JSON string back to an object
-      } catch (error) {
-        console.error('Error parsing localStorage data:', error);
-        setData(null); // Fallback to null if parsing fails
-      }
-    } else {
-      setData({}); // Default to an empty object if nothing is in localStorage
-    }
-  }, []);
-  const [manageTags, setManageTags]= useState(true)
-  console.log("user janavi",data.teammember.manageTags)
-  // const isManageTagsAllowed = data.teammember?.manageTags ?? false;
+ const { logindata } = useContext(LoginContext);
+ console.log("janavi",logindata)
   const TAGS_API = process.env.REACT_APP_TAGS_TEMP_URL;
 
   const [tags, setTags] = useState([]);
@@ -65,6 +41,8 @@ const Tags = () => {
 
   const fetchData = async () => {
     setLoading(true); // Start loader
+
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const response = await fetch(`${TAGS_API}/tags/accountcountoftag/account`);
       const data = await response.json();
@@ -75,6 +53,8 @@ const Tags = () => {
       console.error("Error fetching data:", error);
     }
     finally {
+      // Wait for the fetch and the 3-second timer to complete
+      await loaderDelay;
       setLoading(false); // Stop loader
     }
   };
@@ -391,7 +371,7 @@ const Tags = () => {
         }}
       >
         <Typography variant="h6">Tags</Typography>
-        <Button variant="contained" onClick={handleDrawerOpen}  disabled={!data.teammember.manageTags} >Add Tag</Button>
+        <Button variant="contained" onClick={handleDrawerOpen}  >Add Tag</Button>
       </Box>
 
 <Box >

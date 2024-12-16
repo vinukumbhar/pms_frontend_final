@@ -98,20 +98,7 @@ function handleUserRole(role) {
     case "TeamMember":
       
 
-      const requestOptions = {
-        method: "GET",
-        redirect: "follow"
-      };
       
-      fetch(`http://127.0.0.1:8880/admin/teammemberbyuserid/${user.id}`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-        toast.success("Your TeamMember")
-        toast.info("Restricated Mode")
-          console.log("teammember data",result)
-          localStorage.setItem("usersrestrictions",JSON.stringify(result) );
-        })
-        .catch((error) => console.error(error));
       console.log("User is a Team Member.");
       // Add logic specific to TeamMember here
       break;

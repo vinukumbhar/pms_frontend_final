@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect,useContext  } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, IconButton, List, ListItem, ListItemIcon, ListItemText, Collapse, Typography, Drawer, Button } from "@mui/material";
 import { ChevronLeft, ChevronRight, Brightness4, Brightness7 } from "@mui/icons-material";
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -9,7 +9,7 @@ import axios from "axios";
 import "./Sidebar.css";
 import iconMapping from './icons/index';
 import Logo from '../Images/Logo.svg';
-import { FaBars  } from "react-icons/fa6";
+import { FaBars } from "react-icons/fa6";
 // import { AiOutlinePlusCircle } from "react-icons/ai";
 import { FaPlusCircle } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
@@ -124,39 +124,39 @@ function Sidebar() {
   }, [theme]);
 
 
-   //Logout
-   const { logindata, setLoginData } = useContext(LoginContext);
+  //Logout
+  const { logindata, setLoginData } = useContext(LoginContext);
 
-   const history = useNavigate();
- 
-   const logoutuser = async () => {
-     let token = localStorage.getItem("usersdatatoken");
-     const url = `${LOGIN_API}/common/login/logout/`;
- 
-     const requestOptions = {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-         Authorization: token,
-       },
-     };
- 
-     const res = await fetch(url, requestOptions);
- 
-     const data = await res.json();
- 
-     if (data.status === 200) {
-       console.log("user logout");
-       localStorage.removeItem("usersdatatoken");
-       Cookies.remove("userToken");
-       setLoginData(false);
- 
-       history("/login");
-     } else {
-       console.log("error");
-     }
-   };
-   const [data, setData] = useState(false);
+  const history = useNavigate();
+
+  const logoutuser = async () => {
+    let token = localStorage.getItem("usersdatatoken");
+    const url = `${LOGIN_API}/common/login/logout/`;
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+
+    const res = await fetch(url, requestOptions);
+
+    const data = await res.json();
+
+    if (data.status === 200) {
+      console.log("user logout");
+      localStorage.removeItem("usersdatatoken");
+      Cookies.remove("userToken");
+      setLoginData(false);
+
+      history("/login");
+    } else {
+      console.log("error");
+    }
+  };
+  const [data, setData] = useState(false);
   const [loginsData, setloginsData] = useState("");
 
 
@@ -204,12 +204,14 @@ function Sidebar() {
   useEffect(() => {
     DashboardValid();
     setData(true);
+   
   }, []);
 
   const [userData, setUserData] = useState("");
   const [username, setUsername] = useState("");
-
+  const [userid, setUserid] = useState("");
   const fetchUserData = async (id) => {
+
     const maxLength = 15;
     const myHeaders = new Headers();
 
@@ -222,14 +224,52 @@ function Sidebar() {
     fetch(url + loginsData, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        // console.log("id", result);
+        console.log("id", result);
+
         if (result.email) {
           setUserData(truncateString(result.email, maxLength)); // Set a maximum length for userData if email exists
         }
         // console.log(userData)
+        setUserid(result._id)
+        fectUsersDatabyUserid(result._id)
         setUsername(result.username);
       });
   };
+  
+  const fectUsersDatabyUserid = (userid) => {
+    console.log("janavi", userid)
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    fetch(`http://127.0.0.1:8880/admin/teammemberbyuserid/${userid}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        // toast.success("Your TeamMember")
+        // toast.info("Restricated Mode")
+        // console.log("teammember data", result)
+        localStorage.setItem("teamMemberData", JSON.stringify(result));
+        retrieveTeamMemberData()
+      })
+      .catch((error) => console.error(error));
+  }
+  const retrieveTeamMemberData = () => {
+    // Get the stored data from localStorage
+    const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
+  
+    // Check if data exists
+    if (teamMemberData) {
+      console.log("Retrieved team member data:", teamMemberData);
+      // You can now work with teamMemberData as an object
+      // For example, accessing properties like:
+      // console.log(teamMemberData.name);
+    } else {
+      console.log("No team member data found.");
+    }
+  }
+  
+
   const truncateString = (str, maxLength) => {
     if (str && str.length > maxLength) {
       return str.substring(0, maxLength) + "..."; // Truncate string if it exceeds maxLength
@@ -240,22 +280,22 @@ function Sidebar() {
   return (
     <div className="grid-container">
       <header className="header" >
-        <Box component="header" sx={{ p: 2, display: 'flex', gap: 3,  }} >
+        <Box component="header" sx={{ p: 2, display: 'flex', gap: 3, }} >
           <Box className='bar-icon'>
             <FaBars onClick={handleToggleSidebar} style={{ fontSize: '1.8rem' }} />
           </Box>
-         
+
           {/* <Button variant="contained" color="success"  > */}
-          <FaPlusCircle   className="add-icon"  onClick={handleDrawerOpen}/>
+          <FaPlusCircle className="add-icon" onClick={handleDrawerOpen} />
           {/* </Button> */}
           <Box>
             {/* onClick={() => setIsDarkMode(!isDarkMode)} */}
             <IconButton >
-              {isDarkMode ? <Brightness7 onClick={toggleTheme}/> : <Brightness4 onClick={toggleTheme}/>}
+              {isDarkMode ? <Brightness7 onClick={toggleTheme} /> : <Brightness4 onClick={toggleTheme} />}
             </IconButton>
           </Box>
           <Box>
-            <SearchComponent/>
+            <SearchComponent />
           </Box>
         </Box>
       </header>
@@ -297,7 +337,7 @@ function Sidebar() {
                       '.menu-icon': {
                         color: '#fff',
                       },
-                      '.menu-text':{
+                      '.menu-text': {
                         color: '#fff',
                       }
                     },
@@ -305,7 +345,7 @@ function Sidebar() {
                     <ListItemIcon sx={{ fontSize: '1.5rem', }} className="menu-icon">
                       {iconMapping[item.icon] ? React.createElement(iconMapping[item.icon]) : null}
                     </ListItemIcon>
-                    {!isCollapsed && <ListItemText primary={item.label} sx={{ ml: -2 }} className="menu-text"/>}
+                    {!isCollapsed && <ListItemText primary={item.label} sx={{ ml: -2 }} className="menu-text" />}
                     {!isCollapsed && item.submenu.length > 0 && (
                       <ListItemIcon sx={{ justifyContent: 'end' }}>
                         {openMenu === item._id ? <ExpandLess className="menu-icon" /> : <ExpandMore className="menu-icon" />}
@@ -328,7 +368,7 @@ function Sidebar() {
                               '.menu-icon': {
                                 color: '#fff',
                               },
-                              '.menu-text':{
+                              '.menu-text': {
                                 color: '#fff',
                               }
 
@@ -337,7 +377,7 @@ function Sidebar() {
                             <ListItemIcon sx={{ fontSize: '1.2rem', }} className="menu-icon" >
                               {iconMapping[subItem.icon] ? React.createElement(iconMapping[subItem.icon]) : null}
                             </ListItemIcon>
-                            {!isCollapsed && <ListItemText primary={subItem.label} sx={{ ml: -2 }} className="menu-text"/>}
+                            {!isCollapsed && <ListItemText primary={subItem.label} sx={{ ml: -2 }} className="menu-text" />}
                           </ListItem>
                         ))}
                       </List>
@@ -360,19 +400,19 @@ function Sidebar() {
                       </span>
 
                       <div>
-                      <AiOutlineLogout  
-                        className="logout-icon"
-                        onClick={() => {
-                          logoutuser();
-                        }}
-                      />
-                    </div>
+                        <AiOutlineLogout
+                          className="logout-icon"
+                          onClick={() => {
+                            logoutuser();
+                          }}
+                        />
+                      </div>
                     </div>
 
-                 
+
                   </Link>
                 </li>
-               
+
               </ul>
             </div>
           </Box>
@@ -391,7 +431,7 @@ function Sidebar() {
         </Box>
       </main>
       <Drawer anchor="left" open={isDrawerOpen} onClose={handleDrawerClose} >
-        <Box sx={{ width: 300, p: 2,height:'100%' }} className="newSidebar" >
+        <Box sx={{ width: 300, p: 2, height: '100%' }} className="newSidebar" >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h6" fontWeight='bold'>New Sidebar Content</Typography>
             <RxCross2 onClick={handleDrawerClose} style={{ cursor: 'pointer' }} />
@@ -411,7 +451,7 @@ function Sidebar() {
                   '.menu-icon': {
                     color: '#fff',
                   },
-                  '.menu-text':{
+                  '.menu-text': {
                     color: '#fff',
                   }
                 },
@@ -419,7 +459,7 @@ function Sidebar() {
                 <ListItemIcon sx={{ fontSize: '1.5rem', color: '#2c85de' }} className="menu-icon">
                   {iconMapping[item.icon] ? React.createElement(iconMapping[item.icon]) : null}
                 </ListItemIcon>
-                <ListItemText primary={item.label} className="menu-text"/>
+                <ListItemText primary={item.label} className="menu-text" />
               </ListItem>
             ))}
           </List>

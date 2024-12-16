@@ -28,6 +28,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiPlusCircle } from "react-icons/fi";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
+import { CircularProgress } from "@mui/material";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 const ChatTemp = () => {
   const navigate = useNavigate();
@@ -277,8 +278,11 @@ const ChatTemp = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const [loading, setLoading] = useState(true); // Loader state
   const fetchChatTemplates = async () => {
+    setLoading(true); // Start loader
+
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       const url = `${CHAT_API}/Workflow/chats/chattemplate`;
       const response = await fetch(url);
@@ -292,7 +296,11 @@ const ChatTemp = () => {
     } catch (error) {
       console.error('Error fetching Chat templates:', error);
     }
-
+    finally {
+      // Wait for the fetch and the 3-second timer to complete
+      await loaderDelay;
+      setLoading(false); // Stop loader
+    }
   };
   useEffect(() => {
     fetchChatTemplates();
@@ -587,12 +595,15 @@ checked: checkedSubtasks.includes(id), // Check if ID is in the checkedSubtasks 
           <Button variant="contained" color="primary" onClick={handleCreateChat} sx={{ mb: 3 }}>
             Create Chat Template
           </Button>
-
+{/* 
           <MaterialReactTable
             columns={columns}
 
             table={table}
-          />
+          /> */}
+          {loading ? (
+            <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <MaterialReactTable columns={columns} table={table} />)
+          }
         </Box>
       ) : (
         <Box sx={{ mt: 2 }}>
