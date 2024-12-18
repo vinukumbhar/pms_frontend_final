@@ -85,6 +85,7 @@ import Inboxplus from './Inboxplus/Inboxplus.js';
 import AccountWiseProposal from "./nested-navbar/Proposals/PrposalTempUpdate.js"
 import AccountWiseProposalUpdate from "./nested-navbar/Proposals/ProposalAccWiseUpdate.js"
 import ProposalsELS from './Billing/Proposals&ELS/ProposalsEls.js'
+import NewTag from "./Pages/NewTag.js";
 const App = () => {
   return (
     <BrowserRouter>
@@ -101,6 +102,7 @@ const App = () => {
           <Route path="clients/accounts" element={<Account />} />
           <Route path="clients/contacts" element={<Contact />} />
           <Route path="stages" element={<Stages />} />
+          <Route path="firmtemp/tags" element={<NewTag/>}/>
           <Route path="addJobs" element={<CreateJob />} />
           <Route path="billing/Invoices" element={<Invoices />} />
           <Route path="billing/Invoices/Updateinvoice/:_id" element={<InvoiceUpdate />} />

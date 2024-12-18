@@ -33,7 +33,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
   const [companyname, setcompanyname] = useState("");
   const [cCountry, SetCCountry] = useState(null);
   const [countries, setCountries] = useState([]);
-
+  const [newUserId, setNewUserId]= useState('')
   // const [state, setstate] = useState('')
   const [cStreetAddress, SetCStreetAddress] = useState("");
   const [cCity, setCcity] = useState("");
@@ -318,38 +318,37 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
 
   // const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
   const SEVER_PORT = process.env.REACT_APP_SERVER_URI
+const CLIENT_PORT = process.env.REACT_APP_CLIENT_SERVER_URI
 
+  // const clientCreatedmail = (email) => {
+  //   const port = window.location.port;
+  //   const urlportlogin = `${SEVER_PORT}/`;
+  //   console.log(urlportlogin)
 
- 
-  const clientCreatedmail = (email) => {
-    const port = window.location.port;
-    const urlportlogin = `${SEVER_PORT}/`;
-    console.log(urlportlogin)
+  //   const myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+  //   const url = urlportlogin;
+  //   const raw = JSON.stringify({
+  //     email: email,
+  //     url: url,
+  //   });
 
-    const url = urlportlogin;
-    const raw = JSON.stringify({
-      email: email,
-      url: url,
-    });
+  //   const requestOptions = {
+  //     method: "POST",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow",
+  //   };
+  //   const urlusersavedmail = `${LOGIN_API}/clientsavedemail/`;
+  //   fetch(urlusersavedmail, requestOptions)
+  //     .then((response) => response.json())
 
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    const urlusersavedmail = `${LOGIN_API}/clientsavedemail/`;
-    fetch(urlusersavedmail, requestOptions)
-      .then((response) => response.json())
-
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => console.error(error));
-  };
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((error) => console.error(error));
+  // };
 
   const updateAcountUserId = (UserId, accountuserid) => {
     const myHeaders = new Headers();
@@ -358,7 +357,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
     const raw = JSON.stringify({
       userid: UserId,
     });
-
+console.log(raw)
     const requestOptions = {
       method: "PATCH",
       headers: myHeaders,
@@ -366,8 +365,10 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
       redirect: "follow",
     };
 
-    // const Url = ${LOGIN_API}/admin/adminsignup;
-    fetch(`${ACCOUNT_API}/accounts/accountdetails/${accountuserid}`, requestOptions)
+    const Url = `${ACCOUNT_API}/accounts/accountdetails/${accountuserid}`
+    console.log(Url)
+
+    fetch(Url, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -622,6 +623,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
     // Update combined values
     setCombinedValues((prevCombinedValues) => [...prevCombinedValues, ...selectedTags]);
   };
+
   const newUser = (accountid, email, firstName) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -647,15 +649,18 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
         .then((result) => {
             console.log(result);
             console.log(result._id);
-
+            setNewUserId(result._id)
             // Update account with the newly created user ID
             updateAcountUserId(result._id, accountid);
-
+            clientCreatedmail(email, personalMessage,result._id )
             // Optional: Trigger user created email notification
             // userCreatedmail();
         })
         .catch((error) => console.error(error));
 };
+
+console.log(newUserId)
+
   const handleContactAddPhoneNumber = () => {
     setPhoneNumbers((prevPhoneNumbers) => [...prevPhoneNumbers, { id: Date.now(), phone: "", isPrimary: false }]);
   };
@@ -676,20 +681,17 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
         console.log("Success:", data);
         handleDrawerClose();
         handleNewDrawerClose();
-        // const contactIds = data.newContacts.map((contact) => contact._id);
-        // updateContactstoAccount(contactIds);
-         // Extract contacts with login: true
+        const contactIds = data.newContacts.map((contact) => contact._id);
+        updateContactstoAccount(contactIds);
+  
          const filteredContacts = data.newContacts.filter((contact) => contact.login);
 
          console.log("Filtered Contacts:", filteredContacts);
 
-         // Call newUser for each filtered contact
          filteredContacts.forEach((contact) => {
-             newUser(contact.accountid, contact.email, contact.firstName);
-             clientCreatedmail(contact.email)
-         });
-        const contactIds = data.newContacts.map((contact) => contact._id);
-        updateContactstoAccount(contactIds);
+          newUser(contact.accountid, contact.email, contact.firstName);
+        });
+       
         // toast.success("Contact created successfully!");
         toast.success("Contact created successfully!");
 
@@ -701,7 +703,20 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
         // Handle errors (e.g., show error message)
       });
   };
+  const handleopendialog = () => {
+    setIsModalVisible(true);
+  }
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [personalMessage, setPersonalMessage] = useState('');
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false); // Hide the modal when close is clicked
+  };
+
+  const handleMessageChange = (event) => {
+    setPersonalMessage(event.target.value); // Update personal message input
+  };
   const updateContactstoAccount = (contactsIds) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -899,6 +914,40 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
   const handleDialogClose = () => {
     setOpen(false);
   }
+
+  console.log(newUserId)
+  const clientCreatedmail = (email, personalMessage, userid) => {
+    const port = window.location.port;
+    const urlportlogin = `${CLIENT_PORT}/updatepassword`;
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const url = urlportlogin;
+    const raw = JSON.stringify({
+      email: email,
+      personalMessage: personalMessage,
+      url: url,
+      AccountId: userid
+    });
+    console.log(raw)
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+   
+    const urlusersavedmail = `${LOGIN_API}/clientsavedemail/`;
+    console.log(urlusersavedmail)
+    fetch(urlusersavedmail, requestOptions)
+      .then((response) => response.json())
+
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => console.error(error));
+  };
+ 
 
   const linkContactsToAccount = (selectedContacts) => {
     const existingContactIds = contactData.map((contact) => contact._id);
@@ -1686,7 +1735,8 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
 
                     borderRadius: "10px",
                   }}
-                  onClick={handlesubmitContact}
+                  // onClick={handlesubmitContact}
+                  onClick={handleopendialog}
                 >
                   Create
                 </Button>
@@ -1704,6 +1754,33 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
                   Cancel
                 </Button>
               </Box>
+
+                 {/* Material-UI Dialog for Modal */}
+                 <Dialog open={isModalVisible} onClose={handleCloseModal}>
+                <DialogTitle>Add portal access</DialogTitle>
+                <DialogContent>
+                  <p>You are adding portal access for the following users:</p>
+                  <div>{contacts.email}</div>
+                  <TextField
+                    label="Personal message"
+                    variant="outlined"
+                    fullWidth
+                    value={personalMessage}
+                    onChange={handleMessageChange}
+                    // onChange={(e) => handleContactInputChange(index, e)} 
+                    sx={{ mt: 2 }}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseModal} color="primary">
+                    Skip
+                  </Button>
+                  <Button onClick={handlesubmitContact} color="primary">
+                    Send
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
             </Box>
 
           )}

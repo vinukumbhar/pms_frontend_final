@@ -58,14 +58,79 @@ function Sidebar() {
     const fetchSidebarData = async () => {
       try {
         const response = await axios.get(`${SIDEBAR_API}/api/`);
-        setSidebarItems(response.data);
+        const sidebarData = response.data;
+  
+        // Retrieve permissions from team member data
+        const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
+        const manageTags = teamMemberData?.manageTags ?? false;
+  
+        // Filter sidebar data based on permissions
+        const filteredSidebarData = filterSidebarMenu(sidebarData, manageTags);
+  
+        setSidebarItems(filteredSidebarData);
+        console.log("Filtered sidebar data:", filteredSidebarData);
       } catch (error) {
         console.error("Error fetching sidebar data:", error);
       }
     };
-
+  
     fetchSidebarData();
   }, []);
+  
+  const filterSidebarMenu = (menu, manageTags) => {
+    return menu.map((item) => {
+      if (item.submenu && item.submenu.length > 0) {
+        // Filter submenus based on permissions
+        item.submenu = item.submenu.filter((subItem) => {
+          if (subItem.label === "New Tags") {
+            return manageTags; // Only include "Tags" if manageTags is true
+          }
+          return true; // Include other submenus
+        });
+      }
+      return item;
+    });
+  };
+  
+//   const filterSidebarMenu = (menu, permissions) => {
+//     return menu.map((item) => {
+//       if (item.submenu && item.submenu.length > 0) {
+//         // Filter submenus based on permissions
+//         item.submenu = item.submenu.filter((subItem) => {
+//           if (subItem.label === "New Tags") {
+//             return permissions.manageTags;
+//           }
+//           return true;
+//         });
+//       }
+//       return item;
+//     }).filter((item) => (item.submenu ? item.submenu.length > 0 : true));
+//   };
+  
+//   useEffect(() => {
+//     const fetchSidebarData = async () => {
+//       try {
+//         const response = await axios.get(`${SIDEBAR_API}/api/`);
+//         const sidebarData = response.data;
+
+//  // Retrieve team member data and apply filtering
+//  const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
+//  if (teamMemberData) {
+//    const filteredData = filterSidebarMenu(sidebarData, teamMemberData);
+//    setSidebarItems(filteredData);
+//  } else {
+//    setSidebarItems(sidebarData);
+//  }
+// // setSidebarItems(sidebarData);
+//         console.log("sidebar",sidebarData)
+//       } catch (error) {
+//         console.error("Error fetching sidebar data:", error);
+//       }
+//     };
+
+//     fetchSidebarData();
+//     retrieveTeamMemberData();
+//   }, []);
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -243,7 +308,7 @@ function Sidebar() {
       redirect: "follow"
     };
 
-    fetch(`http://127.0.0.1:8880/admin/teammemberbyuserid/${userid}`, requestOptions)
+    fetch(`${LOGIN_API}/admin/teammemberbyuserid/${userid}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         // toast.success("Your TeamMember")
@@ -261,9 +326,7 @@ function Sidebar() {
     // Check if data exists
     if (teamMemberData) {
       console.log("Retrieved team member data:", teamMemberData);
-      // You can now work with teamMemberData as an object
-      // For example, accessing properties like:
-      // console.log(teamMemberData.name);
+    
     } else {
       console.log("No team member data found.");
     }
@@ -277,6 +340,8 @@ function Sidebar() {
       return str;
     }
   };
+
+  
   return (
     <div className="grid-container">
       <header className="header" >
