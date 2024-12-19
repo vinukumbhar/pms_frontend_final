@@ -85,7 +85,8 @@ import Inboxplus from './Inboxplus/Inboxplus.js';
 import AccountWiseProposal from "./nested-navbar/Proposals/PrposalTempUpdate.js"
 import AccountWiseProposalUpdate from "./nested-navbar/Proposals/ProposalAccWiseUpdate.js"
 import ProposalsELS from './Billing/Proposals&ELS/ProposalsEls.js'
-import NewTag from "./Pages/NewTag.js";
+import NewTag from "./Templates/Tags/Tags";
+import MarketPlaces from "./Pages/MarketPlaces.js";
 const App = () => {
   return (
     <BrowserRouter>
@@ -103,6 +104,9 @@ const App = () => {
           <Route path="clients/contacts" element={<Contact />} />
           <Route path="stages" element={<Stages />} />
           <Route path="firmtemp/tags" element={<NewTag/>}/>
+          <Route path="firmtemp/pipelines" element={<PipelineTemp/>}/>
+          <Route path="/firmtemp/templates/marketplace" element={<MarketPlaces/>}/>
+          <Route path="/PipelineTemplateUpdate/:id" element={<PipelineTempUpdate />} />
           <Route path="addJobs" element={<CreateJob />} />
           <Route path="billing/Invoices" element={<Invoices />} />
           <Route path="billing/Invoices/Updateinvoice/:_id" element={<InvoiceUpdate />} />
@@ -112,7 +116,8 @@ const App = () => {
           <Route path="workflow/pipelines" element={<Pipeline />} />
           <Route path="/organizerpreview" element={<PreviewOrganizer />} />
           <Route path="firmtemp/templates" element={<Templates />}>
-          <Route path="tags" element={<Tags />} />
+          {/* <Route path="tags" element={<Tags />} /> */}
+       
             <Route path="tasks" element={<Tasks />} />
           
             <Route path="tasks/taskTempUpdate/:_id" element={<TasksUpdate />} />
@@ -122,8 +127,8 @@ const App = () => {
             <Route path="jobs" element={<JobTemp />} />
             <Route path="jobs/JobTemplateUpdate/:_id" element={<JobTemplateUpdate />} />
             <Route path="clientfacing" element={<ClientfacingJob />} />
-            <Route path="pipelines" element={<PipelineTemp />} />
-            <Route path="pipelines/PipelineTemplateUpdate/:id" element={<PipelineTempUpdate />} />
+            {/* <Route path="pipelines" element={<PipelineTemp />} /> */}
+            {/* <Route path="pipelines/PipelineTemplateUpdate/:id" element={<PipelineTempUpdate />} /> */}
             <Route path="folders" element={<FolderTemp />} />
             <Route path="chats" element={<ChatTemp />} />
             <Route path="chats/chatTemplateUpdate/:id" element={<ChatTempUpdate />} />

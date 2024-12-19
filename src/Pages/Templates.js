@@ -34,7 +34,7 @@ const Templates = () => {
             },
           }}
         >
-           <NavLink to="/firmtemp/templates/tags">Tag</NavLink>
+           {/* <NavLink to="/firmtemp/templates/tasks">Tag</NavLink> */}
           <NavLink to="/firmtemp/templates/tasks"> Tasks</NavLink>
          
           <NavLink to="/firmtemp/templates/emails">Emails</NavLink>
@@ -47,7 +47,7 @@ const Templates = () => {
          
           <NavLink to="/firmtemp/templates/organizers">Organizers</NavLink>
      
-          <NavLink to="/firmtemp/templates/pipelines">Pipelines</NavLink>
+          {/* <NavLink to="/firmtemp/templates/pipelines">Pipelines</NavLink> */}
 
         
      

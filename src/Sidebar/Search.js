@@ -18,7 +18,7 @@ const SearchComponent = () => {
         try {
             const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
             setContactData(response.data.contactlist);
-            console.log(response.data.contactlist);
+            // console.log(response.data.contactlist);
         } catch (error) {
             console.error("API Error:", error);
             // toast.error('Failed to fetch contacts');
@@ -111,7 +111,7 @@ const SearchComponent = () => {
             }
             const data = await response.json();
             setSelectedContact(data.contact);
-            console.log(data.contact); // Debug: Log the contact data
+            // console.log(data.contact); // Debug: Log the contact data
             selectedContacts();
             setIsDrawerOpen(true); // Open the drawer after setting the contact data
               // Clear the autocomplete input and options

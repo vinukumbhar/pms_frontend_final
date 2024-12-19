@@ -1261,7 +1261,7 @@ const PipelineTemp = () => {
   const handleEdit = (_id) => {
     // Implement logic for editing here
     // console.log("Edit action triggered for template id: ", templateId);
-    navigate('PipelineTemplateUpdate/' + _id)
+    navigate('/PipelineTemplateUpdate/' + _id)
 
   };
 

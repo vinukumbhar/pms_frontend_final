@@ -122,7 +122,9 @@ border-bottom: 1px solid grey;
 .sidebar-contents .menu-icon{
   color: #2c85de;
 }
-
+.sidebar-contents::-webkit-scrollbar{
+  display: none;
+}
 
 .menu-item .MuiListItemText-root {
   transition: color 0.3s;

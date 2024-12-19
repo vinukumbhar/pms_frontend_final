@@ -335,7 +335,7 @@ const PipelineTempUpdate = () => {
 
   const handleButtonClick = () => {
     updatePipe();
-    navigate("/firmtemp/templates/pipelines");
+    navigate("/firmtemp/pipelines");
   };
   // const hanleCloseupdate = ()=>{
   //   navigate("/firmtemp/templates/pipelines")
@@ -345,10 +345,10 @@ const PipelineTempUpdate = () => {
     if (isFormFilled) {
       const confirmCancel = window.confirm("You have unsaved changes. Are you sure you want to cancel?");
       if (confirmCancel) {
-        navigate("/firmtemp/templates/pipelines");
+        navigate("/firmtemp/pipelines");
       }
     } else {
-      navigate("/firmtemp/templates/pipelines");
+      navigate("/firmtemp/pipelines");
     }
   };
   useEffect(() => {

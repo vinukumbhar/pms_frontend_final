@@ -54,83 +54,83 @@ function Sidebar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    const fetchSidebarData = async () => {
-      try {
-        const response = await axios.get(`${SIDEBAR_API}/api/`);
-        const sidebarData = response.data;
-  
-        // Retrieve permissions from team member data
-        const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
-        const manageTags = teamMemberData?.manageTags ?? false;
-  
-        // Filter sidebar data based on permissions
-        const filteredSidebarData = filterSidebarMenu(sidebarData, manageTags);
-  
-        setSidebarItems(filteredSidebarData);
-        console.log("Filtered sidebar data:", filteredSidebarData);
-      } catch (error) {
-        console.error("Error fetching sidebar data:", error);
-      }
-    };
-  
-    fetchSidebarData();
-  }, []);
-  
-  const filterSidebarMenu = (menu, manageTags) => {
-    return menu.map((item) => {
-      if (item.submenu && item.submenu.length > 0) {
-        // Filter submenus based on permissions
-        item.submenu = item.submenu.filter((subItem) => {
-          if (subItem.label === "New Tags") {
-            return manageTags; // Only include "Tags" if manageTags is true
+  //   useEffect(() => {
+  //     const fetchSidebarData = async () => {
+  //       try {
+  //         const response = await axios.get(`${SIDEBAR_API}/api/`);
+  //         const sidebarData = response.data;
+  //         setSidebarItems(sidebarData);
+  // console.log("sidebar data",sidebarData)
+  //       } catch (error) {
+  //         console.error("Error fetching sidebar data:", error);
+  //       }
+  //     };
+  //     fetchSidebarData();
+  //   }, []);
+
+
+  // useEffect(() => {
+  const fetchSidebarData = async () => {
+    try {
+      const response = await axios.get(`${SIDEBAR_API}/api/`);
+      let sidebarData = response.data;
+
+      // Retrieve team member data from localStorage
+      const storedData = JSON.parse(localStorage.getItem("teamMemberData"));
+      const userRole = localStorage.getItem("userRole");
+
+      console.log(storedData)
+      if (storedData && storedData.teammember) {
+        // const { manageTags } = teamMemberData.teammember;
+        const { manageTags, manageServices, managePipelines, manageTemplates, viewAllContacts ,manageProposals} = storedData.teammember;
+
+        // Filter or modify sidebar items based on manageTags
+        const updatedSidebarData = sidebarData.map((item) => {
+          // Remove the `Teams & plans` submenu if the user role is TeamMember
+          if (userRole === "TeamMember" && item.label === "Templates" && item.submenu) {
+            item.submenu = item.submenu.filter((subItem) => subItem.label !== "Teams & plans");
           }
-          return true; // Include other submenus
-        });
+          // Remove the `NewTags` submenu if manageTags is false
+          if (item.submenu && item.submenu.length > 0) {
+            item.submenu = item.submenu.filter(
+              (subItem) =>
+                !((subItem.label === "Tags" && !manageTags) ||
+                  (subItem.label === "Service" && !manageServices) ||
+                  (subItem.label === "Pipelines" && !managePipelines) ||
+                  (subItem.label === "Firm Templates" && !manageTemplates) ||
+                  (subItem.label === "Contacts" && !viewAllContacts) ||
+                  (subItem.label === "Proposal&Els" && !manageProposals)
+                )
+            );
+          }
+
+          // If the parent item is NewTags and manageTags is false, exclude it
+          if ((item.label === "NewTags" && !manageTags) ||
+            (item.label === "Service" && !manageServices) ||
+            (item.label === "Pipelines" && !managePipelines) ||
+            (item.label === "Firm Templates" && !manageTemplates)) {
+            return null;
+          }
+
+          return item;
+        }).filter(Boolean); // Remove null entries
+        setSidebarItems(updatedSidebarData);
+        console.log("sidebar", updatedSidebarData)
       }
-      return item;
-    });
+      else {
+        setSidebarItems(sidebarData);
+        console.log("side", sidebarData)
+      }
+    } catch (error) {
+      console.error("Error fetching sidebar data:", error);
+    }
   };
-  
-//   const filterSidebarMenu = (menu, permissions) => {
-//     return menu.map((item) => {
-//       if (item.submenu && item.submenu.length > 0) {
-//         // Filter submenus based on permissions
-//         item.submenu = item.submenu.filter((subItem) => {
-//           if (subItem.label === "New Tags") {
-//             return permissions.manageTags;
-//           }
-//           return true;
-//         });
-//       }
-//       return item;
-//     }).filter((item) => (item.submenu ? item.submenu.length > 0 : true));
-//   };
-  
-//   useEffect(() => {
-//     const fetchSidebarData = async () => {
-//       try {
-//         const response = await axios.get(`${SIDEBAR_API}/api/`);
-//         const sidebarData = response.data;
 
-//  // Retrieve team member data and apply filtering
-//  const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
-//  if (teamMemberData) {
-//    const filteredData = filterSidebarMenu(sidebarData, teamMemberData);
-//    setSidebarItems(filteredData);
-//  } else {
-//    setSidebarItems(sidebarData);
-//  }
-// // setSidebarItems(sidebarData);
-//         console.log("sidebar",sidebarData)
-//       } catch (error) {
-//         console.error("Error fetching sidebar data:", error);
-//       }
-//     };
 
-//     fetchSidebarData();
-//     retrieveTeamMemberData();
-//   }, []);
+  // }, []);
+
+
+
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -213,6 +213,7 @@ function Sidebar() {
     if (data.status === 200) {
       console.log("user logout");
       localStorage.removeItem("usersdatatoken");
+      localStorage.removeItem("teamMemberData");
       Cookies.remove("userToken");
       setLoginData(false);
 
@@ -250,13 +251,20 @@ function Sidebar() {
       // console.log("user verify");
       setLoginData(data);
       setloginsData(data.user.id);
+
+      console.log("User role:", data.user.role);
+
+
       if (data.user.role === "Admin") {
         fetchUserData(data.user.id);
+        fetchSidebarData()
         navigate("/");
       } else if (data.user.role === "Client") {
         navigate("/clientDash/home");
       } else if (data.user.role === "TeamMember") {
+        localStorage.setItem("userRole", data.user.role);
         fetchUserData(data.user.id);
+        fectUsersDatabyUserid(data.user.id)
         navigate("/");
       } else {
         toast.error("You are not valid user.");
@@ -269,7 +277,7 @@ function Sidebar() {
   useEffect(() => {
     DashboardValid();
     setData(true);
-   
+
   }, []);
 
   const [userData, setUserData] = useState("");
@@ -296,11 +304,12 @@ function Sidebar() {
         }
         // console.log(userData)
         setUserid(result._id)
-        fectUsersDatabyUserid(result._id)
+
+
         setUsername(result.username);
       });
   };
-  
+
   const fectUsersDatabyUserid = (userid) => {
     console.log("janavi", userid)
     const requestOptions = {
@@ -311,27 +320,22 @@ function Sidebar() {
     fetch(`${LOGIN_API}/admin/teammemberbyuserid/${userid}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        // toast.success("Your TeamMember")
-        // toast.info("Restricated Mode")
-        // console.log("teammember data", result)
+
+
+
+        // Store result in local storage
         localStorage.setItem("teamMemberData", JSON.stringify(result));
-        retrieveTeamMemberData()
+
+
+        // Immediately retrieve the stored data
+        //  const storedData = JSON.parse(localStorage.getItem("teamMemberData"));
+        //  console.log("Stored Team Member Data:", storedData);
+        fetchSidebarData();
       })
       .catch((error) => console.error(error));
   }
-  const retrieveTeamMemberData = () => {
-    // Get the stored data from localStorage
-    const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
-  
-    // Check if data exists
-    if (teamMemberData) {
-      console.log("Retrieved team member data:", teamMemberData);
-    
-    } else {
-      console.log("No team member data found.");
-    }
-  }
-  
+
+
 
   const truncateString = (str, maxLength) => {
     if (str && str.length > maxLength) {
@@ -341,7 +345,7 @@ function Sidebar() {
     }
   };
 
-  
+
   return (
     <div className="grid-container">
       <header className="header" >
@@ -385,7 +389,7 @@ function Sidebar() {
               <Typography variant="h5" className="company-name-text">SNP</Typography>
             )}
           </Box>
-          <Box className='sidebar-contents' sx={{ mt: 2 }}>
+          <Box className='sidebar-contents' sx={{ mt: 2, height: '78vh', overflowY: 'auto' }}>
             <List sx={{ cursor: 'pointer' }}>
               {sidebarItems.map(item => (
                 <Box key={item._id}>
