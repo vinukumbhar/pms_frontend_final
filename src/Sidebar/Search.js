@@ -14,6 +14,8 @@ const SearchComponent = () => {
     const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
     const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
     const [contactData, setContactData] = useState([]);
+   
+   
     const fetchContacts = async () => {
         try {
             const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
@@ -32,7 +34,11 @@ const SearchComponent = () => {
     };
     const handleSearch = async (query) => {
         setSearchQuery(query);
-        if (query.trim() === "") {
+        const storedData = JSON.parse(localStorage.getItem("teamMemberData"));
+        const userRole = localStorage.getItem("userRole");
+
+        const { viewAllAccounts, viewAllContacts } = storedData.teammember || {}; 
+        if (query.trim() === "" || (!viewAllAccounts && !viewAllContacts)) {
             setAccounts([]);
             setContacts([]);
             setOptions([]);
@@ -44,8 +50,10 @@ const SearchComponent = () => {
 
         try {
             const [accountsResponse, contactsResponse] = await Promise.all([
-                axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } }),
-                axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } }),
+                // axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } }),
+                // axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } }),
+                viewAllAccounts ? axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } }) : Promise.resolve({ data: { accounts: [] } }),
+                viewAllContacts ? axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } }) : Promise.resolve({ data: { contacts: [] } }),
             ]);
 
             const accountsData = accountsResponse.data.accounts || [];

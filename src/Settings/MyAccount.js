@@ -65,7 +65,7 @@ const MyAccount = () => {
       const url = `${LOGIN_API}/common/user/${logindata.user.id}`;
       const response = await fetch(url);
       const data = await response.json();
-
+console.log("adata", data)
       const validTime = logindata.user.exp - logindata.user.iat;
       setSignedTime(formatTimePeriod(validTime));
 

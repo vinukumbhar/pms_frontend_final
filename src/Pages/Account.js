@@ -1,5 +1,35 @@
 import React, { useEffect, useState, useContext } from "react";
-import { DialogTitle, DialogContent, DialogActions, Drawer, TablePagination, Chip, Tooltip, Autocomplete, Box, Divider, Typography, OutlinedInput, MenuItem as MuiMenuItem, FormControl, InputLabel, Menu, Button, IconButton, Select, MenuItem, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Paper } from "@mui/material";
+import {
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Drawer,
+  TablePagination,
+  Chip,
+  Tooltip,
+  Autocomplete,
+  Box,
+  Divider,
+  Typography,
+  OutlinedInput,
+  MenuItem as MuiMenuItem,
+  FormControl,
+  InputLabel,
+  Menu,
+  Button,
+  IconButton,
+  Select,
+  MenuItem,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Checkbox,
+  Paper,
+} from "@mui/material";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { RxCross2 } from "react-icons/rx";
@@ -21,7 +51,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { CircularProgress } from "@mui/material";
-import { LoginContext } from '../Sidebar/Context/Context.js'
+import { LoginContext } from "../Sidebar/Context/Context.js";
 const FixedColumnTable = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -30,7 +60,10 @@ const FixedColumnTable = () => {
   const [accountData, setAccountData] = useState([]);
   const [selected, setSelected] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ key: "Name", direction: "asc" });
+  const [sortConfig, setSortConfig] = useState({
+    key: "Name",
+    direction: "asc",
+  });
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5); // 5 rows per page
@@ -50,16 +83,37 @@ const FixedColumnTable = () => {
   const [isActiveTrue, setIsActiveTrue] = useState(true);
   const [anchorE2, setAnchorE2] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${ACCOUNT_API}/accounts/account/accountdetailslist/${isActiveTrue}`);
-      setAccountData(response.data.accountlist);
-      console.log(response.data.accountlist);
+      const response = await axios.get(
+        `${ACCOUNT_API}/accounts/account/accountdetailslist/${isActiveTrue}`
+      );
+      let accountsListData = response.data.accountlist;
+     // Retrieve team member data from localStorage
+    const storedData = JSON.parse(localStorage.getItem("teamMemberData"));
+    console.log("recived data", storedData);
+    const userRole = localStorage.getItem("userRole");
+    console.log("role is", userRole);
+
+    // Check user permissions
+    // const canViewAccounts =
+    //   userRole === "TeamMember" ? storedData.viewallAccounts : false;
+     // Check if the user is a TeamMember and if they have permission to view accounts (viewallAccounts = true)
+     const canViewAccounts = userRole === "TeamMember" && storedData.teammember.viewallAccounts;
+    
+     
+    
+    
+     if (canViewAccounts) {
+      setAccountData(accountsListData);
+    } else {
+      setAccountData(accountsListData); // Clear account data if not permitted
+    }
     } catch (error) {
       console.log("Error:", error);
-    }
-    finally {
+    } finally {
       setLoading(false); // Stop loader
     }
   };
@@ -70,13 +124,16 @@ const FixedColumnTable = () => {
 
   const handleSelect = (id) => {
     const currentIndex = selected.indexOf(id);
-    const newSelected = currentIndex === -1 ? [...selected, id] : selected.filter((item) => item !== id);
+    const newSelected =
+      currentIndex === -1
+        ? [...selected, id]
+        : selected.filter((item) => item !== id);
     setSelected(newSelected);
     // Log all selected row IDs
-    console.log("Selected IDs:", newSelected); // Log all selected IDs
+    // console.log("Selected IDs:", newSelected); // Log all selected IDs
   };
 
-  console.log(selected);
+  // console.log(selected);
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value })); // Update filter without clearing others
@@ -84,12 +141,28 @@ const FixedColumnTable = () => {
   };
 
   const filteredData = accountData.filter((row) => {
-    const accountNameMatch = row.Name.toLowerCase().includes(filters.accountName.toLowerCase());
-    const typeMatch = filters.type ? row.Type.toLowerCase() === filters.type.toLowerCase() : true;
-    const teamMemberMatch = filters.teamMember ? row.Team.some((member) => member.username === filters.teamMember) : true;
+    const accountNameMatch = row.Name.toLowerCase().includes(
+      filters.accountName.toLowerCase()
+    );
+    const typeMatch = filters.type
+      ? row.Type.toLowerCase() === filters.type.toLowerCase()
+      : true;
+    const teamMemberMatch = filters.teamMember
+      ? row.Team.some((member) => member.username === filters.teamMember)
+      : true;
     // const tagMatch = filters.tags.length ? filters.tags.every((tag) => row.Tags.some((rowTag) => rowTag.tagName === tag)) : true;
     // const tagMatch = filters.tags.length ? filters.tags.some((tag) => row.Tags.some((rowTag) => rowTag.tagName === tag.tagName && rowTag.tagColour === tag.tagColour)) : true;
-    const tagMatch = filters.tags.length ? row.Tags && Array.isArray(row.Tags) && filters.tags.some((tag) => row.Tags.some((rowTag) => rowTag.tagName === tag.tagName && rowTag.tagColour === tag.tagColour)) : true;
+    const tagMatch = filters.tags.length
+      ? row.Tags &&
+        Array.isArray(row.Tags) &&
+        filters.tags.some((tag) =>
+          row.Tags.some(
+            (rowTag) =>
+              rowTag.tagName === tag.tagName &&
+              rowTag.tagColour === tag.tagColour
+          )
+        )
+      : true;
     return accountNameMatch && typeMatch && teamMemberMatch && tagMatch;
   });
   const handleFilterButtonClick = (event) => {
@@ -118,7 +191,11 @@ const FixedColumnTable = () => {
   const handleMultiSelectChange = (name, values) => {
     setFilters((prevFilters) => ({ ...prevFilters, [name]: values }));
   };
-  const teamMemberOptions = Array.from(new Set(accountData.flatMap((row) => row.Team.map((member) => member.username))));
+  const teamMemberOptions = Array.from(
+    new Set(
+      accountData.flatMap((row) => row.Team.map((member) => member.username))
+    )
+  );
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
@@ -137,10 +214,12 @@ const FixedColumnTable = () => {
 
   const uniqueTags =
     tags.length > 0
-      ? Array.from(new Set(tags.map((tag) => `${tag.tagName}-${tag.tagColour}`))).map((tagKey) => {
-        const [tagName, tagColour] = tagKey.split("-");
-        return { tagName, tagColour };
-      })
+      ? Array.from(
+          new Set(tags.map((tag) => `${tag.tagName}-${tag.tagColour}`))
+        ).map((tagKey) => {
+          const [tagName, tagColour] = tagKey.split("-");
+          return { tagName, tagColour };
+        })
       : [];
   const calculateWidth = (tagName) => {
     const baseWidth = 10; // base width for each tag
@@ -151,7 +230,10 @@ const FixedColumnTable = () => {
   const handleSort = (key) => {
     setSortConfig((prevSortConfig) => {
       if (prevSortConfig.key === key) {
-        return { key, direction: prevSortConfig.direction === "asc" ? "desc" : "asc" };
+        return {
+          key,
+          direction: prevSortConfig.direction === "asc" ? "desc" : "asc",
+        };
       }
       return { key, direction: "asc" };
     });
@@ -163,8 +245,10 @@ const FixedColumnTable = () => {
 
     if (sortConfig.key) {
       sorted.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
-        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
+        if (a[sortConfig.key] < b[sortConfig.key])
+          return sortConfig.direction === "asc" ? -1 : 1;
+        if (a[sortConfig.key] > b[sortConfig.key])
+          return sortConfig.direction === "asc" ? 1 : -1;
         return 0;
       });
     }
@@ -197,7 +281,10 @@ const FixedColumnTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const paginatedData = sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedData = sortedData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   const handleAssignOrganizer = () => {
     setIsCreateOrganizerOpen(!isCreateOrganizerOpen);
@@ -320,9 +407,8 @@ const FixedColumnTable = () => {
 
   // Handle the change in the select dropdown
   const handleSettingChange = (setting, value) => {
-
-    console.log(value)
-    console.log(setting)
+    console.log(value);
+    console.log(setting);
 
     // if (setting === 'notify') {
     //   setNotifySetting(setting, value)
@@ -335,8 +421,13 @@ const FixedColumnTable = () => {
     // }
 
     // Map the dropdown values to boolean or undefined
-    const mappedValue = value === "Assign to all" ? true : value === "Remove from all" ? false : undefined;
-    console.log(mappedValue)
+    const mappedValue =
+      value === "Assign to all"
+        ? true
+        : value === "Remove from all"
+          ? false
+          : undefined;
+    console.log(mappedValue);
     setSettings((prevState) => ({
       ...prevState,
       [setting]: mappedValue,
@@ -344,18 +435,16 @@ const FixedColumnTable = () => {
   };
   // const handleSettingChange = (setting, value) => {
   //   console.log(`Setting: ${setting}, Value: ${value}`);
-  
-   
-  
+
   //   // Map dropdown values to a boolean or undefined
-  //   const mappedValue = value === "Assign to all" 
-  //     ? true 
-  //     : value === "Remove from all" 
-  //     ? false 
+  //   const mappedValue = value === "Assign to all"
+  //     ? true
+  //     : value === "Remove from all"
+  //     ? false
   //     : undefined;
-  
+
   //   console.log(`Mapped Value: ${mappedValue}`);
-  
+
   //   // Update the state with the new setting value
   //   setSettings((prevState) => ({
   //     ...prevState,
@@ -376,15 +465,22 @@ const FixedColumnTable = () => {
   //       console.warn(`Unknown setting: ${setting}`);
   //   }
   // };
-  
 
-  const [loginSetting, setLoginSetting] = useState({ settingName: '', value: '' })
-  const [notifySetting, setNotifySetting] = useState({ settingName: '', value: '' })
-  const [emailSyncSetting, setEmailSyncSetting] = useState({ settingName: '', value: '' })
+  const [loginSetting, setLoginSetting] = useState({
+    settingName: "",
+    value: "",
+  });
+  const [notifySetting, setNotifySetting] = useState({
+    settingName: "",
+    value: "",
+  });
+  const [emailSyncSetting, setEmailSyncSetting] = useState({
+    settingName: "",
+    value: "",
+  });
 
   const handleupdatecontacts = () => {
     submitupdatecontacts(selected);
-
   };
   const { logindata, setLoginData } = useContext(LoginContext);
 
@@ -406,14 +502,12 @@ const FixedColumnTable = () => {
     fetch(url + loginsData, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-
         setUserData(result.email); // Set a maximum length for userData if email exists
 
         setUsername(result.username);
       });
   };
   useEffect(() => {
-
     fetchUserLoginData(logindata.user.id);
   }, []);
 
@@ -427,28 +521,28 @@ const FixedColumnTable = () => {
       operations: {
         login: loginSetting.value,
         notify: notifySetting.value,
-        emailSync: emailSyncSetting.value
+        emailSync: emailSyncSetting.value,
       },
       accountsSummary: {
-        "total": "1",
-        "successful": "1",
-        "failed": "0"
+        total: "1",
+        successful: "1",
+        failed: "0",
       },
-      timestamp: "10.21"
+      timestamp: "10.21",
     });
-console.log(raw)
+    console.log(raw);
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
     };
 
     fetch(`${ACCOUNT_API}/editnotifyloginemailsync`, requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));
-  }
+  };
   const submitupdatecontacts = (selected) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -494,12 +588,15 @@ console.log(raw)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        toast.success("Bulk edit in progress, you will receive an email and Inbox+ notification when complete.");
+        toast.success(
+          "Bulk edit in progress, you will receive an email and Inbox+ notification when complete."
+        );
         // editMailNotifyLoginSendmail()
         handleCloseSidebar();
       })
       .catch((error) => console.error(error));
   };
+ 
   return (
     <>
       <div style={{ display: "flex", padding: "10px", marginBottom: "20px" }}>
@@ -529,11 +626,13 @@ console.log(raw)
                   color: "white",
                 },
               },
-            }}>
+            }}
+          >
             <Box>
               <Button
                 style={{
-                  backgroundColor: activeButton === "active" ? "blue" : "transparent",
+                  backgroundColor:
+                    activeButton === "active" ? "blue" : "transparent",
                   color: activeButton === "active" ? "white" : "black",
                   fontWeight: activeButton === "active" ? "bold" : "normal",
                 }}
@@ -544,7 +643,8 @@ console.log(raw)
 
               <Button
                 style={{
-                  backgroundColor: activeButton === "archived" ? "blue" : "transparent",
+                  backgroundColor:
+                    activeButton === "archived" ? "blue" : "transparent",
                   color: activeButton === "archived" ? "white" : "black",
                   fontWeight: activeButton === "archived" ? "bold" : "normal",
                 }}
@@ -555,13 +655,8 @@ console.log(raw)
             </Box>
           </Box>
           <Divider sx={{ my: 2, margin: "20px" }} />
-          <Box sx={{ my: 2, margin: "20px" }}>
-            <Button variant="text" onClick={handleFilterButtonClick}>
-              Filter Options
-            </Button>
-          </Box>
+          
           <Outlet />
-
         </Box>
         {/* <Button variant="text" onClick={handleFilterButtonClick} style={{ marginRight: "10px" }}>
           Filter Options
@@ -581,22 +676,47 @@ console.log(raw)
               backgroundColor: "#f5f5f5",
             }}
           >
-            <Button variant="text" startIcon={<ListIcon />} onClick={handleAssignOrganizer}>
+            <Button
+              variant="text"
+              startIcon={<ListIcon />}
+              onClick={handleAssignOrganizer}
+            >
               Send Organizer
             </Button>
-            <Button variant="text" startIcon={<ListIcon />} onClick={handleAddJob}>
+            <Button
+              variant="text"
+              startIcon={<ListIcon />}
+              onClick={handleAddJob}
+            >
               Add Job
             </Button>
-            <Button variant="text" startIcon={<PersonIcon />} onClick={handleManageTeam}>
+            <Button
+              variant="text"
+              startIcon={<PersonIcon />}
+              onClick={handleManageTeam}
+            >
               Manage Team
             </Button>
-            <Button variant="text" startIcon={<EmailIcon />} disabled={selected.length === 0} onClick={handleSendEmail}>
+            <Button
+              variant="text"
+              startIcon={<EmailIcon />}
+              disabled={selected.length === 0}
+              onClick={handleSendEmail}
+            >
               Send Email
             </Button>
-            <Button variant="text" startIcon={<TagIcon />} onClick={handleManageTags}>
+            <Button
+              variant="text"
+              startIcon={<TagIcon />}
+              onClick={handleManageTags}
+            >
               Manage Tags
             </Button>
-            <Button variant="text" startIcon={<MoreVertIcon />} onClick={handleMoreActionsClick}>
+            <Button
+              variant="text"
+              startIcon={<MoreVertIcon />}
+              onClick={handleMoreActionsClick}
+            >
               More Actions
             </Button>
 
@@ -614,10 +734,14 @@ console.log(raw)
                 horizontal: "left",
               }}
             >
-              <MenuItem onClick={handleArchiveAccount}> {isActiveTrue ? "Archive Account" : "Activate Account"}</MenuItem>
-              <MenuItem onClick={handleEditLoginNotifyEmailSync}>Edit login notify emailSync</MenuItem>
+              <MenuItem onClick={handleArchiveAccount}>
+                {" "}
+                {isActiveTrue ? "Archive Account" : "Activate Account"}
+              </MenuItem>
+              <MenuItem onClick={handleEditLoginNotifyEmailSync}>
+                Edit login notify emailSync
+              </MenuItem>
               {/* <MenuItem onClick={handleAction3}>Additional Action 3</MenuItem>  */}
-
             </Menu>
           </div>
         )}
@@ -640,18 +764,27 @@ console.log(raw)
           <div style={{ padding: 16, position: "relative" }}>
             <DialogTitle>
               Bulk-edit login, notify, email sync
-              <Typography variant="subtitle1">For a selected account</Typography>
-              <IconButton onClick={handleCloseSidebar} style={{ position: "absolute", right: 8, top: 8 }}>
+              <Typography variant="subtitle1">
+                For a selected account
+              </Typography>
+              <IconButton
+                onClick={handleCloseSidebar}
+                style={{ position: "absolute", right: 8, top: 8 }}
+              >
                 <CloseIcon />
               </IconButton>
             </DialogTitle>
 
             <DialogContent dividers>
               <Typography variant="body2" color="textSecondary" gutterBottom>
-                Bulk edit updates all email addresses linked to the selected accounts. You can adjust settings per contact within each account's Info section.
+                Bulk edit updates all email addresses linked to the selected
+                accounts. You can adjust settings per contact within each
+                account's Info section.
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Your clients will be able to access their portal through their email address and receive notifications. Additionally, you can automatically see all email history if you enable email sync.
+                Your clients will be able to access their portal through their
+                email address and receive notifications. Additionally, you can
+                automatically see all email history if you enable email sync.
               </Typography>
 
               <TableContainer>
@@ -664,15 +797,32 @@ console.log(raw)
                   </TableHead>
                   <TableBody>
                     {[
-                      { label: "Login", setting: "login", icon: <PersonIcon /> },
-                      { label: "Notify", setting: "notify", icon: <NotificationsIcon /> },
-                      { label: "Email sync", setting: "emailSync", icon: <EmailIcon /> },
+                      {
+                        label: "Login",
+                        setting: "login",
+                        icon: <PersonIcon />,
+                      },
+                      {
+                        label: "Notify",
+                        setting: "notify",
+                        icon: <NotificationsIcon />,
+                      },
+                      {
+                        label: "Email sync",
+                        setting: "emailSync",
+                        icon: <EmailIcon />,
+                      },
                     ].map((setting, index) => (
                       <TableRow key={index}>
                         <TableCell>
-                          <div style={{ display: "flex", alignItems: "center" }}>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
                             {setting.icon}
-                            <Typography variant="body2" style={{ marginLeft: 8 }}>
+                            <Typography
+                              variant="body2"
+                              style={{ marginLeft: 8 }}
+                            >
                               {setting.label}
                             </Typography>
                           </div>
@@ -680,13 +830,22 @@ console.log(raw)
                         <TableCell>
                           <Select
                             value={settings[setting.setting]} // Controlled value based on state
-                            onChange={(e) => handleSettingChange(setting.setting, e.target.value)} // Handle change
+                            onChange={(e) =>
+                              handleSettingChange(
+                                setting.setting,
+                                e.target.value
+                              )
+                            } // Handle change
                             displayEmpty
                             inputProps={{ "aria-label": "Without label" }}
                             sx={{ width: "150px" }}
                           >
-                            <MenuItem value="Assign to all">Assign to all</MenuItem>
-                            <MenuItem value="Remove from all">Remove from all</MenuItem>
+                            <MenuItem value="Assign to all">
+                              Assign to all
+                            </MenuItem>
+                            <MenuItem value="Remove from all">
+                              Remove from all
+                            </MenuItem>
                             <MenuItem value="Do nothing">Do nothing</MenuItem>
                           </Select>
                         </TableCell>
@@ -698,18 +857,29 @@ console.log(raw)
             </DialogContent>
 
             <DialogActions>
-              <Button variant="contained" color="primary" onClick={handleupdatecontacts}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleupdatecontacts}
+              >
                 Save
               </Button>
-              <Button variant="outlined" color="secondary" onClick={handleCloseSidebar}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleCloseSidebar}
+              >
                 Cancel
               </Button>
             </DialogActions>
           </div>
-
         </Drawer>
 
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
           <MenuItem
             onClick={() => {
               toggleFilter("accountName");
@@ -746,32 +916,82 @@ console.log(raw)
 
         {/* Account Name Filter */}
         {showFilters.accountName && (
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-            <TextField name="accountName" value={filters.accountName} onChange={handleFilterChange} placeholder="Filter by Account Name" variant="outlined" size="small" style={{ marginRight: "10px" }} />
-            <DeleteIcon onClick={() => clearFilter("accountName")} style={{ cursor: "pointer", color: "red" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <TextField
+              name="accountName"
+              value={filters.accountName}
+              onChange={handleFilterChange}
+              placeholder="Filter by Account Name"
+              variant="outlined"
+              size="small"
+              style={{ marginRight: "10px" }}
+            />
+            <DeleteIcon
+              onClick={() => clearFilter("accountName")}
+              style={{ cursor: "pointer", color: "red" }}
+            />
           </div>
         )}
 
         {/* Type Filter */}
         {showFilters.type && (
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-            <FormControl variant="outlined" size="small" style={{ marginRight: "10px", width: "150px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <FormControl
+              variant="outlined"
+              size="small"
+              style={{ marginRight: "10px", width: "150px" }}
+            >
               <InputLabel>Type</InputLabel>
-              <Select name="type" value={filters.type} onChange={handleFilterChange} label="Type">
+              <Select
+                name="type"
+                value={filters.type}
+                onChange={handleFilterChange}
+                label="Type"
+              >
                 <MenuItem value="">All</MenuItem>
                 <MenuItem value="Individual">Individual</MenuItem>
                 <MenuItem value="Company">Company</MenuItem>
               </Select>
             </FormControl>
-            <DeleteIcon onClick={() => clearFilter("type")} style={{ cursor: "pointer", color: "red" }} />
+            <DeleteIcon
+              onClick={() => clearFilter("type")}
+              style={{ cursor: "pointer", color: "red" }}
+            />
           </div>
         )}
         {/* Team Member Filter */}
         {showFilters.teamMember && (
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-            <FormControl variant="outlined" size="small" style={{ marginRight: "10px", width: "150px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <FormControl
+              variant="outlined"
+              size="small"
+              style={{ marginRight: "10px", width: "150px" }}
+            >
               <InputLabel>Team Member</InputLabel>
-              <Select name="teamMember" value={filters.teamMember} onChange={handleFilterChange} label="Team Member">
+              <Select
+                name="teamMember"
+                value={filters.teamMember}
+                onChange={handleFilterChange}
+                label="Team Member"
+              >
                 <MenuItem value="">All</MenuItem>
                 {teamMemberOptions.map((member) => (
                   <MenuItem key={member} value={member}>
@@ -780,17 +1000,28 @@ console.log(raw)
                 ))}
               </Select>
             </FormControl>
-            <DeleteIcon onClick={() => clearFilter("teamMember")} style={{ cursor: "pointer", color: "red" }} />
+            <DeleteIcon
+              onClick={() => clearFilter("teamMember")}
+              style={{ cursor: "pointer", color: "red" }}
+            />
           </div>
         )}
         {/* Tags Filter */}
         {showFilters.tags && (
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
             <Autocomplete
               multiple
               options={uniqueTags}
               value={filters.tags || []}
-              onChange={(e, newValue) => handleMultiSelectChange("tags", newValue)}
+              onChange={(e, newValue) =>
+                handleMultiSelectChange("tags", newValue)
+              }
               getOptionLabel={(option) => option.tagName}
               filterSelectedOptions
               renderOption={(props, option) => (
@@ -829,172 +1060,285 @@ console.log(raw)
                   />
                 ))
               }
-              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Filter by Tags" size="small" style={{ width: "250px" }} />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  placeholder="Filter by Tags"
+                  size="small"
+                  style={{ width: "250px" }}
+                />
+              )}
               style={{ marginRight: "10px", width: "250px" }}
             />
-            <DeleteIcon onClick={() => clearFilter("tags")} style={{ cursor: "pointer", color: "red" }} />
+            <DeleteIcon
+              onClick={() => clearFilter("tags")}
+              style={{ cursor: "pointer", color: "red" }}
+            />
           </div>
         )}
       </div>
-      {loading ? (  <Box sx={{display:'flex',alignItems:'center', justifyContent:'center'}}> <CircularProgress style={{fontSize:'300px', color:'blue'}}/></Box>):( <TableContainer component={Paper} style={{ width: "100%", overflowX: "auto" }}>
-        <Table style={{ tableLayout: "fixed", width: "100%" }}>
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox" style={{ position: "sticky", left: 0, zIndex: 1, background: "#fff" }}>
-                <Checkbox
-                  checked={selected.length === accountData.length}
-                  onChange={() => {
-                    if (selected.length === accountData.length) {
-                      setSelected([]);
-                    } else {
-                      const allSelected = accountData.map((item) => item.id);
-                      setSelected(allSelected);
-                    }
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          <CircularProgress style={{ fontSize: "300px", color: "blue" }} />
+        </Box>
+      ) : accountData.length > 0 ? (
+        <Box>
+          <Box sx={{ my: 2, margin: "20px" }}>
+            <Button variant="text" onClick={handleFilterButtonClick}>
+              Filter Options
+            </Button>
+          </Box>
+        <TableContainer
+          component={Paper}
+          style={{ width: "100%", overflowX: "auto" }}
+        >
+          <Table style={{ tableLayout: "fixed", width: "100%" }}>
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  padding="checkbox"
+                  style={{
+                    position: "sticky",
+                    left: 0,
+                    zIndex: 1,
+                    background: "#fff",
                   }}
-                />
-              </TableCell>
-              <TableCell onClick={() => handleSort("Name")} style={{ cursor: "pointer", position: "sticky", left: 50, zIndex: 1, background: "#fff" }} width="200">
-                AccountName {sortConfig.key === "Name" ? (sortConfig.direction === "asc" ? "↑" : "↓") : null}
-              </TableCell>
-              <TableCell width="200">Type</TableCell>
-              <TableCell width="200">Follow</TableCell>
-              <TableCell width="200" height="60">
-                Team Members
-              </TableCell>
-              <TableCell width="200">Tags</TableCell>
-              <TableCell width="200">Invoices</TableCell>
-              <TableCell width="200">Credits</TableCell>
-              <TableCell width="200">Tasks</TableCell>
-              <TableCell width="200">Proposals</TableCell>
-              <TableCell width="200">Unreadchchats</TableCell>
-              <TableCell width="200">Pending Organizers</TableCell>
-              <TableCell width="200">Pending Signatures</TableCell>
-              <TableCell width="200">Last Login</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedData.map((row) => {
-              const isSelected = selected.indexOf(row.id) !== -1;
-              return (
-                <TableRow key={row.id} hover onClick={() => handleSelect(row.id)} role="checkbox" tabIndex={-1} selected={isSelected}>
-                  <TableCell padding="checkbox" style={{ position: "sticky", left: 0, zIndex: 1, background: "#fff" }}>
-                    <Checkbox checked={isSelected} />
-                  </TableCell>
-                  <TableCell style={{ position: "sticky", left: 50, zIndex: 1, background: "#fff" }}>
-                    <Link to={`/accountsdash/overview/${row.id}`}> {row.Name}</Link>
-                  </TableCell>
-                  <TableCell>{row.Type}</TableCell>
-                  <TableCell>{row.Follow}</TableCell>
-                  <TableCell style={{ display: "flex", alignItems: "center" }} height="40">
-                    {row.Team.map((member) => {
-                      // Generate initials from the username
-                      const initials = member.username
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase();
+                >
+                  <Checkbox
+                    checked={selected.length === accountData.length}
+                    onChange={() => {
+                      if (selected.length === accountData.length) {
+                        setSelected([]);
+                      } else {
+                        const allSelected = accountData.map((item) => item.id);
+                        setSelected(allSelected);
+                      }
+                    }}
+                  />
+                </TableCell>
+                <TableCell
+                  onClick={() => handleSort("Name")}
+                  style={{
+                    cursor: "pointer",
+                    position: "sticky",
+                    left: 50,
+                    zIndex: 1,
+                    background: "#fff",
+                  }}
+                  width="200"
+                >
+                  AccountName{" "}
+                  {sortConfig.key === "Name"
+                    ? sortConfig.direction === "asc"
+                      ? "↑"
+                      : "↓"
+                    : null}
+                </TableCell>
+                <TableCell width="200">Type</TableCell>
+                <TableCell width="200">Follow</TableCell>
+                <TableCell width="200" height="60">
+                  Team Members
+                </TableCell>
+                <TableCell width="200">Tags</TableCell>
+                <TableCell width="200">Invoices</TableCell>
+                <TableCell width="200">Credits</TableCell>
+                <TableCell width="200">Tasks</TableCell>
+                <TableCell width="200">Proposals</TableCell>
+                <TableCell width="200">Unreadchchats</TableCell>
+                <TableCell width="200">Pending Organizers</TableCell>
+                <TableCell width="200">Pending Signatures</TableCell>
+                <TableCell width="200">Last Login</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paginatedData.map((row) => {
+                const isSelected = selected.indexOf(row.id) !== -1;
+                return (
+                  <TableRow
+                    key={row.id}
+                    hover
+                    onClick={() => handleSelect(row.id)}
+                    role="checkbox"
+                    tabIndex={-1}
+                    selected={isSelected}
+                  >
+                    <TableCell
+                      padding="checkbox"
+                      style={{
+                        position: "sticky",
+                        left: 0,
+                        zIndex: 1,
+                        background: "#fff",
+                      }}
+                    >
+                      <Checkbox checked={isSelected} />
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        position: "sticky",
+                        left: 50,
+                        zIndex: 1,
+                        background: "#fff",
+                      }}
+                    >
+                      <Link to={`/accountsdash/overview/${row.id}`}>
+                        {" "}
+                        {row.Name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{row.Type}</TableCell>
+                    <TableCell>{row.Follow}</TableCell>
+                    <TableCell
+                      style={{ display: "flex", alignItems: "center" }}
+                      height="40"
+                    >
+                      {row.Team.map((member) => {
+                        // Generate initials from the username
+                        const initials = member.username
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase();
 
-                      return (
-                        <Tooltip key={member._id} title={member.username} placement="top">
-                          <span
-                            style={{
-                              display: "inline-block",
-                              backgroundColor: "#3f51b5", // Customize badge color as needed
-                              color: "#fff",
-                              borderRadius: "50%",
-                              width: "20px",
-                              height: "20px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: "12px",
-                              fontWeight: "bold",
-                              marginRight: "5px",
-                              cursor: "pointer",
-                            }}
+                        return (
+                          <Tooltip
+                            key={member._id}
+                            title={member.username}
+                            placement="top"
                           >
-                            {initials}
-                          </span>
-                        </Tooltip>
-                      );
-                    })}
-                  </TableCell>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                backgroundColor: "#3f51b5", // Customize badge color as needed
+                                color: "#fff",
+                                borderRadius: "50%",
+                                width: "20px",
+                                height: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                marginRight: "5px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              {initials}
+                            </span>
+                          </Tooltip>
+                        );
+                      })}
+                    </TableCell>
 
-                  <TableCell>
-                    {Array.isArray(row.Tags) && row.Tags.length > 0 ? (
-                      row.Tags.length > 1 ? (
-                        <Tooltip
-                          title={
-                            <div>
-                              {row.Tags.map((tag) => (
-                                <div
-                                  key={tag._id}
-                                  style={{
-                                    background: tag.tagColour,
-                                    color: "#fff",
-                                    borderRadius: "8px",
-                                    padding: "2px 8px",
-                                    marginBottom: "2px",
-                                    fontSize: "10px",
-                                  }}
-                                >
-                                  {tag.tagName}
-                                </div>
-                              ))}
-                            </div>
-                          }
-                          placement="top"
+                    <TableCell>
+                      {Array.isArray(row.Tags) && row.Tags.length > 0 ? (
+                        row.Tags.length > 1 ? (
+                          <Tooltip
+                            title={
+                              <div>
+                                {row.Tags.map((tag) => (
+                                  <div
+                                    key={tag._id}
+                                    style={{
+                                      background: tag.tagColour,
+                                      color: "#fff",
+                                      borderRadius: "8px",
+                                      padding: "2px 8px",
+                                      marginBottom: "2px",
+                                      fontSize: "10px",
+                                    }}
+                                  >
+                                    {tag.tagName}
+                                  </div>
+                                ))}
+                              </div>
+                            }
+                            placement="top"
+                          >
+                            <span
+                              style={{
+                                background: row.Tags[0].tagColour, // Show color of the first tag
+                                color: "#fff",
+                                borderRadius: "8px",
+                                padding: "2px 8px",
+                                fontSize: "10px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              {row.Tags[0].tagName}
+                            </span>
+                          </Tooltip>
+                        ) : (
+                          row.Tags.map((tag) => (
+                            <span
+                              key={tag._id}
+                              style={{
+                                background: tag.tagColour,
+                                color: "#fff",
+                                borderRadius: "8px",
+                                padding: "2px 8px",
+                                fontSize: "10px",
+                                marginLeft: "3px",
+                              }}
+                            >
+                              {tag.tagName}
+                            </span>
+                          ))
+                        )
+                      ) : null}
+                      {Array.isArray(row.Tags) && row.Tags.length > 1 && (
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                            fontSize: "10px",
+                            color: "#555",
+                          }}
                         >
-                          <span
-                            style={{
-                              background: row.Tags[0].tagColour, // Show color of the first tag
-                              color: "#fff",
-                              borderRadius: "8px",
-                              padding: "2px 8px",
-                              fontSize: "10px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            {row.Tags[0].tagName}
-                          </span>
-                        </Tooltip>
-                      ) : (
-                        row.Tags.map((tag) => (
-                          <span
-                            key={tag._id}
-                            style={{
-                              background: tag.tagColour,
-                              color: "#fff",
-                              borderRadius: "8px",
-                              padding: "2px 8px",
-                              fontSize: "10px",
-                              marginLeft: "3px",
-                            }}
-                          >
-                            {tag.tagName}
-                          </span>
-                        ))
-                      )
-                    ) : null}
-                    {Array.isArray(row.Tags) && row.Tags.length > 1 && <span style={{ marginLeft: "5px", fontSize: "10px", color: "#555" }}>+{row.Tags.length - 1}</span>}
-                  </TableCell>
+                          +{row.Tags.length - 1}
+                        </span>
+                      )}
+                    </TableCell>
 
-                  <TableCell>{row.Invoices}</TableCell>
-                  <TableCell>{row.Credits}</TableCell>
-                  <TableCell>{row.Tasks}</TableCell>
-                  <TableCell>{row.Proposals}</TableCell>
-                  <TableCell>{row.Unreadchats}</TableCell>
-                  <TableCell>{row.Pendingorganizers}</TableCell>
-                  <TableCell>{row.Pendingsignatures}</TableCell>
-                  <TableCell>{row.Lastlogin}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>)}
+                    <TableCell>{row.Invoices}</TableCell>
+                    <TableCell>{row.Credits}</TableCell>
+                    <TableCell>{row.Tasks}</TableCell>
+                    <TableCell>{row.Proposals}</TableCell>
+                    <TableCell>{row.Unreadchats}</TableCell>
+                    <TableCell>{row.Pendingorganizers}</TableCell>
+                    <TableCell>{row.Pendingsignatures}</TableCell>
+                    <TableCell>{row.Lastlogin}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        
+         <TablePagination
+         rowsPerPageOptions={[5, 10, 15]}
+         component="div"
+         count={sortedData.length}
+         rowsPerPage={rowsPerPage}
+         page={page}
+         onPageChange={handleChangePage}
+         onRowsPerPageChange={handleChangeRowsPerPage}
+       />
+       </Box>
+      ) : (
+        <Typography variant="h6" style={{ textAlign: "center", marginTop: "20px" }}>
+          You do not have permission to view accounts.
+        </Typography>
+      )}
+
      
-      <TablePagination rowsPerPageOptions={[5, 10, 15]} component="div" count={sortedData.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} />
 
       <Drawer
         anchor="right"
@@ -1012,10 +1356,17 @@ console.log(raw)
           },
         }}
       >
-        <Box sx={{ borderRadius: isSmallScreen ? "0" : "15px" }} role="presentation">
+        <Box
+          sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}
+          role="presentation"
+        >
           {isSendEmailOpen && (
             <Box p={2}>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography variant="h6">New Email</Typography>
                 <IconButton onClick={handleFormClose} sx={{ color: "blue" }}>
                   <RxCross2 fontSize="large" />
@@ -1024,13 +1375,20 @@ console.log(raw)
 
               <Divider sx={{ my: 2 }} />
 
-              <SendAccountEmail selectedAccounts={selected} onClose={handleFormClose} />
+              <SendAccountEmail
+                selectedAccounts={selected}
+                onClose={handleFormClose}
+              />
             </Box>
           )}
 
           {isCreateJobOpen && (
             <Box p={2}>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography variant="h6">Create job</Typography>
                 <IconButton onClick={handleFormClose} sx={{ color: "blue" }}>
                   <RxCross2 fontSize="large" />
@@ -1043,26 +1401,39 @@ console.log(raw)
 
           {isCreateOrganizerOpen && (
             <Box p={2}>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography variant="h6">Create Organizer</Typography>
                 <IconButton onClick={handleFormClose} sx={{ color: "blue" }}>
                   <RxCross2 fontSize="large" />
                 </IconButton>
               </Box>
 
-              <AddBulkOrganizer selectedAccounts={selected} onClose={handleFormClose} />
+              <AddBulkOrganizer
+                selectedAccounts={selected}
+                onClose={handleFormClose}
+              />
             </Box>
           )}
 
           {isManageTagsOpen && (
             <Box p={2}>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography variant="h6">Assign Tags for </Typography>
 
                 <Typography variant="body1" sx={{ marginRight: 2 }}>
                   {selected
                     .map((id) => {
-                      const account = accountData.find((account) => account.id === id);
+                      const account = accountData.find(
+                        (account) => account.id === id
+                      );
                       return account ? account.Name : id; // Fallback to ID if name is not found
                     })
                     .join(", ")}{" "}
@@ -1076,19 +1447,28 @@ console.log(raw)
 
               <Divider sx={{ my: 2 }} />
 
-              <ManageTags selectedAccounts={selected} onClose={handleFormClose} />
+              <ManageTags
+                selectedAccounts={selected}
+                onClose={handleFormClose}
+              />
             </Box>
           )}
 
           {isManageTeamOpen && (
             <Box p={2}>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Typography variant="h6">Assign Team for</Typography>
 
                 <Typography variant="body1" sx={{ marginRight: 2 }}>
                   {selected
                     .map((id) => {
-                      const account = accountData.find((account) => account.id === id);
+                      const account = accountData.find(
+                        (account) => account.id === id
+                      );
                       return account ? account.Name : id; // Fallback to ID if name is not found
                     })
                     .join(", ")}{" "}
@@ -1101,7 +1481,10 @@ console.log(raw)
 
               <Divider sx={{ my: 2 }} />
 
-              <ManageTeams selectedAccounts={selected} onClose={handleFormClose} />
+              <ManageTeams
+                selectedAccounts={selected}
+                onClose={handleFormClose}
+              />
             </Box>
           )}
         </Box>

@@ -82,13 +82,16 @@ function Sidebar() {
       console.log(storedData)
       if (storedData && storedData.teammember) {
         // const { manageTags } = teamMemberData.teammember;
-        const { manageTags, manageServices, managePipelines, manageTemplates, viewAllContacts ,manageProposals} = storedData.teammember;
+        const { manageTags, manageServices, managePipelines, manageTemplates, viewAllContacts ,manageProposals,viewallAccounts} = storedData.teammember;
 
         // Filter or modify sidebar items based on manageTags
         const updatedSidebarData = sidebarData.map((item) => {
           // Remove the `Teams & plans` submenu if the user role is TeamMember
           if (userRole === "TeamMember" && item.label === "Templates" && item.submenu) {
             item.submenu = item.submenu.filter((subItem) => subItem.label !== "Teams & plans");
+          }
+          if (userRole === "TeamMember" && item.label === "Settings" && item.submenu) {
+            item.submenu = item.submenu.filter((subItem) => subItem.label !== "Firm Settings");
           }
           // Remove the `NewTags` submenu if manageTags is false
           if (item.submenu && item.submenu.length > 0) {
@@ -99,7 +102,8 @@ function Sidebar() {
                   (subItem.label === "Pipelines" && !managePipelines) ||
                   (subItem.label === "Firm Templates" && !manageTemplates) ||
                   (subItem.label === "Contacts" && !viewAllContacts) ||
-                  (subItem.label === "Proposal&Els" && !manageProposals)
+                  (subItem.label === "Proposal&Els" && !manageProposals) ||
+                  (subItem.label === "Invoices" && !viewallAccounts)
                 )
             );
           }
@@ -129,23 +133,76 @@ function Sidebar() {
 
   // }, []);
 
-
-
-
   useEffect(() => {
     if (isDrawerOpen) {
       const fetchNewSidebarData = async () => {
         try {
           const response = await axios.get(`${NEW_SIDEBAR_API}/newsidebar/`);
-          setNewSidebarItems(response.data);
+          let NewSidebarData = response.data;
+  
+          // Retrieve team member data if the user is a team member
+          const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
+          if (teamMemberData) {
+             // Add a flag to indicate restricted access
+          // NewSidebarData = NewSidebarData.map(item =>
+          //   item.label === "Account" && !teamMemberData.manageAccounts
+          //     ? { ...item, restricted: true }
+          //     : item
+          // );
+
+          NewSidebarData = NewSidebarData.map(item => {
+            if (item.label === "Account" && !teamMemberData.manageAccounts) {
+              return { ...item, restricted: true };
+            }
+            if (item.label === "Contact" && !teamMemberData.manageContacts) {
+              return { ...item, restricted: true };
+            }
+            if (item.label === "Jobs" && !teamMemberData.managePipelines) {
+              return { ...item, restricted: true };
+            }
+            return item;
+          });
+        }
+          
+  
+          setNewSidebarItems(NewSidebarData);
         } catch (error) {
           console.error("Error fetching new sidebar data:", error);
         }
       };
-
+  
       fetchNewSidebarData();
     }
   }, [isDrawerOpen]);
+
+
+//   useEffect(() => {
+//     if (isDrawerOpen) {
+//       const fetchNewSidebarData = async () => {
+//         try {
+//           const response = await axios.get(`${NEW_SIDEBAR_API}/newsidebar/`);
+//           let NewSidebarData = response.data;
+
+
+//  // Retrieve team member data if the user is a team member
+//  const teamMemberData = JSON.parse(localStorage.getItem("teamMemberData"));
+//  if (teamMemberData) {
+//    // Add a flag to disable "Accounts" based on manageAccounts
+//    NewSidebarData = NewSidebarData.map(item =>
+//      item.label === "Account" && !teamMemberData.manageAccounts
+//        ? { ...item, disabled: true }
+//        : item
+//    );
+//  }
+//           setNewSidebarItems(NewSidebarData);
+//         } catch (error) {
+//           console.error("Error fetching new sidebar data:", error);
+//         }
+//       };
+
+//       fetchNewSidebarData();
+//     }
+//   }, [isDrawerOpen]);
 
   const handleToggleSidebar = () => {
     if (isSmallScreen) {
@@ -214,6 +271,7 @@ function Sidebar() {
       console.log("user logout");
       localStorage.removeItem("usersdatatoken");
       localStorage.removeItem("teamMemberData");
+      localStorage.removeItem("userRole");
       Cookies.remove("userToken");
       setLoginData(false);
 
@@ -505,9 +563,13 @@ function Sidebar() {
             <Typography variant="h6" fontWeight='bold'>New Sidebar Content</Typography>
             <RxCross2 onClick={handleDrawerClose} style={{ cursor: 'pointer' }} />
           </Box>
-          <List>
+          {/* <List>
             {newSidebarItems.map(item => (
-              <ListItem key={item._id} component={Link} to={item.path} className="menu-item" onClick={() => handleNewItemClick(item.label)} sx={{
+              <ListItem key={item._id} component={ Link} to={item.path } className="menu-item" onClick={() => {
+               
+                  handleNewItemClick(item.label);
+                
+              }} sx={{
                 mt: 1, // margin-top: 8px
                 borderRadius: '10px',
                 color: 'black',
@@ -531,7 +593,53 @@ function Sidebar() {
                 <ListItemText primary={item.label} className="menu-text" />
               </ListItem>
             ))}
-          </List>
+          </List> */}
+       <List>
+  {newSidebarItems.map(item => (
+    <ListItem
+      key={item._id}
+      component={Link}
+      to={item.path}
+      className="menu-item"
+      onClick={e => {
+        if (item.restricted) {
+          e.preventDefault(); // Prevent navigation
+          toast.error("Access to this feature is restricted.");
+        } else {
+          handleNewItemClick(item.label);
+        }
+      }}
+      sx={{
+        mt: 1, // margin-top: 8px
+        borderRadius: '10px',
+        color: 'black',
+        transition: 'background-color 0.3s, color 0.3s',
+        '&:hover': {
+          color: item.restricted ? 'grey' : '#fff',
+          backgroundColor: item.restricted ? '' : '#0000ff',
+          '.menu-icon': {
+            color: item.restricted ? 'grey' : '#fff',
+          },
+          '.menu-text': {
+            color: item.restricted ? 'grey' : '#fff',
+          },
+        },
+      }}
+    >
+      <ListItemIcon
+        sx={{ fontSize: '1.5rem', color: item.restricted ? 'grey' : '#2c85de' }}
+        className="menu-icon"
+      >
+        {iconMapping[item.icon] ? React.createElement(iconMapping[item.icon]) : null}
+      </ListItemIcon>
+      <ListItemText
+        primary={item.label}
+        className="menu-text"
+        sx={{ color: item.restricted ? 'grey' : 'inherit' }}
+      />
+    </ListItem>
+  ))}
+</List>
         </Box>
       </Drawer>
       <Drawer anchor="right" open={isRightDrawerOpen} onClose={handleNewDrawerClose}

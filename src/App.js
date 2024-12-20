@@ -87,6 +87,7 @@ import AccountWiseProposalUpdate from "./nested-navbar/Proposals/ProposalAccWise
 import ProposalsELS from './Billing/Proposals&ELS/ProposalsEls.js'
 import NewTag from "./Templates/Tags/Tags";
 import MarketPlaces from "./Pages/MarketPlaces.js";
+import TimeEntry from "./Pages/TimeEntry.js";
 const App = () => {
   return (
     <BrowserRouter>
@@ -108,6 +109,7 @@ const App = () => {
           <Route path="/firmtemp/templates/marketplace" element={<MarketPlaces/>}/>
           <Route path="/PipelineTemplateUpdate/:id" element={<PipelineTempUpdate />} />
           <Route path="addJobs" element={<CreateJob />} />
+          <Route path="billing/time" element={<TimeEntry />} />
           <Route path="billing/Invoices" element={<Invoices />} />
           <Route path="billing/Invoices/Updateinvoice/:_id" element={<InvoiceUpdate />} />
           <Route path='billing/proposalsandels' element={<ProposalsELS/>}/>
