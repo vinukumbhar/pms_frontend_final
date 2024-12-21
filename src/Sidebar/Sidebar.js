@@ -99,7 +99,7 @@ function Sidebar() {
               (subItem) =>
                 !((subItem.label === "Tags" && !manageTags) ||
                   (subItem.label === "Service" && !manageServices) ||
-                  (subItem.label === "Pipelines" && !managePipelines) ||
+                  (subItem.label === "Pipeline Templates" && !managePipelines) ||
                   (subItem.label === "Firm Templates" && !manageTemplates) ||
                   (subItem.label === "Contacts" && !viewAllContacts) ||
                   (subItem.label === "Proposal&Els" && !manageProposals) ||
@@ -111,8 +111,12 @@ function Sidebar() {
           // If the parent item is NewTags and manageTags is false, exclude it
           if ((item.label === "NewTags" && !manageTags) ||
             (item.label === "Service" && !manageServices) ||
-            (item.label === "Pipelines" && !managePipelines) ||
-            (item.label === "Firm Templates" && !manageTemplates)) {
+            (item.label === "Pipeline Templates" && !managePipelines) ||
+            (item.label === "Firm Templates" && !manageTemplates)
+            (item.label === "Contacts" && !viewAllContacts) ||
+            (item.label === "Proposal&Els" && !manageProposals) ||
+            (item.label === "Invoices" && !viewallAccounts)
+          ) {
             return null;
           }
 
