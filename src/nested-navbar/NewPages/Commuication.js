@@ -29,6 +29,16 @@ import { LoginContext } from '../../Sidebar/Context/Context'
 
 const Communication = () => {
   const { logindata } = useContext(LoginContext);
+  // console.log("login data",logindata.user.id)
+  const [loginUserId, setLoginUserId] = useState()
+
+  useEffect(() => {
+    if (logindata?.user?.id) {
+      setLoginUserId(logindata.user.id);
+    }
+  }, [logindata]);
+
+  console.log("Login User ID:", loginUserId);
   const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
   const [username, setUsername] = useState("");
   console.log(logindata)

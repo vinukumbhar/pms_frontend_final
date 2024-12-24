@@ -1,3 +1,527 @@
+// import React, { useEffect, useState, useContext } from "react";
+// import {
+//   DialogTitle,
+//   DialogContent,
+//   DialogActions,
+//   Drawer,
+//   TablePagination,
+//   Chip,
+//   Tooltip,
+//   Autocomplete,
+//   Box,
+//   Divider,
+//   Typography,
+//   OutlinedInput,
+//   MenuItem as MuiMenuItem,
+//   FormControl,
+//   InputLabel,
+//   Menu,
+//   Button,
+//   IconButton,
+//   Select,
+//   MenuItem,
+//   TextField,
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableContainer,
+//   TableHead,
+//   TableRow,
+//   Checkbox,
+//   Paper,
+// } from "@mui/material";
+// import axios from "axios";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import { RxCross2 } from "react-icons/rx";
+// import { Link } from "react-router-dom";
+// import { toast } from "react-toastify";
+// import { Outlet } from "react-router-dom";
+// import ListIcon from "@mui/icons-material/List";
+// import EmailIcon from "@mui/icons-material/Email";
+// import TagIcon from "@mui/icons-material/Tag";
+// import PersonIcon from "@mui/icons-material/Person";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import SendAccountEmail from "./BulkActions/SendAccountEmail";
+// import AddJobs from "./BulkActions/AddJobs";
+// import AddBulkOrganizer from "./BulkActions/AddBulkOrganizer";
+// import ManageTags from "./BulkActions/ManageTags";
+// import ManageTeams from "./BulkActions/ManageTeams";
+// import { useTheme } from "@mui/material/styles";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
+// import CloseIcon from "@mui/icons-material/Close";
+// import useMediaQuery from "@mui/material/useMediaQuery";
+// import { CircularProgress } from "@mui/material";
+// import { LoginContext } from "../Sidebar/Context/Context.js";
+// const FixedColumnTable = () => {
+//   const theme = useTheme();
+//   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+//   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
+//   const TAGS_API = process.env.REACT_APP_TAGS_TEMP_URL;
+//   const [accountData, setAccountData] = useState([]);
+//   const [selected, setSelected] = useState([]);
+//   const [anchorEl, setAnchorEl] = useState(null);
+//   const [sortConfig, setSortConfig] = useState({
+//     key: "Name",
+//     direction: "asc",
+//   });
+
+//   const [page, setPage] = useState(0);
+//   const [rowsPerPage, setRowsPerPage] = useState(5); // 5 rows per page
+//   const [filters, setFilters] = useState({
+//     accountName: "",
+//     type: "",
+//     teamMember: "",
+//     tags: [],
+//   });
+//   const [showFilters, setShowFilters] = useState({
+//     accountName: false,
+//     type: false,
+//     teamMember: false,
+//     tags: false,
+//   });
+
+//   const [loading, setLoading] = useState(true);
+//   const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
+
+//   const fetchData = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await axios.get(
+//         `${CONTACT_API}/contacts/contactlist/list/`
+//       );
+//       let accountsListData = response.data.contactlist;
+
+//       setAccountData(accountsListData); // Clear account data if not permitted
+//       console.log(accountsListData);
+//     } catch (error) {
+//       console.log("Error:", error);
+//     } finally {
+//       setLoading(false); // Stop loader
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchData();
+//   }, [ACCOUNT_API]);
+
+//   const handleSelect = (id) => {
+//     const currentIndex = selected.indexOf(id);
+//     const newSelected =
+//       currentIndex === -1
+//         ? [...selected, id]
+//         : selected.filter((item) => item !== id);
+//     setSelected(newSelected);
+//     // Log all selected row IDs
+//     // console.log("Selected IDs:", newSelected); // Log all selected IDs
+//   };
+
+//   // console.log(selected);
+//   const handleFilterChange = (e) => {
+//     const { name, value } = e.target;
+//     setFilters((prevFilters) => ({ ...prevFilters, [name]: value })); // Update filter without clearing others
+//     setPage(0);
+//   };
+
+//   const filteredData = accountData.filter((row) => {
+//     const accountNameMatch = row.name
+//       .toLowerCase()
+//       .includes(filters.accountName.toLowerCase());
+
+//     const tagMatch = filters.tags.length
+//       ? row.tags &&
+//         Array.isArray(row.Tags) &&
+//         filters.tags.some((tag) =>
+//           row.tags.some(
+//             (rowTag) =>
+//               rowTag.tagName === tag.tagName &&
+//               rowTag.tagColour === tag.tagColour
+//           )
+//         )
+//       : true;
+//     return accountNameMatch && tagMatch;
+//   });
+//   const handleFilterButtonClick = (event) => {
+//     setAnchorEl(event.currentTarget);
+//   };
+
+//   const handleClose = () => {
+//     setAnchorEl(null);
+//   };
+
+//   const clearFilter = (filterField) => {
+//     setFilters((prevFilters) => ({ ...prevFilters, [filterField]: "" })); // Clear the specific filter
+//     setShowFilters((prev) => ({
+//       ...prev,
+//       [filterField]: false, // Hide the filter input
+//     }));
+//   };
+
+//   const toggleFilter = (filterType) => {
+//     setShowFilters((prev) => ({
+//       ...prev,
+//       [filterType]: !prev[filterType],
+//     }));
+//   };
+//   const handleMultiSelectChange = (name, values) => {
+//     setFilters((prevFilters) => ({ ...prevFilters, [name]: values }));
+//   };
+
+//   const [tags, setTags] = useState([]);
+
+//   useEffect(() => {
+//     fetchTagData();
+//   }, []);
+
+//   const fetchTagData = async () => {
+//     try {
+//       const response = await fetch(`${TAGS_API}/tags/`);
+//       const data = await response.json();
+//       setTags(data.tags);
+//     } catch (error) {
+//       console.error("Error fetching tags:", error);
+//     }
+//   };
+
+//   const uniqueTags =
+//     tags.length > 0
+//       ? Array.from(
+//           new Set(tags.map((tag) => `${tag.tagName}-${tag.tagColour}`))
+//         ).map((tagKey) => {
+//           const [tagName, tagColour] = tagKey.split("-");
+//           return { tagName, tagColour };
+//         })
+//       : [];
+//   const calculateWidth = (tagName) => {
+//     const baseWidth = 10; // base width for each tag
+//     const charWidth = 8; // approximate width of each character
+//     const padding = 10; // padding on either side
+//     return baseWidth + charWidth * tagName.length + padding;
+//   };
+//   const handleSort = (key) => {
+//     setSortConfig((prevSortConfig) => {
+//       if (prevSortConfig.key === key) {
+//         return {
+//           key,
+//           direction: prevSortConfig.direction === "asc" ? "desc" : "asc",
+//         };
+//       }
+//       return { key, direction: "asc" };
+//     });
+//   };
+
+//   const sortedData = React.useMemo(() => {
+//     const dataToSort = filteredData; // Use filteredData for sorting
+//     const sorted = [...dataToSort]; // Create a copy of filteredData
+
+//     if (sortConfig.key) {
+//       sorted.sort((a, b) => {
+//         if (a[sortConfig.key] < b[sortConfig.key])
+//           return sortConfig.direction === "asc" ? -1 : 1;
+//         if (a[sortConfig.key] > b[sortConfig.key])
+//           return sortConfig.direction === "asc" ? 1 : -1;
+//         return 0;
+//       });
+//     }
+//     return sorted;
+//   }, [filteredData, sortConfig]);
+
+//   const handleChangePage = (event, newPage) => {
+//     setPage(newPage);
+//   };
+
+//   const handleChangeRowsPerPage = (event) => {
+//     setRowsPerPage(parseInt(event.target.value, 10));
+//     setPage(0);
+//   };
+//   const paginatedData = sortedData.slice(
+//     page * rowsPerPage,
+//     page * rowsPerPage + rowsPerPage
+//   );
+
+//   return (
+//     <>
+//       <div style={{ display: "flex", padding: "10px", marginBottom: "20px" }}>
+//         <Menu
+//           anchorEl={anchorEl}
+//           open={Boolean(anchorEl)}
+//           onClose={handleClose}
+//         >
+//           <MenuItem
+//             onClick={() => {
+//               toggleFilter("accountName");
+//               handleClose();
+//             }}
+//           >
+//             Account Name
+//           </MenuItem>
+//           <MenuItem
+//             onClick={() => {
+//               toggleFilter("tags");
+//               handleClose();
+//             }}
+//           >
+//             Tags
+//           </MenuItem>
+//         </Menu>
+
+//         {/* Account Name Filter */}
+//         {showFilters.accountName && (
+//           <div
+//             style={{
+//               display: "flex",
+//               alignItems: "center",
+//               marginBottom: "10px",
+//             }}
+//           >
+//             <TextField
+//               name="accountName"
+//               value={filters.accountName}
+//               onChange={handleFilterChange}
+//               placeholder="Filter by Account Name"
+//               variant="outlined"
+//               size="small"
+//               style={{ marginRight: "10px" }}
+//             />
+//             <DeleteIcon
+//               onClick={() => clearFilter("accountName")}
+//               style={{ cursor: "pointer", color: "red" }}
+//             />
+//           </div>
+//         )}
+//         {/* Tags Filter */}
+//         {showFilters.tags && (
+//           <div
+//             style={{
+//               display: "flex",
+//               alignItems: "center",
+//               marginBottom: "10px",
+//             }}
+//           >
+//             <Autocomplete
+//               multiple
+//               options={uniqueTags}
+//               value={filters.tags || []}
+//               onChange={(e, newValue) =>
+//                 handleMultiSelectChange("tags", newValue)
+//               }
+//               getOptionLabel={(option) => option.tagName}
+//               filterSelectedOptions
+//               renderOption={(props, option) => (
+//                 <li
+//                   {...props}
+//                   style={{
+//                     backgroundColor: option.tagColour,
+//                     color: "#fff",
+//                     padding: "2px 8px",
+//                     borderRadius: "8px",
+//                     textAlign: "center",
+//                     marginBottom: "5px",
+//                     fontSize: "10px",
+//                     width: `${calculateWidth(option.tagName)}px`,
+//                     marginLeft: "5px",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   {option.tagName}
+//                 </li>
+//               )}
+//               renderTags={(selected, getTagProps) =>
+//                 selected.map((option, index) => (
+//                   <Chip
+//                     key={option.value}
+//                     label={option.tagName}
+//                     style={{
+//                       backgroundColor: option.tagColour,
+//                       color: "#fff",
+//                       cursor: "pointer",
+//                       // borderRadius: "8px",
+//                       fontSize: "12px",
+//                       margin: "2px",
+//                     }}
+//                     {...getTagProps({ index })}
+//                   />
+//                 ))
+//               }
+//               renderInput={(params) => (
+//                 <TextField
+//                   {...params}
+//                   variant="outlined"
+//                   placeholder="Filter by Tags"
+//                   size="small"
+//                   style={{ width: "250px" }}
+//                 />
+//               )}
+//               style={{ marginRight: "10px", width: "250px" }}
+//             />
+//             <DeleteIcon
+//               onClick={() => clearFilter("tags")}
+//               style={{ cursor: "pointer", color: "red" }}
+//             />
+//           </div>
+//         )}
+//       </div>
+//       {loading ? (
+//         <Box
+//           sx={{
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//           }}
+//         >
+//           {" "}
+//           <CircularProgress style={{ fontSize: "300px", color: "blue" }} />
+//         </Box>
+//       ) : (
+//         <Box>
+//           <Box sx={{ my: 2, margin: "20px" }}>
+//             <Button variant="text" onClick={handleFilterButtonClick}>
+//               Filter Options
+//             </Button>
+//           </Box>
+//           <TableContainer
+//             component={Paper}
+//             style={{ width: "100%", overflowX: "auto" }}
+//           >
+//             <Table style={{ tableLayout: "fixed", width: "100%" }}>
+//               <TableHead>
+//                 <TableRow>
+//                   <TableCell
+//                     padding="checkbox"
+//                     style={{
+//                       position: "sticky",
+//                       left: 0,
+//                       zIndex: 1,
+//                       background: "#fff",
+//                     }}
+//                   >
+//                     <Checkbox
+//                       checked={selected.length === accountData.length}
+//                       onChange={() => {
+//                         if (selected.length === accountData.length) {
+//                           setSelected([]);
+//                         } else {
+//                           const allSelected = accountData.map(
+//                             (item) => item.id
+//                           );
+//                           setSelected(allSelected);
+//                         }
+//                       }}
+//                     />
+//                   </TableCell>
+//                   <TableCell
+//                     onClick={() => handleSort("Name")}
+//                     style={{
+//                       cursor: "pointer",
+//                       position: "sticky",
+//                       left: 50,
+//                       zIndex: 1,
+//                       background: "#fff",
+//                     }}
+//                     width="200"
+//                   >
+//                     Name{" "}
+//                     {sortConfig.key === "Name"
+//                       ? sortConfig.direction === "asc"
+//                         ? "↑"
+//                         : "↓"
+//                       : null}
+//                   </TableCell>
+//                   <TableCell width="200">Email</TableCell>
+//                   <TableCell width="200">Phone Number</TableCell>
+
+//                   <TableCell width="200">Tags</TableCell>
+//                   <TableCell width="200">Company Name</TableCell>
+
+//                   <TableCell width="200"></TableCell>
+//                 </TableRow>
+//               </TableHead>
+//               <TableBody>
+//                 {paginatedData.map((row) => {
+//                   const isSelected = selected.indexOf(row.id) !== -1;
+//                   return (
+//                     <TableRow
+//                       key={row.id}
+//                       hover
+//                       onClick={() => handleSelect(row.id)}
+//                       role="checkbox"
+//                       tabIndex={-1}
+//                       selected={isSelected}
+//                     >
+//                       <TableCell
+//                         padding="checkbox"
+//                         style={{
+//                           position: "sticky",
+//                           left: 0,
+//                           zIndex: 1,
+//                           background: "#fff",
+//                         }}
+//                       >
+//                         <Checkbox checked={isSelected} />
+//                       </TableCell>
+//                       <TableCell
+//                         style={{
+//                           position: "sticky",
+//                           left: 50,
+//                           zIndex: 1,
+//                           background: "#fff",
+//                         }}
+//                       >
+//                         {row.name}
+//                       </TableCell>
+//                       <TableCell>{row.email}</TableCell>
+//                       <TableCell>{row.phoneNumbers}</TableCell>
+//                       <TableCell>
+//                         {Array.isArray(row.tags) && row.tags.length > 0  && (
+//                           row.tags.flat().map((tag, index) => (
+//                             <span
+//                               key={tag._id}
+//                               style={{
+//                                 background: tag.tagColour,
+//                                 color: "#fff",
+//                                 borderRadius: "8px",
+//                                 padding: "2px 8px",
+//                                 fontSize: "10px",
+//                                 marginLeft: index > 0 ? "5px" : "0",
+//                               }}
+//                             >
+//                               {tag.tagName}
+//                             </span>
+//                           ))
+//                         ) }
+//                       </TableCell>
+
+//                       <TableCell
+//                         style={{ display: "flex", alignItems: "center" }}
+//                         height="40"
+//                       >
+//                         {row.companyName}
+//                       </TableCell>
+//                       <TableCell></TableCell>
+//                     </TableRow>
+//                   );
+//                 })}
+//               </TableBody>
+//             </Table>
+//           </TableContainer>
+
+//           <TablePagination
+//             rowsPerPageOptions={[5, 10, 15]}
+//             component="div"
+//             count={sortedData.length}
+//             rowsPerPage={rowsPerPage}
+//             page={page}
+//             onPageChange={handleChangePage}
+//             onRowsPerPageChange={handleChangeRowsPerPage}
+//           />
+//         </Box>
+//       )}
+//     </>
+//   );
+// };
+
+// export default FixedColumnTable;
+
+
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import "./account.css";
@@ -280,7 +804,7 @@ const ContactTable = () => {
                   {firstTag.tagName}
                 </span>
                 {remainingCount > 0 && (
-                  <span style={{ cursor: "pointer", textDecoration: "underline" }}>
+                  <span style={{ cursor: "pointer",  }}>
                     +{remainingCount}
                   </span>
                 )}
@@ -288,42 +812,7 @@ const ContactTable = () => {
             </Tooltip>
           );
         },
-        // Cell: ({ cell }) => {
-        //   const tags = cell.row.original.tags.flat();
-        //   return (
-        //     <Tooltip
-        //       title={
-        //         <div>
-        //           {tags.map((tag) => (
-        //             <span
-        //               key={tag._id}
-        //               style={{
-        //                 display: "block",
-        //                 backgroundColor: tag.tagColour,
-        //                 color: "#fff",
-        //                 padding: "2px 4px",
-        //                 margin: "2px 0",
-        //                 borderRadius: "4px",
-        //               }}
-        //             >
-        //               {tag.tagName}
-        //             </span>
-        //           ))}
-        //         </div>
-        //       }
-        //       arrow
-        //     >
-        //       <span
-        //         style={{
-        //           cursor: "pointer",
-        //           textDecoration: "underline",
-        //         }}
-        //       >
-        //         {tags.length} tag{tags.length > 1 ? "s" : ""}
-        //       </span>
-        //     </Tooltip>
-        //   );
-        // },
+     
       
         filterFn: (row, columnId, filterValue) => {
           const tags = row.original.tags.flat();
@@ -363,61 +852,6 @@ const ContactTable = () => {
       }
       ,
 
-      // {
-      //   accessorKey: "tags",
-      //   header: "Tags",
-      //   Cell: ({ cell }) => {
-      //     const tags = cell.row.original.tags.flat();
-      //     return (
-      //       <div>
-      //         {tags.map((tag) => (
-      //           <span
-      //             key={tag._id}
-      //             style={{
-      //               backgroundColor: tag.tagColour,
-      //               color: "#fff",
-      //               padding: "2px 4px",
-      //               margin: "0 2px",
-      //               borderRadius: "60px",
-      //             }}
-      //           >
-      //             {tag.tagName}
-      //           </span>
-      //         ))}
-      //       </div>
-      //     );
-      //   },
-
-      //   filterFn: (row, columnId, filterValue) => {
-      //     const tags = row.original.tags.flat();
-      //     return tags.some((tag) => filterValue.some((value) => tag.tagName.toLowerCase().includes(value.label.toLowerCase())));
-      //   },
-
-      //   Filter: ({ column }) => (
-      //     <Autocomplete
-      //       multiple
-      //       options={tagsOptions}
-      //       onChange={(event, newValue) => {
-      //         column.setFilterValue(newValue); // Set the filter value to the selected tags
-      //       }}
-      //       renderInput={(params) => <TextField {...params} placeholder="Select Tags" variant="outlined" size="small" />}
-      //       renderOption={(props, option) => (
-      //         <li {...props} style={{ cursor: "pointer" }}>
-      //           <span
-      //             style={{
-      //               backgroundColor: option.colour,
-      //               color: "#fff",
-      //               padding: "2px 4px",
-      //               borderRadius: "4px",
-      //             }}
-      //           >
-      //             {option.label}
-      //           </span>
-      //         </li>
-      //       )}
-      //     />
-      //   ),
-      // },
       {
         accessorKey: "companyName",
         header: "Company Name",
@@ -542,266 +976,3 @@ const ContactTable = () => {
 };
 
 export default ContactTable;
-
-// import React, { useEffect, useState } from "react";
-// import { Chip, Tooltip, Autocomplete, OutlinedInput, MenuItem as MuiMenuItem, FormControl, InputLabel, Menu, Button, IconButton, Select, MenuItem, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Paper } from "@mui/material";
-// import axios from "axios";
-// import DeleteIcon from "@mui/icons-material/Delete";
-// import { RxCross2 } from "react-icons/rx";
-// import { Link } from "react-router-dom";
-// const FixedColumnTable = () => {
-//   const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
-//   const [contactData, setContactData] = useState([]);
-//   const [selected, setSelected] = useState([]);
-//   const [anchorEl, setAnchorEl] = useState(null);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
-//         setContactData(response.data.contactlist);
-//         console.log(response.data.contactlist);
-//       } catch (error) {
-//         console.log("Error:", error);
-//       }
-//     };
-
-//     fetchData();
-//   }, [CONTACT_API]);
-
-//   const handleFilterButtonClick = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-//   return (
-//     <>
-//       <div style={{ display: "flex", padding: "10px", marginBottom: "20px" }}>
-//         <Button variant="text" onClick={handleFilterButtonClick} style={{ marginRight: "10px" }}>
-//           Filter Options
-//         </Button>
-//         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-//           <MenuItem>Account Name</MenuItem>
-//           <MenuItem>Type</MenuItem>
-//           <MenuItem>Team Member</MenuItem>
-//           <MenuItem>Tags</MenuItem>
-//         </Menu>
-//       </div>
-//       <TableContainer component={Paper} style={{ width: "100%", overflowX: "auto" }}>
-//         <Table style={{ tableLayout: "fixed", width: "100%" }}>
-//           <TableHead>
-//             <TableRow>
-//               <TableCell width="200">Name</TableCell>
-//               <TableCell width="200">Email</TableCell>
-//               <TableCell width="200">Phone Number</TableCell>
-//               <TableCell width="200">Company Name</TableCell>
-//               <TableCell width="200">Tags</TableCell>
-
-//               <TableCell width="200"></TableCell>
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {contactData.map((contact) => (
-//               <TableRow key={contact.id}>
-//                 <TableCell>{contact.name}</TableCell>
-//                 <TableCell>{contact.email}</TableCell>
-//                 <TableCell></TableCell>
-//                 <TableCell>{contact.companyName}</TableCell>
-//                 <TableCell></TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-//     </>
-//   );
-// };
-
-// export default FixedColumnTable;
-
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Link } from "react-router-dom";
-// import { Checkbox, FormControl, InputLabel, Autocomplete, TextField, Select, Chip, TableSortLabel, Tooltip, Button, Menu, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from "@mui/material";
-// import DeleteIcon from "@mui/icons-material/Delete";
-
-// const FixedColumnTable = () => {
-//   const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
-//   const [contactData, setContactData] = useState([]);
-//   const [selected, setSelected] = useState([]);
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const [page, setPage] = useState(0);
-//   const [rowsPerPage, setRowsPerPage] = useState(5);
-//   const [order, setOrder] = useState("asc");
-//   const [orderBy, setOrderBy] = useState("name");
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
-//         setContactData(response.data.contactlist);
-//         console.log(response.data.contactlist);
-//       } catch (error) {
-//         console.log("Error:", error);
-//       }
-//     };
-
-//     fetchData();
-//   }, [CONTACT_API]);
-
-//   const handleFilterButtonClick = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const handleChangePage = (event, newPage) => {
-//     setPage(newPage);
-//   };
-
-//   const handleChangeRowsPerPage = (event) => {
-//     setRowsPerPage(parseInt(event.target.value, 10));
-//     setPage(0);
-//   };
-
-//   const handleRequestSort = (property) => {
-//     const isAsc = orderBy === property && order === "asc";
-//     setOrder(isAsc ? "desc" : "asc");
-//     setOrderBy(property);
-//   };
-
-//   const sortedData = contactData.slice().sort((a, b) => {
-//     if (orderBy === "name") {
-//       return (a.name < b.name ? -1 : 1) * (order === "asc" ? 1 : -1);
-//     } else if (orderBy === "phoneNumber") {
-//       return (a.phoneNumbers[0]?.[0]?.phone < b.phoneNumbers[0]?.[0]?.phone ? -1 : 1) * (order === "asc" ? 1 : -1);
-//     } else if (orderBy === "companyName") {
-//       return (a.companyName < b.companyName ? -1 : 1) * (order === "asc" ? 1 : -1);
-//     }
-//     return 0;
-//   });
-//   const formatDate = (dateString) => {
-//     const options = { year: "numeric", month: "long", day: "numeric" }; // Format to show only date
-//     return new Intl.DateTimeFormat("en-US", options).format(new Date(dateString));
-//   };
-
-//   return (
-//     <>
-//       <div style={{ display: "flex", padding: "10px", marginBottom: "20px" }}>
-//         <Button variant="text" onClick={handleFilterButtonClick} style={{ marginRight: "10px" }}>
-//           Filter Options
-//         </Button>
-//         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-//           <MenuItem>Tags</MenuItem>
-//           <MenuItem>Date Created</MenuItem>
-//           <MenuItem>Date Updated</MenuItem>
-//         </Menu>
-//       </div>
-//       <div className="table-wrapper">
-//         <TableContainer component={Paper} style={{ width: "100%", overflowX: "auto" }}>
-//           <Table style={{ tableLayout: "fixed", width: "100%" }}>
-//             <TableHead>
-//               <TableRow>
-//                 <TableCell width="200" className="fixed-column">
-//                   <TableSortLabel active={orderBy === "name"} direction={orderBy === "name" ? order : "asc"} onClick={() => handleRequestSort("name")}>
-//                     Name
-//                   </TableSortLabel>
-//                 </TableCell>
-//                 <TableCell width="200">Email</TableCell>
-//                 <TableCell width="200">
-//                   <TableSortLabel active={orderBy === "phoneNumber"} direction={orderBy === "phoneNumber" ? order : "asc"} onClick={() => handleRequestSort("phoneNumber")}>
-//                     Phone Number
-//                   </TableSortLabel>
-//                 </TableCell>
-//                 <TableCell width="200">
-//                   <TableSortLabel active={orderBy === "companyName"} direction={orderBy === "companyName" ? order : "asc"} onClick={() => handleRequestSort("companyName")}>
-//                     Company Name
-//                   </TableSortLabel>
-//                 </TableCell>
-//                 <TableCell width="200">Tags</TableCell>
-//                 <TableCell width="200">Created At</TableCell>
-//                 <TableCell width="200">Updated At</TableCell>
-//                 <TableCell width="200"></TableCell>
-//               </TableRow>
-//             </TableHead>
-//             <TableBody>
-//               {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((contact) => (
-//                 <TableRow key={contact.id}>
-//                   <TableCell className="fixed-column">{contact.name}</TableCell>
-//                   <TableCell>{contact.email}</TableCell>
-//                   <TableCell>{contact.phoneNumbers && contact.phoneNumbers[0] && contact.phoneNumbers[0].map((phoneObj, index) => <div key={index}>{phoneObj.phone}</div>)}</TableCell>
-//                   <TableCell>{contact.companyName}</TableCell>
-
-//                   <TableCell>
-//                     {contact.tags && contact.tags[0] ? (
-//                       contact.tags[0].length > 1 ? (
-//                         <Tooltip
-//                           title={
-//                             <div>
-//                               {contact.tags[0].map((tag) => (
-//                                 <span
-//                                   key={tag._id}
-//                                   style={{
-//                                     backgroundColor: tag.tagColour,
-//                                     color: "#fff",
-//                                     padding: "2px 6px",
-//                                     borderRadius: "8px",
-//                                     display: "inline-block",
-//                                     margin: "2px",
-//                                   }}
-//                                 >
-//                                   {tag.tagName}
-//                                 </span>
-//                               ))}
-//                             </div>
-//                           }
-//                           placement="top"
-//                           sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
-//                         >
-//                           <span>
-//                             <span
-//                               style={{
-//                                 backgroundColor: contact.tags[0][0].tagColour,
-//                                 color: "#fff",
-//                                 padding: "2px 6px",
-//                                 borderRadius: "8px",
-//                               }}
-//                             >
-//                               {contact.tags[0][0].tagName}
-//                             </span>
-//                             {` +${contact.tags[0].length - 1}`}
-//                           </span>
-//                         </Tooltip>
-//                       ) : (
-//                         <span
-//                           style={{
-//                             backgroundColor: contact.tags[0][0].tagColour,
-//                             color: "#fff",
-//                             padding: "2px 6px",
-//                             borderRadius: "8px",
-//                           }}
-//                         >
-//                           {contact.tags[0][0].tagName}
-//                         </span>
-//                       )
-//                     ) : (
-//                       ""
-//                     )}
-//                   </TableCell>
-//                   <TableCell>{formatDate(contact.createdAt)}</TableCell>
-//                   <TableCell>{formatDate(contact.updatedAt)}</TableCell>
-//                   <TableCell></TableCell>
-//                 </TableRow>
-//               ))}
-//             </TableBody>
-//           </Table>
-//           <TablePagination rowsPerPageOptions={[5, 10, 15, 20, 25]} component="div" count={contactData.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} />
-//         </TableContainer>
-//       </div>
-//     </>
-//   );
-// };
-// export default FixedColumnTable;

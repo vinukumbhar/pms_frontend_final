@@ -318,6 +318,7 @@ const TeamMembers = () => {
     };
 
     const { logindata } = useContext(LoginContext);
+    
     const sendmail = () => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");

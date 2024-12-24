@@ -9,10 +9,39 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
-import {  Modal,Divider, IconButton, FormControlLabel, MenuItem, InputLabel, InputAdornment, Checkbox, Box, Switch, Chip, Button, CircularProgress, Drawer, TextField, Autocomplete, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Modal,
+  Divider,
+  IconButton,
+  FormControlLabel,
+  MenuItem,
+  InputLabel,
+  InputAdornment,
+  Checkbox,
+  Box,
+  Switch,
+  Chip,
+  Button,
+  CircularProgress,
+  Drawer,
+  TextField,
+  Autocomplete,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 // import Select from 'react-select';
 import CloseIcon from "@mui/icons-material/Close";
-import { differenceInMinutes, differenceInHours, differenceInDays } from "date-fns";
+import {
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+} from "date-fns";
 import Priority from "../Templates/Priority/Priority";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Editor from "../Templates/Texteditor/Editor";
@@ -97,7 +126,9 @@ const Pipeline = ({ charLimit = 4000 }) => {
     setSelectedPipelineOption(option);
 
     if (option) {
-      const pipeline = pipelineData.find((p) => p.pipelineName === option.label);
+      const pipeline = pipelineData.find(
+        (p) => p.pipelineName === option.label
+      );
       if (pipeline) {
         handleBoardsList(pipeline);
       }
@@ -106,7 +137,10 @@ const Pipeline = ({ charLimit = 4000 }) => {
 
   const handleBoardsList = async (pipeline) => {
     setSelectedPipeline(pipeline);
-    setSelectedPipelineOption({ value: pipeline._id, label: pipeline.pipelineName });
+    setSelectedPipelineOption({
+      value: pipeline._id,
+      label: pipeline.pipelineName,
+    });
     setPipelineId(pipeline._id);
 
     const fetchedStages = await fetchStages(pipeline._id);
@@ -118,7 +152,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
     setSelectedPipelineOption(null);
     setStages([]);
   };
-  console.log("janavi", stages)
+  console.log("janavi", stages);
   // const updateJobStage = async (stage, item) => {
   //   let data = JSON.stringify({ stageid: stage._id });
   //   let config = {
@@ -199,7 +233,14 @@ const Pipeline = ({ charLimit = 4000 }) => {
     }
   };
 
-  const AutomationDrawer = ({ open, automations, onClose, onMoveJob, jobId, targetStage }) => {
+  const AutomationDrawer = ({
+    open,
+    automations,
+    onClose,
+    onMoveJob,
+    jobId,
+    targetStage,
+  }) => {
     const INVOICE_API = process.env.REACT_APP_INVOICE_TEMP_URL;
     const INVOICE_NEW = process.env.REACT_APP_INVOICES_URL;
     const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_TEMP_URL;
@@ -207,34 +248,40 @@ const Pipeline = ({ charLimit = 4000 }) => {
     const ORGANIZER_TEMP_API = process.env.REACT_APP_ORGANIZER_TEMP_URL;
     const AUTOMATION_API = process.env.REACT_APP_AUTOMATION_API;
     const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
+    const API_KEY = process.env.REACT_APP_API_IP;
+    const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE;
+    const [automationType, setAutomationType] = useState([]);
+    const [automationTemp, setAutomationTemp] = useState("");
+    const [automationAccountId, setAutomationAccountId] = useState("");
+    const [selectedAutomationIndices, setSelectedAutomationIndices] = useState(
+      []
+    );
+    console.log("automatios data", automations);
 
-    const [automationType, setAutomationType] = useState([])
-    const [automationTemp, setAutomationTemp] = useState('')
-    const [automationAccountId, setAutomationAccountId] = useState('')
-    const [selectedAutomationIndices, setSelectedAutomationIndices] = useState([]);
-    console.log("automatios data",automations)
+    const [accountTags, setAccountTags] = useState([]);
 
-    const[accountTags,setAccountTags]= useState([]);
-
-    const AccountsTag=(accountId)=>{
-      console.log(accountId)
+    const AccountsTag = (accountId) => {
+      console.log(accountId);
       const requestOptions = {
         method: "GET",
-        redirect: "follow"
+        redirect: "follow",
       };
-      
-      fetch(`${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyid/${accountId}`, requestOptions)
+
+      fetch(
+        `${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyid/${accountId}`,
+        requestOptions
+      )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result)
+          console.log(result);
           if (result.accountlist && result.accountlist.Tags) {
             setAccountTags(result.accountlist.Tags);
           }
         })
         .catch((error) => console.error(error));
-    }
+    };
     useEffect(() => {
-      AccountsTag(accountId)
+      AccountsTag(accountId);
     }, []);
     const handleAutomationSelection = (index) => {
       setSelectedAutomationIndices((prevSelected) =>
@@ -253,11 +300,25 @@ const Pipeline = ({ charLimit = 4000 }) => {
       if (automations.length > 0) {
         setAutomationType(automations[0].type);
         setAutomationTemp(automations[0].template.value);
-        console.log(automations[0].template.value)
       }
-      setAutomationAccountId(accountId);
-    }, [automations]);
-console.log("account id automation",accountId)
+      
+      // If accountId is an array, extract the first value
+      const accountValue = Array.isArray(accountId) ? accountId[0] : accountId;
+      setAutomationAccountId(accountValue);
+    }, [automations, accountId]);
+    
+    console.log("account id automation", accountId);
+    
+    // useEffect(() => {
+    //   // Ensure automations is not empty and then set the automation type and template
+    //   if (automations.length > 0) {
+    //     setAutomationType(automations[0].type);
+    //     setAutomationTemp(automations[0].template.value);
+    //     // console.log(automations[0].template.value);
+    //   }
+    //   setAutomationAccountId(accountId);
+    // }, [automations]);
+    // console.log("account id automation", accountId);
     // fetch invoive temp by id
     const fetchinvoicetempbyid = async (automationTemp) => {
       const requestOptions = {
@@ -285,7 +346,10 @@ console.log("account id automation",accountId)
       try {
         const response = await fetch(url, requestOptions); // Fetch the data
         const result = await response.json(); // Parse the JSON response
-        console.log("Fetched proposalsels template:", result.proposalesAndElsTemplate);
+        console.log(
+          "Fetched proposalsels template:",
+          result.proposalesAndElsTemplate
+        );
         return result.proposalesAndElsTemplate; // Return the data
       } catch (error) {
         console.error("Error fetching proposal template:", error);
@@ -310,15 +374,25 @@ console.log("account id automation",accountId)
         throw error; // Let the calling function handle the error
       }
     };
+
     const getCurrentDate = () => {
       const today = new Date();
       const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+      const day = String(today.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
     };
-    const assignInvoiceToAccount = (invoiceData, automationTemp, automationAccountId) => {
-      console.log("Assigning invoice", invoiceData, automationTemp, automationAccountId);
+    const assignInvoiceToAccount = (
+      invoiceData,
+      automationTemp,
+      automationAccountId
+    ) => {
+      console.log(
+        "Assigning invoice",
+        invoiceData,
+        automationTemp,
+        automationAccountId
+      );
 
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -340,7 +414,7 @@ console.log("account id automation",accountId)
         scheduleinvoice: false, // Optional, adjust as needed
         scheduleinvoicedate: "", // Optional, adjust as needed
         scheduleinvoicetime: "", // Optional, adjust as needed
-        lineItems: invoiceData.lineItems.map(item => ({
+        lineItems: invoiceData.lineItems.map((item) => ({
           productorService: item.productorService || "",
           description: item.description || "",
           rate: item.rate || "",
@@ -363,12 +437,21 @@ console.log("account id automation",accountId)
         redirect: "follow",
       };
       fetch(`${INVOICE_NEW}/workflow/invoices/invoice`, requestOptions)
-        .then(response => response.json())
-        .then(result => console.log("Invoice assigned successfully:", result))
-        .catch(error => console.error("Error assigning invoice:", error));
+        .then((response) => response.json())
+        .then((result) => console.log("Invoice assigned successfully:", result))
+        .catch((error) => console.error("Error assigning invoice:", error));
     };
-    const assignProposalToAccount = (proposalesandelsData, automationTemp, automationAccountId) => {
-      console.log("Assigning proposal", proposalesandelsData, automationTemp, automationAccountId);
+    const assignProposalToAccount = (
+      proposalesandelsData,
+      automationTemp,
+      automationAccountId
+    ) => {
+      console.log(
+        "Assigning proposal",
+        proposalesandelsData,
+        automationTemp,
+        automationAccountId
+      );
       const options = {
         method: "POST",
         headers: {
@@ -385,7 +468,8 @@ console.log("account id automation",accountId)
           servicesandinvoices: proposalesandelsData.servicesandinvoices,
           introductiontext: proposalesandelsData.introductiontext,
           custommessageinemail: proposalesandelsData.custommessageinemail,
-          custommessageinemailtext: proposalesandelsData.custommessageinemailtext,
+          custommessageinemailtext:
+            proposalesandelsData.custommessageinemailtext,
           reminders: proposalesandelsData.reminders,
           daysuntilnextreminder: proposalesandelsData.daysuntilnextreminder,
           numberofreminder: proposalesandelsData.numberofreminder,
@@ -394,8 +478,10 @@ console.log("account id automation",accountId)
           termsandconditions: proposalesandelsData.termsandconditions,
           lineItems: proposalesandelsData.lineItems,
           summary: proposalesandelsData.summary,
-          Addinvoiceoraskfordeposit: proposalesandelsData.Addinvoiceoraskfordeposit,
-          Additemizedserviceswithoutcreatinginvoices: proposalesandelsData.Additemizedserviceswithoutcreatinginvoices,
+          Addinvoiceoraskfordeposit:
+            proposalesandelsData.Addinvoiceoraskfordeposit,
+          Additemizedserviceswithoutcreatinginvoices:
+            proposalesandelsData.Additemizedserviceswithoutcreatinginvoices,
           invoicetemplatename: proposalesandelsData.invoicetemplatename,
           invoiceteammember: proposalesandelsData.invoiceteammember,
           issueinvoice: proposalesandelsData.issueinvoice,
@@ -426,9 +512,18 @@ console.log("account id automation",accountId)
           console.error("Fetch Error:", error);
           // toast.error("An error occurred while updating ProposalesAndEls.");
         });
-    }
-    const assignOrganizerToAccount = (organizerData, automationTemp, automationAccountId) => {
-      console.log("Assigning proposal", organizerData, automationTemp, automationAccountId);
+    };
+    const assignOrganizerToAccount = (
+      organizerData,
+      automationTemp,
+      automationAccountId
+    ) => {
+      console.log(
+        "Assigning proposal",
+        organizerData,
+        automationTemp,
+        automationAccountId
+      );
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       const raw = JSON.stringify({
@@ -454,66 +549,129 @@ console.log("account id automation",accountId)
           console.log(result);
         })
         .catch((error) => console.error(error));
-    }
-    const selectAutomationApi = async (automationType, automationTemp, automationAccountId) => {
+    };
+
+    const CLIENT_DOCS_API = process.env.REACT_APP_CLIENT_DOCS_MANAGE;
+    const assignfoldertemp = (automationAccountId, automationTemp) => {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const raw = JSON.stringify({
+        accountId: automationAccountId,
+        foldertempId: automationTemp,
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      console.log(raw);
+      fetch(`${CLIENT_DOCS_API}/clientdocs/accountfoldertemp`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+    };
+    const selectAutomationApi = async (
+      automationType,
+      automationTemp,
+      automationAccountId
+    ) => {
       if (!automationType || !automationTemp || !automationAccountId) {
         console.error("Missing required parameters");
         return;
       }
       switch (automationType) {
-        case 'Send Invoice':
-          console.log(`Processing 'Send Invoice' with template: ${automationTemp}, Account ID: ${automationAccountId}`);
+        case "Send Invoice":
+          console.log(
+            `Processing 'Send Invoice' with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
           try {
             const invoiceData = await fetchinvoicetempbyid(automationTemp); // Await the fetched data
             console.log("Fetched invoice data", invoiceData);
             // Proceed with further logic
-            assignInvoiceToAccount(invoiceData, automationTemp, automationAccountId);
+            assignInvoiceToAccount(
+              invoiceData,
+              automationTemp,
+              automationAccountId
+            );
           } catch (error) {
             console.error("Error processing 'Send Invoice':", error);
           }
           break;
-        case 'Create Organizer':
-          console.log(`Processing 'Create Organizer' with template: ${automationTemp}, Account ID: ${automationAccountId}`);
+
+        case "Apply folder template":
+          console.log(
+            `Apply folder template with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
+          try {
+            // Assign the folder template to the account
+            await assignfoldertemp(automationAccountId, automationTemp);
+            console.log("Folder template assigned successfully");
+          } catch (error) {
+            console.error("Error applying folder template:", error);
+          }
+          break;
+        case "Create Organizer":
+          console.log(
+            `Processing 'Create Organizer' with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
           try {
             const organizerData = await fetchorganizertempbyid(automationTemp); // Await the fetched data
             console.log("Fetched organizer data", organizerData);
             // Proceed with further logic
-            assignOrganizerToAccount(organizerData, automationTemp, automationAccountId);
+            assignOrganizerToAccount(
+              organizerData,
+              automationTemp,
+              automationAccountId
+            );
           } catch (error) {
             console.error("Error processing 'Send Invoice':", error);
           }
           break;
-        case 'Send Proposal/Els':
-          console.log(`Creating Proposals with template: ${automationTemp}, Account ID: ${automationAccountId}`);
+        case "Send Proposal/Els":
+          console.log(
+            `Creating Proposals with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
           try {
-            const proposalesandelsData = await fetchproposalbyid(automationTemp); // Await the fetched data
+            const proposalesandelsData =
+              await fetchproposalbyid(automationTemp); // Await the fetched data
             console.log("Fetched Proposals data", proposalesandelsData);
             // Proceed with further logic
-            assignProposalToAccount(proposalesandelsData, automationTemp, automationAccountId);
+            assignProposalToAccount(
+              proposalesandelsData,
+              automationTemp,
+              automationAccountId
+            );
           } catch (error) {
             console.error("Error processing 'Send Invoice':", error);
           }
           break;
-        case 'Send Email':
-          console.log(`Sending email with template: ${automationTemp}, Account ID: ${automationAccountId}`);
+
+        case "Send Email":
+          console.log(
+            `Sending email with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
           // Add logic to handle sending email
           const myHeaders = new Headers();
           myHeaders.append("Content-Type", "application/json");
           const raw = JSON.stringify({
             automationType: automationType,
             templateId: automationTemp,
-            accountId: automationAccountId
+            accountId: automationAccountId,
           });
           const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: raw,
-            redirect: "follow"
+            redirect: "follow",
           };
           fetch(`${AUTOMATION_API}/automations/`, requestOptions)
             .then((response) => response.json())
             .then((result) => {
-              console.log(result)
+              console.log(result);
             })
             .catch((error) => console.error(error));
           break;
@@ -526,120 +684,108 @@ console.log("account id automation",accountId)
       <Drawer anchor="right" open={open} onClose={onClose}>
         <Box sx={{ width: 500, padding: 2 }}>
           <Typography variant="h6">Automations</Typography>
-          <Typography variant="body1"><strong>Account Name:</strong> {accountName}</Typography>
-
-        
+          <Typography variant="body1">
+            <strong>Account Name:</strong> {accountName}
+          </Typography>
 
           {automations.length > 0 ? (
-  automations.map((automation, index) => {
-    // Check if automation tags match accountTags
-    const hasMatchingTags = automation.tags.some((tag) =>
-      accountTags.some((accountTag) => accountTag._id === tag._id)
-    );
-
-    return (
-      <Box key={index} sx={{ marginBottom: 2 }}>
-        <Checkbox
-          checked={selectedAutomationIndices.includes(index)}
-          onChange={() => handleAutomationSelection(index)}
-          disabled={!hasMatchingTags} // Disable if no matching tags
-        />
-        <Typography variant="body1"><strong>Type:</strong> {automation.type}</Typography>
-        <Typography variant="body1"><strong>Template:</strong> {automation.template.label}</Typography>
-        <Typography variant="body1"><strong>Tags:</strong></Typography>
-        {automation.tags.map((tag) => (
-          <Box
-            key={tag._id}
-            sx={{
-              display: "inline-block",
-              backgroundColor: tag.tagColour,
-              color: "white",
-              borderRadius: "4px",
-              padding: "2px 6px",
-              marginRight: "4px",
-            }}
-          >
-            {tag.tagName}
-          </Box>
-        ))}
-      </Box>
-    );
-  })
-) : (
-  <Typography>No automations available</Typography>
-)}
-
-
-          {/* <Button
-            onClick={async () => {
-              const selectedAutomations = selectedAutomationIndices.map(
-                (index) => automations[index]
+            automations.map((automation, index) => {
+              // Check if automation tags match accountTags
+              const hasMatchingTags = automation.tags.some((tag) =>
+                accountTags.some((accountTag) => accountTag._id === tag._id)
               );
-              // Process all automations
+
+              return (
+                <Box key={index} sx={{ marginBottom: 2 }}>
+                  <Checkbox
+                    checked={selectedAutomationIndices.includes(index)}
+                    onChange={() => handleAutomationSelection(index)}
+                    disabled={!hasMatchingTags} // Disable if no matching tags
+                  />
+                  <Typography variant="body1">
+                    <strong>Type:</strong> {automation.type}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Template:</strong> {automation.template.label}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Tags:</strong>
+                  </Typography>
+                  {automation.tags.map((tag) => (
+                    <Box
+                      key={tag._id}
+                      sx={{
+                        display: "inline-block",
+                        backgroundColor: tag.tagColour,
+                        color: "white",
+                        borderRadius: "4px",
+                        padding: "2px 6px",
+                        marginRight: "4px",
+                      }}
+                    >
+                      {tag.tagName}
+                    </Box>
+                  ))}
+                </Box>
+              );
+            })
+          ) : (
+            <Typography>No automations available</Typography>
+          )}
+          <Button
+            onClick={async () => {
+              // Filter only selected and enabled automations
+              const selectedAutomations = selectedAutomationIndices
+                .map((index) => automations[index])
+                .filter((automation) =>
+                  automation.tags.some((tag) =>
+                    accountTags.some((accountTag) => accountTag._id === tag._id)
+                  )
+                );
+
+              if (selectedAutomations.length === 0) {
+                console.warn("No valid automations selected");
+                return;
+              }
+
+              // Process all valid automations
               for (const automation of selectedAutomations) {
                 const { type, template } = automation;
                 const templateValue = template?.value;
 
                 if (type && templateValue && automationAccountId) {
-                  // Call the API for each automation
-                  await selectAutomationApi(type, templateValue, automationAccountId);
+                  try {
+                    // Call the API for each automation
+                    await selectAutomationApi(
+                      type,
+                      templateValue,
+                      automationAccountId
+                    );
+                  } catch (error) {
+                    console.error(
+                      "Error processing automation:",
+                      automation,
+                      error
+                    );
+                  }
                 } else {
-                  console.warn("Skipping automation due to missing parameters:", automation);
+                  console.warn(
+                    "Skipping automation due to missing parameters:",
+                    automation
+                  );
                 }
               }
-              // selectAutomationApi(automationType, automationTemp, automationAccountId)
-              onMoveJob(jobId, targetStage); // Move the job when the button is clicked
-              onClose(); // Close the drawer after the move
+
+              // Move the job to the target stage after processing
+              onMoveJob(jobId, targetStage);
+              onClose(); // Close the drawer
             }}
             variant="contained"
             color="primary"
             sx={{ marginTop: 2 }}
           >
             Move
-          </Button> */}
-<Button
-  onClick={async () => {
-    // Filter only selected and enabled automations
-    const selectedAutomations = selectedAutomationIndices
-      .map((index) => automations[index])
-      .filter((automation) =>
-        automation.tags.some((tag) =>
-          accountTags.some((accountTag) => accountTag._id === tag._id)
-        )
-      );
-
-    if (selectedAutomations.length === 0) {
-      console.warn("No valid automations selected");
-      return;
-    }
-
-    // Process all valid automations
-    for (const automation of selectedAutomations) {
-      const { type, template } = automation;
-      const templateValue = template?.value;
-
-      if (type && templateValue && automationAccountId) {
-        try {
-          // Call the API for each automation
-          await selectAutomationApi(type, templateValue, automationAccountId);
-        } catch (error) {
-          console.error("Error processing automation:", automation, error);
-        }
-      } else {
-        console.warn("Skipping automation due to missing parameters:", automation);
-      }
-    }
-
-    // Move the job to the target stage after processing
-    onMoveJob(jobId, targetStage);
-    onClose(); // Close the drawer
-  }}
-  variant="contained"
-  color="primary"
-  sx={{ marginTop: 2 }}
->
-  Move
-</Button>
+          </Button>
 
           <Button onClick={onClose} variant="contained" sx={{ marginTop: 2 }}>
             Close
@@ -649,7 +795,6 @@ console.log("account id automation",accountId)
     );
   };
 
-
   const JobCard = ({ job }) => {
     const [{ isDragging }, drag] = useDrag({
       type: "JOB_CARD",
@@ -658,7 +803,9 @@ console.log("account id automation",accountId)
         isDragging: !!monitor.isDragging(),
       }),
     });
-    const [lastUpdatedTime, setLastUpdatedTime] = useState(new Date(job.createdAt));
+    const [lastUpdatedTime, setLastUpdatedTime] = useState(
+      new Date(job.createdAt)
+    );
 
     useEffect(() => {
       if (job.updatedAt) {
@@ -713,13 +860,37 @@ console.log("account id automation",accountId)
     const getPriorityStyle = (priority) => {
       switch (priority.toLowerCase()) {
         case "urgent":
-          return { color: "white", backgroundColor: "#0E0402", fontSize: "12px", borderRadius: "50px", padding: "3px 7px" };
+          return {
+            color: "white",
+            backgroundColor: "#0E0402",
+            fontSize: "12px",
+            borderRadius: "50px",
+            padding: "3px 7px",
+          };
         case "high":
-          return { color: "white", backgroundColor: "#fe676e", fontSize: "12px", borderRadius: "50px", padding: "3px 7px" }; // light red background
+          return {
+            color: "white",
+            backgroundColor: "#fe676e",
+            fontSize: "12px",
+            borderRadius: "50px",
+            padding: "3px 7px",
+          }; // light red background
         case "medium":
-          return { color: "white", backgroundColor: "#FFC300", fontSize: "12px", borderRadius: "50px", padding: "3px 7px" }; // light orange background
+          return {
+            color: "white",
+            backgroundColor: "#FFC300",
+            fontSize: "12px",
+            borderRadius: "50px",
+            padding: "3px 7px",
+          }; // light orange background
         case "low":
-          return { color: "white", backgroundColor: "#56c288", fontSize: "12px", borderRadius: "50px", padding: "3px 7px" }; // light green background
+          return {
+            color: "white",
+            backgroundColor: "#56c288",
+            fontSize: "12px",
+            borderRadius: "50px",
+            padding: "3px 7px",
+          }; // light green background
         default:
           return {};
       }
@@ -746,17 +917,13 @@ console.log("account id automation",accountId)
     const [isHovered, setIsHovered] = useState(false);
     const [open, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const handleDelete = (_id) => {
-
-     
-        const requestOptions = {
-          method: "DELETE",
-          redirect: "follow",
-        };
-
-      
+      const requestOptions = {
+        method: "DELETE",
+        redirect: "follow",
+      };
 
       fetch(`${JOBS_API}/workflow/jobs/job/` + _id, requestOptions)
         .then((response) => {
@@ -774,9 +941,7 @@ console.log("account id automation",accountId)
           console.error(error);
           toast.error("Failed to delete item");
         });
-      
     };
-
 
     // edit
 
@@ -818,11 +983,13 @@ console.log("account id automation",accountId)
 
     const fetchPipelineDataid = async (piplineid) => {
       try {
-        const response = await fetch(`${PIPELINE_API}/workflow/pipeline/pipeline/${piplineid}`);
+        const response = await fetch(
+          `${PIPELINE_API}/workflow/pipeline/pipeline/${piplineid}`
+        );
         const data = await response.json();
 
         setPipelineIdData(data.pipeline);
-        console.log("pipeline data for stage", data.pipeline)
+        console.log("pipeline data for stage", data.pipeline);
 
         if (data.pipeline && data.pipeline.stages) {
           const stagesdata = data.pipeline.stages.map((stage) => ({
@@ -849,7 +1016,7 @@ console.log("account id automation",accountId)
           throw new Error("Failed to fetch pipeline data");
         }
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setPipelineData(data.pipeline || []);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -863,7 +1030,7 @@ console.log("account id automation",accountId)
 
     const handlePipelineChange = (selectedOptions) => {
       setSelectedPipeline(selectedOptions);
-      console.log("pipeline", selectedOptions)
+      console.log("pipeline", selectedOptions);
       fetchPipelineDataid(selectedOptions.value);
     };
 
@@ -906,7 +1073,8 @@ console.log("account id automation",accountId)
       const textWidth = label.length * 8;
       return Math.min(textWidth, 200);
     };
-    const calculateWidthOptions = (label) => `${Math.max(label.length * 8, 90)}px`;
+    const calculateWidthOptions = (label) =>
+      `${Math.max(label.length * 8, 90)}px`;
     const tagoptions = tags.map((tag) => ({
       value: tag._id,
       label: tag.tagName,
@@ -990,7 +1158,9 @@ console.log("account id automation",accountId)
     const [selectedJobShortcut, setSelectedJobShortcut] = useState("");
     const fetchClientFacingJobsData = async () => {
       try {
-        const response = await fetch(`${CLIENT_FACING_API}/workflow/clientfacingjobstatus/`);
+        const response = await fetch(
+          `${CLIENT_FACING_API}/workflow/clientfacingjobstatus/`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -1018,14 +1188,18 @@ console.log("account id automation",accountId)
       if (newValue && newValue.value) {
         const clientjobId = newValue.value;
         try {
-          const response = await fetch(`${CLIENT_FACING_API}/workflow/clientfacingjobstatus/${clientjobId}`);
+          const response = await fetch(
+            `${CLIENT_FACING_API}/workflow/clientfacingjobstatus/${clientjobId}`
+          );
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const data = await response.json();
 
           console.log(data);
-          setClientDescription(data.clientfacingjobstatuses.clientfacingdescription);
+          setClientDescription(
+            data.clientfacingjobstatuses.clientfacingdescription
+          );
           console.log(data.clientfacingjobstatuses.clientfacingdescription);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -1047,8 +1221,7 @@ console.log("account id automation",accountId)
       setClientFacingStatus(checked);
     };
     const handleEditJobCard = async (jobid) => {
-
-      console.log(jobid)
+      console.log(jobid);
       setjobid(jobid);
       try {
         const url = `${JOBS_API}/workflow/jobs/job/joblist/listbyid/${jobid}`;
@@ -1086,11 +1259,15 @@ console.log("account id automation",accountId)
         setClientFacingStatus(data.jobList.ShowinClientPortal);
         setInputText(data.jobList.jobClientName);
         setClientDescription(data.jobList.ClientFacingDecription);
-        if (data.jobList.ClientFacingStatus && data.jobList.ClientFacingStatus) {
+        if (
+          data.jobList.ClientFacingStatus &&
+          data.jobList.ClientFacingStatus
+        ) {
           const clientStatusData = {
             value: data.jobList.ClientFacingStatus._id,
             label: data.jobList.ClientFacingStatus.clientfacingName,
-            clientfacingColour: data.jobList.ClientFacingStatus.clientfacingColour,
+            clientfacingColour:
+              data.jobList.ClientFacingStatus.clientfacingColour,
           };
 
           setSelectedjob(clientStatusData);
@@ -1153,7 +1330,6 @@ console.log("account id automation",accountId)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
     const handleSaveClick = () => {
       const myHeaders = new Headers();
@@ -1278,19 +1454,51 @@ console.log("account id automation",accountId)
         });
     };
     return (
-      <Box className={`job-card ${isDragging ? "dragging" : ""}`} ref={drag} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onDrop={updateLastUpdatedTime}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "10px" }}>
+      <Box
+        className={`job-card ${isDragging ? "dragging" : ""}`}
+        ref={drag}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onDrop={updateLastUpdatedTime}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "10px",
+          }}
+        >
           <Typography color={"black"}>{job.Account.join(", ")}</Typography>
-          {isHovered ? <RiDeleteBin5Line  onClick={handleOpen} style={{ cursor: "pointer" }} /> : <span className="automation-batch">1</span>}
+          {isHovered ? (
+            <RiDeleteBin5Line
+              onClick={handleOpen}
+              style={{ cursor: "pointer" }}
+            />
+          ) : (
+            <span className="automation-batch">1</span>
+          )}
         </Box>
 
-        <Typography sx={{ fontWeight: "bold", marginBottom: "8px", cursor: "pointer" }} color={"black"} onClick={() => handleEditJobCard(job.id)}>
+        <Typography
+          sx={{ fontWeight: "bold", marginBottom: "8px", cursor: "pointer" }}
+          color={"black"}
+          onClick={() => handleEditJobCard(job.id)}
+        >
           {truncateName(job.Name)}
         </Typography>
-        <Typography color={"black"} variant="body2" sx={{ marginBottom: "8px" }}>
+        <Typography
+          color={"black"}
+          variant="body2"
+          sx={{ marginBottom: "8px" }}
+        >
           {job.JobAssignee.join(", ")}
         </Typography>
-        <Typography color={"black"} variant="body2" sx={{ marginBottom: "8px" }}>
+        <Typography
+          color={"black"}
+          variant="body2"
+          sx={{ marginBottom: "8px" }}
+        >
           {truncateDescription(stripHtmlTags(job.Description))}
         </Typography>
 
@@ -1298,50 +1506,58 @@ console.log("account id automation",accountId)
 
         <br />
 
-        <Typography color={"black"} sx={{ marginBottom: "4px", mt: 2 }} variant="body2">
+        <Typography
+          color={"black"}
+          sx={{ marginBottom: "4px", mt: 2 }}
+          variant="body2"
+        >
           Starts : {startDateFormatted}
         </Typography>
         <Typography color={"black"} variant="body2">
           Due : {dueDateFormatted}
         </Typography>
-        <Typography color={"black"} variant="body2" sx={{ marginBottom: "5px", mt: 2 }}>
+        <Typography
+          color={"black"}
+          variant="body2"
+          sx={{ marginBottom: "5px", mt: 2 }}
+        >
           {timeAgo()}
         </Typography>
 
         <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 300,
-            bgcolor: "background.paper",
-            p: 4,
-            boxShadow: 24,
-            borderRadius: 2,
-          }}
-        >
-          <Typography variant="h6" component="h2" mb={2}>
-            Confirm Deletion
-          </Typography>
-          <Typography variant="body1" mb={4}>
-            Are you sure you want to delete this job?
-          </Typography>
-          <Box display="flex" gap={3} ml={15}>
-            <Button variant="text" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => handleDelete(job.id)}
-            >
-              Delete
-            </Button>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 300,
+              bgcolor: "background.paper",
+              p: 4,
+              boxShadow: 24,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6" component="h2" mb={2}>
+              Confirm Deletion
+            </Typography>
+            <Typography variant="body1" mb={4}>
+              Are you sure you want to delete this job?
+            </Typography>
+            <Box display="flex" gap={3} ml={15}>
+              <Button variant="text" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDelete(job.id)}
+              >
+                Delete
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Modal>
+        </Modal>
 
         {/* edit job */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1361,7 +1577,15 @@ console.log("account id automation",accountId)
               },
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px", ml: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "20px",
+                ml: 1,
+              }}
+            >
               <Typography sx={{ fontWeight: "bold" }} variant="h6">
                 Edit Job
               </Typography>
@@ -1379,7 +1603,9 @@ console.log("account id automation",accountId)
                   getOptionLabel={(option) => option.label}
                   value={selectedPipeline}
                   onChange={(event, newValue) => handlePipelineChange(newValue)}
-                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  isOptionEqualToValue={(option, value) =>
+                    option.value === value.value
+                  }
                   renderOption={(props, option) => (
                     <Box
                       component="li"
@@ -1389,7 +1615,15 @@ console.log("account id automation",accountId)
                       {option.label}
                     </Box>
                   )}
-                  renderInput={(params) => <TextField {...params} sx={{ backgroundColor: "#fff" }} placeholder="Pipeline" variant="outlined" size="small" />}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={{ backgroundColor: "#fff" }}
+                      placeholder="Pipeline"
+                      variant="outlined"
+                      size="small"
+                    />
+                  )}
                   sx={{ width: "100%", marginTop: "8px" }}
                   clearOnEscape // Enable clearable functionality
                 />
@@ -1404,8 +1638,16 @@ console.log("account id automation",accountId)
                   value={selectedTags} // Selected tags
                   onChange={handleTagChange}
                   getOptionLabel={(option) => option.label} // Assuming your tags have a 'label' property
-                  isOptionEqualToValue={(option, value) => option.value === value.value} // Customize equality check
-                  renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select tags..." />}
+                  isOptionEqualToValue={(option, value) =>
+                    option.value === value.value
+                  } // Customize equality check
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      placeholder="Select tags..."
+                    />
+                  )}
                   filterSelectedOptions // Prevents duplicates in selection
                   renderOption={(props, option) => (
                     <MenuItem
@@ -1463,8 +1705,16 @@ console.log("account id automation",accountId)
                       {option.label}
                     </Box>
                   )}
-                  renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Assignees" />}
-                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      placeholder="Assignees"
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) =>
+                    option.value === value.value
+                  }
                 />
               </Box>
               <Box>
@@ -1474,7 +1724,9 @@ console.log("account id automation",accountId)
                   getOptionLabel={(option) => option.label}
                   value={selectedstage}
                   onChange={(event, newValue) => handleStageChange(newValue)}
-                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  isOptionEqualToValue={(option, value) =>
+                    option.value === value.value
+                  }
                   renderOption={(props, option) => (
                     <Box
                       component="li"
@@ -1484,13 +1736,24 @@ console.log("account id automation",accountId)
                       {option.label}
                     </Box>
                   )}
-                  renderInput={(params) => <TextField {...params} sx={{ backgroundColor: "#fff" }} placeholder="Select stages" variant="outlined" size="small" />}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={{ backgroundColor: "#fff" }}
+                      placeholder="Select stages"
+                      variant="outlined"
+                      size="small"
+                    />
+                  )}
                   clearOnEscape // Enable clearable functionality
                   sx={{ width: "100%", marginTop: "8px" }}
                 />
               </Box>
               <Box mt={2}>
-                <Priority onPriorityChange={handlePriorityChange} selectedPriority={priority} />
+                <Priority
+                  onPriorityChange={handlePriorityChange}
+                  selectedPriority={priority}
+                />
               </Box>
 
               <Typography>Start Date</Typography>
@@ -1515,24 +1778,58 @@ console.log("account id automation",accountId)
                 renderInput={(params) => <TextField {...params} size="small" />}
               />
               <Box mt={2}>
-                <Editor initialContent={description} onChange={handleEditorChange} />
+                <Editor
+                  initialContent={description}
+                  onChange={handleEditorChange}
+                />
               </Box>
 
               <Box mt={2}>
                 <Box style={{ display: "flex", alignItems: "center" }}>
-
-                  <Box style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}>
-                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Box
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                      width: "100%",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <Typography variant="body">
                         <b>Client-facing status</b>
                       </Typography>
-                      <FormControlLabel control={<Switch onChange={(event) => handleClientFacing(event.target.checked)} checked={clientFacingStatus} color="primary" />} label="Show in Client portal" />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            onChange={(event) =>
+                              handleClientFacing(event.target.checked)
+                            }
+                            checked={clientFacingStatus}
+                            color="primary"
+                          />
+                        }
+                        label="Show in Client portal"
+                      />
                     </Box>
                     <Box>
                       {clientFacingStatus && (
                         <>
                           <Typography>Job name for client</Typography>
-                          <TextField fullWidth name="subject" value={inputText + selectedJobShortcut} onChange={handlechatsubject} placeholder="Job name for client" size="small" sx={{ background: "#fff", mt: 2 }} />
+                          <TextField
+                            fullWidth
+                            name="subject"
+                            value={inputText + selectedJobShortcut}
+                            onChange={handlechatsubject}
+                            placeholder="Job name for client"
+                            size="small"
+                            sx={{ background: "#fff", mt: 2 }}
+                          />
 
                           <Box mt={2}>
                             <Typography>Status</Typography>
@@ -1543,14 +1840,16 @@ console.log("account id automation",accountId)
                               value={selectedjob}
                               onChange={handleJobChange}
                               getOptionLabel={(option) => option.label}
-                              isOptionEqualToValue={(option, value) => option.value === value.value}
+                              isOptionEqualToValue={(option, value) =>
+                                option.value === value.value
+                              }
                               renderOption={(props, option) => (
                                 <Box component="li" {...props}>
-
                                   <Chip
                                     size="small"
                                     style={{
-                                      backgroundColor: option.clientfacingColour,
+                                      backgroundColor:
+                                        option.clientfacingColour,
                                       marginRight: 8,
                                       marginLeft: 8,
                                       borderRadius: "50%",
@@ -1567,11 +1866,17 @@ console.log("account id automation",accountId)
                                   InputProps={{
                                     ...params.InputProps,
                                     startAdornment:
-                                      params.inputProps.value && clientFacingJobs.length > 0 ? (
+                                      params.inputProps.value &&
+                                      clientFacingJobs.length > 0 ? (
                                         <Chip
                                           size="small"
                                           style={{
-                                            backgroundColor: clientFacingJobs.find((job) => job.clientfacingName === params.inputProps.value)?.clientfacingColour, // Set color from selection
+                                            backgroundColor:
+                                              clientFacingJobs.find(
+                                                (job) =>
+                                                  job.clientfacingName ===
+                                                  params.inputProps.value
+                                              )?.clientfacingColour, // Set color from selection
                                             marginRight: 8,
                                             marginLeft: 2,
                                             borderRadius: "50%",
@@ -1585,7 +1890,9 @@ console.log("account id automation",accountId)
                             />
                           </Box>
                           <Box sx={{ position: "relative", mt: 2 }}>
-                            <InputLabel sx={{ color: "black" }}>Description</InputLabel>
+                            <InputLabel sx={{ color: "black" }}>
+                              Description
+                            </InputLabel>
                             <TextField
                               fullWidth
                               size="small"
@@ -1598,7 +1905,15 @@ console.log("account id automation",accountId)
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position="end">
-                                    <Typography sx={{ color: "gray", fontSize: "12px", position: "absolute", bottom: "15px", right: "15px" }}>
+                                    <Typography
+                                      sx={{
+                                        color: "gray",
+                                        fontSize: "12px",
+                                        position: "absolute",
+                                        bottom: "15px",
+                                        right: "15px",
+                                      }}
+                                    >
                                       {charCount}/{charLimit}
                                     </Typography>
                                   </InputAdornment>
@@ -1626,10 +1941,7 @@ console.log("account id automation",accountId)
               </Box>
             </Box>
           </Drawer>
-
-
         </LocalizationProvider>
-
       </Box>
     );
   };
@@ -1647,14 +1959,18 @@ console.log("account id automation",accountId)
       }),
     });
 
-    const stageJobs = jobs.filter((job) => job.Pipeline === selectedPipeline.pipelineName && job.Stage.includes(stage.name));
+    const stageJobs = jobs.filter(
+      (job) =>
+        job.Pipeline === selectedPipeline.pipelineName &&
+        job.Stage.includes(stage.name)
+    );
     const [displayCount, setDisplayCount] = useState(3);
     const displayedJobs = stageJobs.slice(0, displayCount);
-    const truncatedStageName = stage.name.length > 20 ? `${stage.name.slice(0, 20)}...` : stage.name;
+    const truncatedStageName =
+      stage.name.length > 20 ? `${stage.name.slice(0, 20)}...` : stage.name;
     return (
       <Box ref={drop} className={`stage ${isOver ? "drag-over" : ""}`}>
         <Typography sx={{ marginBottom: "12px" }} className="stage-name">
-
           {truncatedStageName}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: "12px" }}>
@@ -1664,7 +1980,11 @@ console.log("account id automation",accountId)
           <JobCard key={job.id} job={job} />
         ))}
         {stageJobs.length > displayCount && (
-          <Button variant="outlined" onClick={() => setDisplayCount(displayCount + 5)} sx={{ marginTop: "16px", alignSelf: "center" }}>
+          <Button
+            variant="outlined"
+            onClick={() => setDisplayCount(displayCount + 5)}
+            sx={{ marginTop: "16px", alignSelf: "center" }}
+          >
             Load More
           </Button>
         )}
@@ -1676,8 +1996,8 @@ console.log("account id automation",accountId)
   const [currentJobId, setCurrentJobId] = useState(null);
   const [currentTargetStage, setCurrentTargetStage] = useState(null);
   const [tempJobData, setTempJobData] = useState(null); // State for temporary job data
-  const [accountName, setAccountName] = useState('');
-  const [accountId, setAccountId] = useState('');
+  const [accountName, setAccountName] = useState("");
+  const [accountId, setAccountId] = useState("");
 
   const handleDrop = (jobId, targetStageName) => {
     const sourceStage = stages.find((stage) =>
@@ -1711,7 +2031,6 @@ console.log("account id automation",accountId)
       setTimeout(() => {
         fetchJobData();
       }, 1000);
-
 
       updateJobStage(jobId, targetStage);
     }
@@ -1748,7 +2067,12 @@ console.log("account id automation",accountId)
     <DndProvider backend={HTML5Backend}>
       <Box p={3}>
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100vh"
+          >
             <CircularProgress />
           </Box>
         ) : selectedPipeline ? (
@@ -1759,7 +2083,9 @@ console.log("account id automation",accountId)
                 onChange={handleSelectChange}
                 options={optionpipeline}
                 getOptionLabel={(option) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value?.value}
+                isOptionEqualToValue={(option, value) =>
+                  option.value === value?.value
+                }
                 renderOption={(props, option) => (
                   <Box
                     component="li"
@@ -1780,11 +2106,25 @@ console.log("account id automation",accountId)
                 // isClearable
                 className="pipeline-select"
               />
-              <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
-                <Button variant="outlined" color="primary" onClick={handleBackToPipelineList} sx={{ mt: 2 }}>
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleBackToPipelineList}
+                  sx={{ mt: 2 }}
+                >
                   Back to Pipeline List
                 </Button>
-                <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleDrawerOpen}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                  onClick={handleDrawerOpen}
+                >
                   Add Jobs
                 </Button>
               </Box>
@@ -1792,7 +2132,12 @@ console.log("account id automation",accountId)
             <Box>
               <Box className="stage-container" display="flex" gap={2}>
                 {stages.map((stage, index) => (
-                  <Stage key={index} stage={stage} selectedPipeline={selectedPipeline} handleDrop={handleDrop} />
+                  <Stage
+                    key={index}
+                    stage={stage}
+                    selectedPipeline={selectedPipeline}
+                    handleDrop={handleDrop}
+                  />
                 ))}
 
                 <AutomationDrawer
@@ -1803,9 +2148,6 @@ console.log("account id automation",accountId)
                   targetStage={currentTargetStage}
                   onMoveJob={handleMoveJob}
                 />
-
-
-
               </Box>
             </Box>
             <Drawer
@@ -1824,14 +2166,36 @@ console.log("account id automation",accountId)
                 },
               }}
             >
-              <Box sx={{ borderRadius: isSmallScreen ? "0" : "15px" }} role="presentation">
+              <Box
+                sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}
+                role="presentation"
+              >
                 <Box>
-                  <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px", background: "#EEEEEE" }}>
-                    <Typography variant="h6">Add Job to {selectedPipeline ? selectedPipeline.pipelineName : ""}</Typography>
-                    <IoClose onClick={handleDrawerClose} style={{ cursor: "pointer" }} />
+                  <Box
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "15px",
+                      background: "#EEEEEE",
+                    }}
+                  >
+                    <Typography variant="h6">
+                      Add Job to{" "}
+                      {selectedPipeline ? selectedPipeline.pipelineName : ""}
+                    </Typography>
+                    <IoClose
+                      onClick={handleDrawerClose}
+                      style={{ cursor: "pointer" }}
+                    />
                   </Box>
                   <Box>
-                    <AddJobs stages={stages} pipelineId={pipelineId} handleDrawerClose={handleDrawerClose} fetchJobData={fetchJobData} />
+                    <AddJobs
+                      stages={stages}
+                      pipelineId={pipelineId}
+                      handleDrawerClose={handleDrawerClose}
+                      fetchJobData={fetchJobData}
+                    />
                   </Box>
                 </Box>
               </Box>
@@ -1857,7 +2221,14 @@ console.log("account id automation",accountId)
                 <TableBody>
                   {pipelineData.map((pipeline, index) => (
                     <TableRow key={index} hover>
-                      <TableCell onClick={() => handleBoardsList(pipeline)} sx={{ color: "primary.main", cursor: "pointer", fontWeight: "bold" }}>
+                      <TableCell
+                        onClick={() => handleBoardsList(pipeline)}
+                        sx={{
+                          color: "primary.main",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                        }}
+                      >
                         {pipeline.pipelineName}
                       </TableCell>
                       <TableCell></TableCell>
@@ -1879,12 +2250,8 @@ console.log("account id automation",accountId)
 
 export default Pipeline;
 
-
-
-
-
-
-  {/* {automations.length > 0 ? (
+{
+  /* {automations.length > 0 ? (
             automations.map((automation, index) => (
               <Box key={index} sx={{ marginBottom: 2 }}>
                 <Checkbox
@@ -1913,4 +2280,5 @@ export default Pipeline;
             ))
           ) : (
             <Typography>No automations available</Typography>
-          )} */}
+          )} */
+}

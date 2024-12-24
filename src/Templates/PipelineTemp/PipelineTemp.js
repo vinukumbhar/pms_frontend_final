@@ -183,6 +183,9 @@ const PipelineTemp = () => {
       case "Create Organizer":
         newAutomation = { type: "Create Organizer", template: null, tags: [] };
         break;
+         case "Apply folder template":
+        newAutomation = { type: "Apply folder template", template: null, tags: [] };
+        break;
       // Update account tags
       case "Update account tags":
         // Initialize addTags and removeTags as separate empty arrays
@@ -498,6 +501,33 @@ const PipelineTemp = () => {
     label: temp.templatename,
   }));
 
+
+   // folder templates
+   const API_KEY = process.env.REACT_APP_API_IP;
+    const [folderTemplates, setFolderTemplates] = useState([]);
+
+  
+  
+    useEffect(() => {
+      fetchFolderData();
+    }, []);
+  
+  
+    const fetchFolderData = async () => {
+      try {
+        const url = `${API_KEY}/common/folder`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setFolderTemplates(data.folderTemplates);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+   
+    const optionfolder = folderTemplates.map((folderTemplates) => ({
+      value: folderTemplates._id,
+      label: folderTemplates.templatename,
+    }));
   const [selectedtemp, setselectedTemp] = useState();
   const handletemp = (selectedOptions) => {
     setselectedTemp(selectedOptions);
@@ -1059,7 +1089,148 @@ const PipelineTemp = () => {
             </Drawer>
           </>
         );
+        case "Apply folder template":
+        return (
+          <>
+            <Box p={2}>
+              <Grid item>
+                {automationSelect}
+                <Typography mb={1}>Select template</Typography>
+                <Autocomplete
+                  options={optionfolder}
+                  getOptionLabel={(option) => option.label}
+                  value={selectedtemp}
+                  onChange={(event, newValue) => handletemp(newValue)}
+                  isOptionEqualToValue={(option, value) =>
+                    option.value === value.value
+                  }
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      {...props}
+                      sx={{ cursor: "pointer", margin: "5px 10px" }} // Add cursor pointer style
+                    >
+                      {option.label}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <>
+                      <TextField
+                        {...params}
+                        // helperText={templateError}
+                        sx={{ backgroundColor: "#fff" }}
+                        placeholder="Select Template"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </>
+                  )}
+                  sx={{ width: "100%", marginTop: "8px" }}
+                  clearOnEscape // Enable clearable functionality
+                />
+                {selectedTags.length > 0 && (
+                  <Grid container alignItems="center" gap={1}>
+                    <Typography>Only for:</Typography>
+                    <Grid item>{selectedTagElements}</Grid>
+                  </Grid>
+                )}
+                <Button variant="text" onClick={handleAddConditions}>
+                  Add Conditions
+                </Button>
+              </Grid>
+              <Button
+                variant="contained"
+                onClick={handleSaveAutomation(stageSelected)}
+              >
+                Save Automation
+              </Button>
+            </Box>
+            {/* Condition tags for automation */}
+            <Drawer
+              anchor="right"
+              open={isConditionsFormOpen}
+              onClose={handleGoBack}
+              PaperProps={{ sx: { width: "550px", padding: 2 } }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <IconButton onClick={handleGoBack}>
+                  <IoMdArrowRoundBack fontSize="large" color="blue" />
+                </IconButton>
+                <Typography variant="h6">Add conditions</Typography>
+              </Box>
+
+              <Box sx={{ padding: 2 }}>
+                <Typography variant="body1">
+                  Apply automation only for accounts with these tags
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  InputProps={{
+                    startAdornment: (
+                      <AiOutlineSearch style={{ marginRight: 8 }} />
+                    ),
+                  }}
+                  sx={{ marginTop: 2 }}
+                />
+
+                <Box sx={{ marginTop: 2, height: "68vh", overflowY: "auto" }}>
+                  {filteredTags.map((tag) => (
+                    <Box
+                      key={tag._id}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 3,
+                        borderBottom: "1px solid grey",
+                        paddingBottom: 1,
+                      }}
+                    >
+                      <Checkbox
+                        checked={tempSelectedTags.includes(tag)}
+                        onChange={() => handleCheckboxChange(tag)}
+                      />
+                      <Chip
+                        label={tag.tagName}
+                        sx={{
+                          backgroundColor: tag.tagColour,
+                          color: "#fff",
+                          fontWeight: "500",
+                          borderRadius: "20px",
+                          marginRight: 1,
+                        }}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={!isAnyCheckboxChecked}
+                    onClick={handleAddTags}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleGoBack}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </Box>
+            </Drawer>
+          </>
+        );
       //  Update account tags
+      // Apply folder template
       case "Update account tags":
         return (
           <>
@@ -1748,7 +1919,7 @@ const PipelineTemp = () => {
 
   const fetchPipelineData = async () => {
     setLoading(true);
-    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 2000));
     try {
       const url = `${PIPELINE_API}/workflow/pipeline/pipelines`;
       const response = await fetch(url);
@@ -2564,6 +2735,17 @@ const PipelineTemp = () => {
                                 Update account tags
                               </MenuItem> */}
                               {/* Send Proposal/Els */}
+                              {/*  Apply folder template */}
+                               <MenuItem
+                                onClick={() =>
+                                  handleAddAutomation(
+                                    stageSelected,
+                                    "Apply folder template"
+                                  )
+                                }
+                              >
+                                Apply folder template
+                              </MenuItem>
                             </Menu>
 
                             <Drawer
@@ -3590,6 +3772,14 @@ const PipelineTemp = () => {
                                   >
                                     Create Organizer
                                   </MenuItem>
+                                  <MenuItem
+                                    onClick={() =>
+                                      handleMenuItemSelect("Apply folder template")
+                                    }
+                                  >
+                                   Apply folder template
+                                  </MenuItem>
+                                  {/* Apply folder template */}
                                   {/* <MenuItem
                                     onClick={() =>
                                       handleMenuItemSelect(

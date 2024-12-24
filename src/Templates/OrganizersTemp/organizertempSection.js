@@ -157,8 +157,15 @@ const Section = ({ sections, section, onDelete, onUpdate, onDuplicate, onSaveFor
       // Optionally log or save formData
       onSaveFormData(selectedElement.id, formData);
 
-      const updatedFormElements = formElements.map((element) => (element.id === selectedElement.id ? { ...element, questionsectionsettings: formData } : element));
-      console.log("Updated formElements:", updatedFormElements);
+      // const updatedFormElements = formElements.map((element) => (element.id === selectedElement.id ? { ...element, questionsectionsettings: formData } : element));
+      // console.log("Updated formElements:", updatedFormElements);
+      const updatedFormElements = formElements.map((element) =>
+        element.id === selectedElement.id
+          ? { ...element, questionsectionsettings: formData }
+          : element
+      );
+      setFormElements(updatedFormElements); // Update form elements in state
+      
 
       // Clear form and close drawer
       clearForm();

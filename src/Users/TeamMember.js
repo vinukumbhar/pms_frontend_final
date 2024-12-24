@@ -196,7 +196,8 @@ const TeamMember = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const result = await response.text();
+      const result = await response.json();
+      console.log(result)
       // Check if user array is empty
       if (result.error) {
         // No such user, email does not exist
@@ -212,7 +213,7 @@ const TeamMember = () => {
   };
   const handleEmail = async (event) => {
     const enteredEmail = event.target.value;
-    console.log(enteredEmail);
+    // console.log(enteredEmail);
     setEMail(enteredEmail);
     // Check if email exists
     const exists = await checkEmailExists(enteredEmail);
