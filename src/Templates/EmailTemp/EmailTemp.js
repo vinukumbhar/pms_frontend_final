@@ -369,7 +369,7 @@ const EmailTemp = () => {
    
     const fetchEmailTemplates = async () => {
         setLoading(true);
-        const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+        const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const url = `${EMAIL_API}/workflow/emailtemplate/`;
             const response = await fetch(url);

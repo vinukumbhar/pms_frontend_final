@@ -420,7 +420,7 @@ const MyStepper = () => {
   const fetchPrprosalsAllData = async () => {
     setLoading(true); // Start loader
 
-    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const url = `${PROPOSAL_API}/workflow/proposalesandels/proposalesandels`;
 

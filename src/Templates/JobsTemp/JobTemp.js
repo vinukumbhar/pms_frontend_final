@@ -347,7 +347,7 @@ const JobTemp = ({ charLimit = 4000 }) => {
   }, []);
   const fetchJobTemplatesData = async () => {
     setLoading(true);
-    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const url = `${JOBS_API}/workflow/jobtemplate/jobtemplate`;
 

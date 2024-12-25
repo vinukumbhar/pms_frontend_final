@@ -37,7 +37,7 @@ const [loading, setLoading] = useState(true); // Loader state
     async function fetchFolderTemplates() {
       setLoading(true); // Start loader
 
-      const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+      const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
       try {
         const url = `${API_KEY}/common/folder`;
         const response = await fetch(url);

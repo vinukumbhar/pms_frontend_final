@@ -42,7 +42,7 @@ const Tags = () => {
   const fetchData = async () => {
     setLoading(true); // Start loader
 
-    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const response = await fetch(`${TAGS_API}/tags/accountcountoftag/account`);
       const data = await response.json();

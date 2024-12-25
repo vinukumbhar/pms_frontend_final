@@ -1919,7 +1919,7 @@ const PipelineTemp = () => {
 
   const fetchPipelineData = async () => {
     setLoading(true);
-    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 2000));
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const url = `${PIPELINE_API}/workflow/pipeline/pipelines`;
       const response = await fetch(url);

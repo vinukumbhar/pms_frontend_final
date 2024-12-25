@@ -282,7 +282,7 @@ const ChatTemp = () => {
   const fetchChatTemplates = async () => {
     setLoading(true); // Start loader
 
-    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+    const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const url = `${CHAT_API}/Workflow/chats/chattemplate`;
       const response = await fetch(url);
