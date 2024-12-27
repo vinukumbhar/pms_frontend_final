@@ -94,7 +94,7 @@ const UploadDocument = ({ isDocumentForm, setIsDocumentForm, file, setFile, fold
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${API_KEY}/common/upload/${folderName}/${subfolderName}/${selectedFolder}/${selectedSubFolder}`, {
+      const response = await fetch(`${API_KEY}/foldertemp/upload/${folderName}/${subfolderName}/${selectedFolder}/${selectedSubFolder}`, {
         method: "POST",
         body: formData,
       });

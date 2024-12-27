@@ -39,7 +39,7 @@ const [loading, setLoading] = useState(true); // Loader state
 
       const loaderDelay = new Promise((resolve) => setTimeout(resolve, 1000));
       try {
-        const url = `${API_KEY}/common/folder`;
+        const url = `${API_KEY}/foldertemp/folder`;
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch folder templates");
@@ -112,7 +112,7 @@ const [loading, setLoading] = useState(true); // Loader state
       redirect: "follow",
     };
 
-    const url = `${API_KEY}/common/folder`;
+    const url = `${API_KEY}/foldertemp/folder`;
 
     fetch(url, requestOptions)
       .then((response) => response.json())

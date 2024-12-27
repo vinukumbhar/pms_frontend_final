@@ -315,7 +315,7 @@ export default function CreateFolder({
 
     try {
       const response = await fetch(
-        `${API_KEY}/common/upload/${folderName}/${subfolderName}/${selectedFolder}/${selectedSubFolder}`,
+        `${API_KEY}/foldertemp/upload/${folderName}/${subfolderName}/${selectedFolder}/${selectedSubFolder}`,
         {
           method: "POST",
           body: formData,
@@ -355,7 +355,7 @@ export default function CreateFolder({
       );
 
       try {
-        const url = `${API_KEY}/common/createFolder`;
+        const url = `${API_KEY}/foldertemp/createFolder`;
         await axios.post(url, {
           folderName: folderName,
           selectedFolder: selectedFolder,

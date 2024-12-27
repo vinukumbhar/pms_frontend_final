@@ -7,14 +7,14 @@ const ManageTeams = ({ selectedAccounts, onClose }) => {
   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const [userData, setUserData] = useState([]);
   const [tagActions, setTagActions] = useState({});
-
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const url = `${USER_API}/api/auth/users`;
+      const url = `${LOGIN_API}/common/users/roles?roles=TeamMember,Admin`;
       const response = await fetch(url);
       const data = await response.json();
       console.log(data);

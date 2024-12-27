@@ -121,10 +121,10 @@ const CreateBulkJob = ({ selectedAccounts, onClose, charLimit = 4000 }) => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
   const fetchData = async () => {
     try {
-      const url = `${USER_API}/api/auth/users`;
+      const url = `${LOGIN_API}/common/users/roles?roles=TeamMember,Admin`;
       const response = await fetch(url);
       const data = await response.json();
       setUserData(data);

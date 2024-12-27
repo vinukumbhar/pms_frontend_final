@@ -135,7 +135,7 @@ function FetchFolder({ folderData, setSelectedFolder, selectedFolder, templateId
       method: "delete",
       maxBodyLength: Infinity,
      
-      url: `${API_KEY}/common/deleteFile/`,
+      url: `${API_KEY}/foldertemp/deleteFile/`,
       headers: {
         "Content-Type": "application/json",
       },

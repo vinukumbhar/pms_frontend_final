@@ -380,7 +380,7 @@ console.log("new chat id",chatId)
       redirect: "follow"
     };
 console.log(raw)
-    fetch(`${CHATTOCLIENT_API}/securechatsend`, requestOptions)
+    fetch(`${CHATTOCLIENT_API}/chatsend/securechatsend`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));
@@ -407,7 +407,7 @@ console.log(raw)
       redirect: "follow"
     };
 
-    fetch(`${CHATTOCLIENT_API}/securemessagechatsend`, requestOptions)
+    fetch(`${CHATTOCLIENT_API}/chatmsg/securemessagechatsend`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

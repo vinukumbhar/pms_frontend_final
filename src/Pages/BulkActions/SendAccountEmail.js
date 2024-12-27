@@ -240,11 +240,11 @@ const SendAccountEmail = ({ selectedAccounts, onClose }) => {
   }, []);
 
   const USER_API = process.env.REACT_APP_USER_URL;
-
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
   const fetchData = async () => {
     try {
       // const url = `${API_KEY}/common/user/`;
-      const url = `${USER_API}/api/auth/users`;
+      const url = `${LOGIN_API}/common/users/roles?roles=TeamMember,Admin`;
       // const url = `${API_KEY}/common/users/roles?roles=Admin,TeamMember`;
       const response = await fetch(url);
       const data = await response.json();
@@ -267,7 +267,7 @@ const SendAccountEmail = ({ selectedAccounts, onClose }) => {
 
     setSelectedUser(selectedOption);
 
-    const url = `${USER_API}/api/auth/users/${selectedOption.value}`;
+    const url = `${LOGIN_API}/common/users/roles?roles=TeamMember,Admin/${selectedOption.value}`;;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -469,7 +469,7 @@ const SendAccountEmail = ({ selectedAccounts, onClose }) => {
       body: raw,
       redirect: "follow",
     };
-    const url = `${CONTACT_API}/sendBulkEmails`;
+    const url = `${CONTACT_API}/sendemails/sendBulkEmails`;
     fetch(url, requestOptions)
       .then((response) => {
         if (!response.ok) {

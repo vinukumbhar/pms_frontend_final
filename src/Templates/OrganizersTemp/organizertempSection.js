@@ -309,6 +309,8 @@ const Section = ({
   
   const handleSectionSettingsClick = () => {
     if (section && section.sectionSettings) {
+        // Open the drawer with the updated data
+        toggleDrawer(true); // Open the drawer
       // Set the selected section data before opening the drawer
       setSelectedSectionData(section);
       setSelectedSectionId(section.id); // Store the ID of the section to open
@@ -320,16 +322,20 @@ const Section = ({
       setSectionMode(section.sectionSettings.sectionMode || "Any");
       setSectionQuestionAnswers(section.sectionSettings.conditions || []);
   
-      // Open the drawer with the updated data
-      toggleDrawer(true); // Open the drawer
+    
       console.log("Selected single Section Data:", section);
     } else {
       // Handle case where sectionSettings is not available
       console.log("Section settings not found.");
-      toggleDrawer(false); // Optionally close the drawer if sectionSettings is missing
+      toggleDrawer(true); // Optionally close the drawer if sectionSettings is missing
     }
   };
   
+  useEffect(() => {
+    if (isDrawerOpen && selectedSectionData) {
+      console.log("Drawer opened with section data:", selectedSectionData);
+    }
+  }, [isDrawerOpen, selectedSectionData]);
   
   
   const toggleDrawer = (open) => {
