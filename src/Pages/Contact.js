@@ -18,7 +18,8 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow,
+  TableRow,Button,Menu,
+  MenuItem,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import {
@@ -367,9 +368,11 @@ const ContactTable = () => {
     return sortedData.filter((contact) => {
       const name = contact.name?.toLowerCase() || "";
       const email = contact.email?.toLowerCase() || "";
+      const companyName = contact.companyName?.toLowerCase() || "";
       return (
         name.includes(filterText.toLowerCase()) ||
-        email.includes(filterText.toLowerCase())
+        email.includes(filterText.toLowerCase()) ||
+        companyName.includes(filterText.toLowerCase())
       );
     });
   }, [sortedData, filterText]);
@@ -501,7 +504,27 @@ const ContactTable = () => {
       console.log("Selected Contacts IDs: []"); // Log empty array when deselected
     }
   };
+  const [filterOption, setFilterOption] = useState("");
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [isFilterVisible, setIsFilterVisible] = useState(false); 
+  const handleFilterOptionClick = (option) => {
+    setFilterOption(option);
+    setIsFilterVisible(true); // Show the TextField
+    setMenuAnchor(null); // Close the menu after selection
+  };
 
+  const handleMenuOpen = (event) => {
+    setMenuAnchor(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+  }; 
+  const clearFilter = () => {
+    setFilterOption(""); // Clear filter option
+    setFilterText(""); // Clear filter text
+    setIsFilterVisible(false); // Hide the TextField
+  };
   return (
     <>
       <Drawer
@@ -539,14 +562,37 @@ const ContactTable = () => {
       </Drawer>
 
 
-      <TextField
-        label="Search by Name or Email"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={filterText}
-        onChange={(e) => setFilterText(e.target.value)}
-      />
+      {/* Filter Button and Dropdown */}
+      <Box display="flex" alignItems="center" mb={2}>
+        <Button variant="contained" onClick={handleMenuOpen}>
+          Filter by
+        </Button>
+        <Menu
+          anchorEl={menuAnchor}
+          open={Boolean(menuAnchor)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={() => handleFilterOptionClick("name")}>Name</MenuItem>
+          <MenuItem onClick={() => handleFilterOptionClick("email")}>Email</MenuItem>
+          <MenuItem onClick={() => handleFilterOptionClick("companyName")}>Company Name</MenuItem>
+        
+        </Menu>
+        {isFilterVisible && (
+           <Box display="flex" alignItems="center" ml={2}>
+           <TextField
+             label={`Search by ${filterOption}`}
+             variant="outlined"
+             size="small"
+             value={filterText}
+             onChange={(e) => setFilterText(e.target.value)}
+             style={{ flex: 1 }}
+           />
+           <IconButton onClick={clearFilter} sx={{ ml: 1 }}>
+             <DeleteIcon color="error" />
+           </IconButton>
+         </Box>
+        )}
+      </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="contact table">
           <TableHead>
