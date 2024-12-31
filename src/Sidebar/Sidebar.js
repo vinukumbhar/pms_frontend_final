@@ -82,7 +82,7 @@ function Sidebar() {
       console.log(storedData)
       if (storedData && storedData.teammember) {
         // const { manageTags } = teamMemberData.teammember;
-        const { manageTags, manageServices, managePipelines, manageTemplates, viewAllContacts ,manageProposals,viewallAccounts} = storedData.teammember;
+        const { manageTags, manageServices, managePipelines, viewAllContacts ,manageTemplates,manageProposals,viewallAccounts} = storedData.teammember;
 
         // Filter or modify sidebar items based on manageTags
         const updatedSidebarData = sidebarData.map((item) => {
@@ -112,7 +112,7 @@ function Sidebar() {
           if ((item.label === "NewTags" && !manageTags) ||
             (item.label === "Service" && !manageServices) ||
             (item.label === "Pipeline Templates" && !managePipelines) ||
-            (item.label === "Firm Templates" && !manageTemplates)
+            (item.label === "Firm Templates" && !manageTemplates) ||
             (item.label === "Contacts" && !viewAllContacts) ||
             (item.label === "Proposal&Els" && !manageProposals) ||
             (item.label === "Invoices" && !viewallAccounts)
@@ -318,6 +318,7 @@ function Sidebar() {
 
 
       if (data.user.role === "Admin") {
+        localStorage.setItem("userRole", data.user.role);
         fetchUserData(data.user.id);
         fetchSidebarData()
         navigate("/");

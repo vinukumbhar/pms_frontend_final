@@ -79,33 +79,33 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
     value: user._id,
     label: user.username,
   }));
-  // useEffect(() => {
-  //   axios
-  //     .get("https://restcountries.com/v3.1/all")
-  //     .then((response) => {
-  //       const countryData = response.data.map((country) => ({
-  //         name: country.name.common,
-  //         code: country.cca2,
-  //       }));
-  //       setCountries(countryData);
-  //     })
-  //     .catch((error) => console.error("Error fetching country data:", error));
-  // }, []);
-
   useEffect(() => {
     axios
-        .get('https://restcountries.com/v3.1/all')
-        .then((response) => {
-            const countryData = response.data.map((country) => ({
-                name: country.name.common,
-                code: country.cca2,
-            }));
-            setCountries(countryData);
-        })
-        .catch((error) =>
-            console.error('Error fetching country data:', error)
-        );
-}, []);
+      .get("https://restcountries.com/v3.1/all")
+      .then((response) => {
+        const countryData = response.data.map((country) => ({
+          name: country.name.common,
+          code: country.cca2,
+        }));
+        setCountries(countryData);
+      })
+      .catch((error) => console.error("Error fetching country data:", error));
+  }, []);
+
+//   useEffect(() => {
+//     axios
+//         .get('https://restcountries.com/v3.1/all')
+//         .then((response) => {
+//             const countryData = response.data.map((country) => ({
+//                 name: country.name.common,
+//                 code: country.cca2,
+//             }));
+//             setCountries(countryData);
+//         })
+//         .catch((error) =>
+//             console.error('Error fetching country data:', error)
+//         );
+// }, []);
 
   const [selectedTags, setSelectedTags] = useState([]);
   const [combinedValues, setCombinedValues] = useState([]);
@@ -215,7 +215,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
 
   const fetchFolderData = async () => {
     try {
-      const url = `${API_KEY}/common/folder`;
+      const url = `${API_KEY}/foldertemp/folder`;
       const response = await fetch(url);
       const data = await response.json();
       setFolderTemplates(data.folderTemplates);

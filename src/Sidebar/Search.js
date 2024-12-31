@@ -32,36 +32,95 @@ const SearchComponent = () => {
     const handleContactUpdated = () => {
         fetchContacts(); // Refetch contacts when updated
     };
+//     const handleSearch = async (query) => {
+//         setSearchQuery(query);
+        
+//         const storedData = JSON.parse(localStorage.getItem("teamMemberData"));
+//         const userRole = localStorage.getItem("userRole");
+
+//         const { viewAllAccounts, viewAllContacts } = storedData.teammember || {}; 
+//         if (query.trim() === "" || (!viewAllAccounts && !viewAllContacts)) {
+//             setAccounts([]);
+//             setContacts([]);
+//             setOptions([]);
+//             return;
+//         }
+
+//         setLoading(true);
+//         setError(null);
+
+//         try {
+//             const [accountsResponse, contactsResponse] = await Promise.all([
+               
+//                 viewAllAccounts ? axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } }) : Promise.resolve({ data: { accounts: [] } }),
+//                 viewAllContacts ? axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } }) : Promise.resolve({ data: { contacts: [] } }),
+//             ]);
+
+//             const accountsData = accountsResponse.data.accounts || [];
+//             const contactsData = contactsResponse.data.contacts || [];
+
+//             setAccounts(accountsData);
+//             setContacts(contactsData);
+//  console.log(accountsData)
+//             const combinedOptions = [
+//                 ...accountsData.map((account) => ({ label: account.accountName, type: "Account", id: account._id })),
+//                 ...contactsData.map((contact) => ({
+//                     label: `${contact.contactName} (${contact.email || "No Email"})`,
+//                     type: "Contact",
+//                     id: contact._id,
+//                 })),
+//             ];
+//             setOptions(combinedOptions);
+//         } catch (err) {
+//             setError("Failed to fetch results. Please try again.");
+//         } finally {
+//             setLoading(false);
+//         }
+//     };
+    // Trigger a search whenever `selectedType` or `searchQuery` changes
+    
+    
+    
     const handleSearch = async (query) => {
         setSearchQuery(query);
+    
+        // Retrieve role and stored data from localStorage
         const storedData = JSON.parse(localStorage.getItem("teamMemberData"));
         const userRole = localStorage.getItem("userRole");
-
-        const { viewAllAccounts, viewAllContacts } = storedData.teammember || {}; 
-        if (query.trim() === "" || (!viewAllAccounts && !viewAllContacts)) {
+    
+        // Default permissions for TeamMember
+        const { viewallAccounts= false, viewAllContacts = false  } = storedData?.teammember || {}; 
+    
+        // Admins can always search
+        const canSearchAccounts = userRole === "Admin" || viewallAccounts;
+        const canSearchContacts = userRole === "Admin" || viewAllContacts;
+    
+        if (query.trim() === "" || (!canSearchAccounts && !canSearchContacts)) {
             setAccounts([]);
             setContacts([]);
             setOptions([]);
             return;
         }
-
+    
         setLoading(true);
         setError(null);
-
+    
         try {
             const [accountsResponse, contactsResponse] = await Promise.all([
-                // axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } }),
-                // axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } }),
-                viewAllAccounts ? axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } }) : Promise.resolve({ data: { accounts: [] } }),
-                viewAllContacts ? axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } }) : Promise.resolve({ data: { contacts: [] } }),
+                canSearchAccounts
+                    ? axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, { params: { search: query } })
+                    : Promise.resolve({ data: { accounts: [] } }),
+                canSearchContacts
+                    ? axios.get(`${CONTACT_API}/contacts/nameandid`, { params: { search: query } })
+                    : Promise.resolve({ data: { contacts: [] } }),
             ]);
-
+    
             const accountsData = accountsResponse.data.accounts || [];
             const contactsData = contactsResponse.data.contacts || [];
-
+    
             setAccounts(accountsData);
             setContacts(contactsData);
-
+     console.log(accountsData)
             const combinedOptions = [
                 ...accountsData.map((account) => ({ label: account.accountName, type: "Account", id: account._id })),
                 ...contactsData.map((contact) => ({
@@ -77,7 +136,8 @@ const SearchComponent = () => {
             setLoading(false);
         }
     };
-    // Trigger a search whenever `selectedType` or `searchQuery` changes
+    
+    
     useEffect(() => {
         if (searchQuery.trim() !== "") {
             handleSearch(searchQuery);

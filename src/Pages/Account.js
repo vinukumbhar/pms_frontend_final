@@ -97,19 +97,19 @@ const FixedColumnTable = () => {
     const userRole = localStorage.getItem("userRole");
     console.log("role is", userRole);
 
-    // Check user permissions
-    // const canViewAccounts =
-    //   userRole === "TeamMember" ? storedData.viewallAccounts : false;
      // Check if the user is a TeamMember and if they have permission to view accounts (viewallAccounts = true)
-     const canViewAccounts = userRole === "TeamMember" && storedData.teammember.viewallAccounts;
-    
+    //  const canViewAccounts = userRole === "TeamMember" && storedData.teammember?.viewallAccounts;
+    const canViewAccounts =
+    userRole === "Admin" || // Admins can always view accounts
+    (userRole === "TeamMember" && storedData.teammember?.viewallAccounts);
      
     
     
      if (canViewAccounts) {
       setAccountData(accountsListData);
     } else {
-      setAccountData(accountsListData); // Clear account data if not permitted
+      setAccountData([]); // Clear account data if not permitted
+      // setAccountData(accountsListData);
     }
     } catch (error) {
       console.log("Error:", error);

@@ -513,7 +513,7 @@ const Documents = () => {
 
   const fetchFolderData = async () => {
     try {
-      const url = `${API_KEY}/common/folder`;
+      const url = `${API_KEY}/foldertemp/folder`;
       const response = await fetch(url);
       const data = await response.json();
       setFolderTemplates(data.folderTemplates);
