@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FcFolder } from "react-icons/fc";
-import { FcOpenedFolder } from "react-icons/fc";
-import { FaRegFilePdf, FaRegImage } from "react-icons/fa6";
-import { PiMicrosoftWordLogoFill } from "react-icons/pi";
-import { AiFillFileUnknown } from "react-icons/ai";
-import { BsFiletypeXlsx } from "react-icons/bs";
-import { FaRegFolderClosed } from "react-icons/fa6";
-import { HiDocumentArrowUp } from "react-icons/hi2";
-import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import {
   Box,
   Button,
@@ -18,404 +9,277 @@ import {
   Input,
   Paper,
 } from "@mui/material";
+import { FaRegFolderClosed } from "react-icons/fa6";
+import { HiDocumentArrowUp } from "react-icons/hi2";
 import UploadDocument from "./UploadDocument";
 import CreateFolder from "./CreateFolder";
 import UploadFolder from "./UploadFolder";
-function FolderTempEdit({ tempName, fetchAllFolders, folderData, templateId }) {
-  const [folders, setFolders] = useState([]);
+import { MdOutlineDriveFolderUpload } from "react-icons/md";
+function FolderTempEdit({templateId}) {
+  const [structFolder, setStructFolder] = useState(null);
   const [error, setError] = useState(null);
-  const [subExpandedFolders, setSubExpandedFolders] = useState({});
-  const [expandedFolders, setExpandedFolders] = useState([]);
-  const [file, setFile] = useState(null);
-  const [files, setFiles] = useState([]);
-  const [folderName, setFolderName] = useState("");
-  const [folder, setFolder] = useState(null);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, folderId: null });
+  //function related to folder 
   const [isFolderFormOpen, setIsFolderFormOpen] = useState(false);
-  const [isSendFolderForm, setIsSendFolderForm] = useState(false);
-  const [isDocumentForm, setIsDocumentForm] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState();
-  const toggleSubFolder = (folder) => {
-    //setSubfolder(folder);
-    // fetchAllFolders();
-    setMenuVisible(false);
-    setMenuVisibleFile(false);
-    setSubExpandedFolders((prevExpanded) => {
-      const isExpanded = prevExpanded[folder] || false;
-      return { ...prevExpanded, [folder]: !isExpanded };
-    });
-  };
-
-  useEffect(() => {
-    console.log(templateId);
-    async function fetchFolderTemplates() {
-      try {
-        const url = `http://127.0.0.1:8001/allFolders/${templateId}`;
-        const response = await axios.get(url);
-
-        setFolders(response.data.folders || []);
-        console.log(response.data.folders);
-      } catch (error) {
-        setError("Error fetching folder structure.");
-        console.error("Error fetching folder structure:", error);
-      }
-    }
-
-    if (templateId) {
-      fetchFolderTemplates();
-    }
-  }, [templateId]);
-
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [menuVisibleFile, setMenuVisibleFile] = useState(false);
-  const [selectedFolderIndex, setSelectedFolderIndex] = useState(null);
-  const [selectedFileIndex, setSelectedFileIndex] = useState(null);
-  const getFileIcon = (fileName) => {
-    let position = fileName.search("");
-    const extension = fileName.split(".").pop().toLowerCase();
-
-    if (extension === "pdf") {
-      return <FaRegFilePdf style={{ color: "red" }} />;
-    } else if (extension === "jpg" || extension === "jpeg") {
-      return <FaRegImage />;
-    } else if (extension === "xlsx" || extension === "xls") {
-      return <BsFiletypeXlsx style={{ color: "green" }} />;
-    } else if (extension === "txt") {
-      return <PiMicrosoftWordLogoFill style={{ color: "blue" }} />;
-    } else {
-      if (!fileName.includes(".")) {
-        //console.log("No extension found.");
-        return <FcFolder />;
-      }
-      return <AiFillFileUnknown style={{ color: "grey" }} />;
-    }
-  };
-
-  const handleFolderChange = (event) => {
-  
-   setIsSendFolderForm(!isSendFolderForm);
-    const files = event.target.files;
-    const formData = new FormData();
-
-    // Get the folder name from the first file's path
-    const folderName = files[0].webkitRelativePath.split("/")[0];
-
-    // Append the folder name to FormData
-    formData.append("folderName", folderName); // Matches the backend field name
-
-    // Append all files in the folder to FormData
-    for (let i = 0; i < files.length; i++) {
-      formData.append("files", files[i]); // Matches the backend field name
-    }
-
-    // Send files to the server
-    fetch(`http://localhost:8001/uploadZip/${templateId}`, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        alert("Folder uploaded successfully!");
-      })
-      .catch((error) => {
-        console.error("Error uploading folder:", error);
-        alert("Error uploading folder: " + error.message);
-      });
-  };
-
-  const handleFileChange = async (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const handleInputChange = (e) => {
-    setFolderName(e.target.value);
-  };
-
   const handleCreateFolderClick = () => {
     setIsFolderFormOpen(!isFolderFormOpen);
   };
+  const [isLoading, setIsLoading] = useState(false);
+// const handleFormClose = async () => {
+//   setIsFolderFormOpen(false);
+//   // await fetchFolders(); // Ensure folders are fetched after the form is closed
+// };
 
+  //function related to document 
+  const [isDocumentForm, setIsDocumentForm] = useState(false);
+  
+  const [file, setFile] = useState(null);
+
+  const handleUploadFormClose = () => {
+    setIsDocumentForm(false);
+  };
+  const handleFileChange = async (e) => {
+    setFile(e.target.files[0]);
+  };
   const handleFileUpload = () => {
     setIsDocumentForm(!isDocumentForm);
   };
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
+ 
+  // Function to fetch folders
+  const fetchFolders = async () => {
+    try {
+      const url = `${API_KEY}/allFolders/${templateId}`;
+      const response = await axios.get(url);
 
-  const handleButtonClick = () => {
-    console.log("not working");
-    setIsDocumentForm(!isDocumentForm);
+      const addIsOpenProperty = (folders, parentId = null) =>
+        folders.map((folder, index) => ({
+          ...folder,
+          isOpen: false,
+          id: parentId ? `${parentId}-${index}` : `${index}`,
+          contents: folder.contents
+            ? addIsOpenProperty(folder.contents, parentId ? `${parentId}-${index}` : `${index}`)
+            : [],
+        }));
+
+      const processedData = {
+        ...response.data,
+        folders: addIsOpenProperty(response.data.folders || []),
+      };
+
+      setStructFolder(processedData);
+    
+    } catch (err) {
+      console.error("Error fetching all folders:", err);
+      setError(err.message || "An error occurred");
+    }
   };
+console.log("jajavi",structFolder)
+  // Fetch folders on component mount
+  useEffect(() => {
+    fetchFolders();
+  }, [API_KEY, templateId]);
+  const handleMenuClick = (e, folderId) => {
+    e.stopPropagation(); // Prevent triggering other click events
+    setContextMenu({
+      visible: true,
+      x: e.currentTarget.getBoundingClientRect().x - 150,
+      y: e.currentTarget.getBoundingClientRect().y - 50,
+      folderId,
+    });
+  };
+  const handleCloseMenu = () => {
+    setContextMenu({ visible: false, x: 0, y: 0, folderId: null });
+  };
+  const renderContents = (contents, setContents) => {
+    return contents.map((item, index) => {
+      if (item.folder) {
+        const toggleFolder = () => {
+          const updatedContents = contents.map((folder, i) =>
+            i === index ? { ...folder, isOpen: !folder.isOpen } : folder
+          );
+          setContents(updatedContents);
+        };
 
-  const toggleFolder = (folder) => {
-    // fetchAllFolders();
-    setMenuVisible(false);
-    setMenuVisibleFile(false);
-    setExpandedFolders((prevExpanded) => {
-      const isExpanded = prevExpanded.includes(folder);
-      return isExpanded
-        ? prevExpanded.filter((f) => f !== folder)
-        : [...prevExpanded, folder];
+        const selectFolder = () => setSelectedFolderId(item.id);
+
+        return (
+          <div key={index} style={{ marginLeft: "20px", position: "relative" }}>
+            <div
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor:
+                  selectedFolderId === item.id ? "#e0f7fa" : "transparent",
+              }}
+              onClick={selectFolder}
+            >
+              <div onClick={toggleFolder}>
+                {item.isOpen ? "📂" : "📁"}{" "}
+                <strong style={{ marginLeft: "5px" }}>{item.folder}</strong>
+              </div>
+              <div
+                style={{ cursor: "pointer", marginLeft: "10px" }}
+                onClick={(e) => handleMenuClick(e, item.id)}
+              >
+                ⋮
+              </div>
+            </div>
+            {item.isOpen && item.contents && item.contents.length > 0 && (
+              <div>
+                {renderContents(item.contents, (newContents) => {
+  const updatedFolders = contents.map((folder, i) =>
+    i === index ? { ...folder, contents: newContents } : folder
+  );
+  setContents(updatedFolders);
+})}
+
+              </div>
+            )}
+          </div>
+        );
+      } else if (item.file) {
+        return (
+          <div key={index} style={{ marginLeft: "40px" }}>
+            📄 {item.file}
+          </div>
+        );
+      }
+      return null;
     });
   };
 
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!structFolder) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
-      <Box sx={{ padding: 3 }} component={Paper}>
-        <Typography variant="h6">
-          Template Name: <strong>{tempName}</strong>
-        </Typography>
-        <Divider sx={{ marginY: 2 }} />
-
-        <Box
-          className="uploads-documents-links"
-          sx={{ display: "flex", gap: 2 }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <IconButton
-              component="label"
-              htmlFor="fileInput"
-              sx={{ color: "#e87800" }}
-            >
-              <HiDocumentArrowUp size={24} />
-            </IconButton>
-            <Typography
-              variant="body1"
-              component="label"
-              htmlFor="fileInput"
-              sx={{ cursor: "pointer" }}
-            >
-              Upload Document
-            </Typography>
-            <Input
-              type="file"
-              id="fileInput"
-              onChange={(e) => {
-                handleFileChange(e);
-                handleFileUpload(e);
-              }}
-              sx={{ display: "none" }}
-            />
-          </Box>
-
-          <UploadDocument
-            isDocumentForm={isDocumentForm}
-            setIsDocumentForm={setIsDocumentForm}
-            file={file}
-            folderData={folderData}
-            setFile={setFile}
-            templateId={templateId}
-          />
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <IconButton
-              component="label"
-              htmlFor="folderInput"
-              sx={{ color: "#e87800" }}
-            >
-              <MdOutlineDriveFolderUpload size={24} />
-            </IconButton>
-            <label htmlFor="folderInput" style={{ cursor: "pointer" }}>
-      <Typography variant="body1">
-        Upload Folder
-      </Typography>
-      <input
-        type="file"
-        id="folderInput"
-        webkitdirectory="true"
-        directory="true"
-        onChange={handleFolderChange}
-        style={{ display: "none" }} // Hide the input element
-      />
-    </label>
-          </Box>
-          <UploadFolder
-            isSendFolderForm={isSendFolderForm}
-            setIsSendFolderForm={setIsSendFolderForm}
-            files={files}
-            folderData={folderData}
-            setFiles={setFiles}
-            templateId={templateId}
-          />
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <IconButton
-              onClick={handleCreateFolderClick}
-              sx={{ color: "#e87800" }}
-            >
-              <FaRegFolderClosed size={20} />
-            </IconButton>
-            <Typography
-              variant="body1"
-              onClick={handleCreateFolderClick}
-              sx={{ cursor: "pointer" }}
-            >
-              Create Folder
-            </Typography>
-          </Box>
-
-          <CreateFolder
-            isFolderFormOpen={isFolderFormOpen}
-            setIsFolderFormOpen={setIsFolderFormOpen}
-            folderData={folderData}
-            templateId={templateId}
+      
+      <Box className="uploads-documents-links" sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton
+            component="label"
+            htmlFor="fileInput"
+            sx={{ color: "#e87800" }}
+          >
+            <HiDocumentArrowUp size={24} />
+          </IconButton>
+          <Typography
+            variant="body1"
+            component="label"
+            htmlFor="fileInput"
+            sx={{ cursor: "pointer" }}
+          >
+            Upload Document
+          </Typography>
+          <Input
+            type="file"
+            id="fileInput"
+            onChange={(e) => {
+              handleFileChange(e);
+              handleFileUpload(e);
+            }}
+            sx={{ display: "none" }}
           />
         </Box>
+
+        <UploadDocument
+          isDocumentForm={isDocumentForm}
+          setIsDocumentForm={setIsDocumentForm}
+          templateId={templateId}
+          handleUploadFormClose={handleUploadFormClose}
+       
+        /> 
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton
+            component="label"
+            htmlFor="folderInput"
+            sx={{ color: "#e87800" }}
+          >
+            <MdOutlineDriveFolderUpload size={24} />
+          </IconButton>
+          <label htmlFor="folderInput" style={{ cursor: "pointer" }}>
+            <Typography variant="body1">Upload Folder</Typography>
+            <input
+              type="file"
+              id="folderInput"
+              webkitdirectory="true"
+              directory="true"
+              style={{ display: "none" }} // Hide the input element
+            />
+          </label>
+        </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton
+                      sx={{ color: "#e87800" }}
+          >
+            <FaRegFolderClosed size={20} />
+          </IconButton>
+          <Typography
+            variant="body1"
+            onClick={handleCreateFolderClick}
+            sx={{ cursor: "pointer" }}
+          >
+            Create Folder
+          </Typography>
+        </Box>
+        <CreateFolder
+          isFolderFormOpen={isFolderFormOpen}
+          setIsFolderFormOpen={setIsFolderFormOpen}
+        // handleFormClose={handleFormClose}
+          templateId={templateId}
+         
+        />
       </Box>
-
-      {folders.map((folder, index) => (
-        <div key={index}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              onClick={() => {
-                toggleFolder(folder.folder);
-              }}
-            >
-              <button
-                style={{
-                  fontSize: "20px",
-                  background: "none",
-                  color: "inherit",
-                  border: "none",
-                  padding: 0,
-                  font: "inherit",
-                  cursor: "pointer",
-                  outline: "inherit",
-                }}
-              >
-                {expandedFolders.includes(folder.folder) ? (
-                  <FcOpenedFolder style={{ fontSize: "20px" }} />
-                ) : (
-                  <FcFolder />
-                )}
-              </button>
-              {folder.folder}
-            </div>
+      {renderContents(structFolder.folders, (newFolders) =>
+        setStructFolder({ ...structFolder, folders: newFolders })
+      )}
+      {contextMenu.visible && (
+        <div
+          style={{
+            position: "absolute",
+            top: contextMenu.y,
+            left: contextMenu.x,
+            backgroundColor: "#fff",
+            border: "1px solid #ccc",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+            padding: "10px",
+          }}
+        >
+          <div style={{ padding: "5px", cursor: "pointer" }} onClick={handleCloseMenu}>
+            Delete
           </div>
-
-          {expandedFolders.includes(folder.folder) && (
-            <ul>
-              {folder.contents.map((item, fileIndex) => (
-                <div
-                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
-                  {item.file && (
-                    <div>
-                      <li
-                        key={fileIndex}
-                        style={{
-                          width: "100%",
-                          listStyle: "none",
-                          padding: 0,
-                          margin: "0px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <div>
-                            <span
-                              style={{ marginRight: "10px", fontSize: "18px" }}
-                            >
-                              {getFileIcon(item.file)}
-                            </span>
-                          </div>
-                          <div>{item.file}</div>
-                        </div>
-                      </li>
-                    </div>
-                  )}
-                  {item.folder && (
-                    <div>
-                      <li
-                        key={fileIndex}
-                        style={{
-                          width: "100%",
-                          listStyle: "none",
-                          padding: 0,
-                          margin: "0px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <div>
-                            <button
-                              style={{
-                                marginRight: "10px",
-                                fontSize: "20px",
-                                background: "none",
-                                color: "inherit",
-                                border: "none",
-                                padding: 0,
-                                font: "inherit",
-                                cursor: "pointer",
-                                outline: "inherit",
-                              }}
-                              onClick={() => {
-                                toggleSubFolder(item.folder);
-                              }}
-                            >
-                              {subExpandedFolders[item.folder] ? (
-                                <FcOpenedFolder style={{ fontSize: "20px" }} />
-                              ) : (
-                                <FcFolder />
-                              )}
-                            </button>
-                          </div>
-                          <div>
-                            <div>{item.folder}</div>
-                          </div>
-                        </div>
-                      </li>
-                      {subExpandedFolders[item.folder] && (
-                        <ul>
-                          {item.contents.map((subContent, subIndex) => (
-                            <li key={subIndex} style={{ marginLeft: "20px" }}>
-                              {/* {getFileIcon(subContent.file)}{subContent.file} */}
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <div>
-                                  <span
-                                    style={{
-                                      marginRight: "10px",
-                                      fontSize: "18px",
-                                    }}
-                                  >
-                                    {getFileIcon(subContent.file)}
-                                  </span>
-                                </div>
-                                <div>{subContent.file}</div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </ul>
-          )}
-          <hr style={{ marginBottom: "5px" }} />
+          <div style={{ padding: "5px", cursor: "pointer" }} onClick={handleCloseMenu}>
+            Rename
+          </div>
+          <div style={{ padding: "5px", cursor: "pointer" }} onClick={handleCloseMenu}>
+            Download
+          </div>
         </div>
-      ))}
+      )}
+      {contextMenu.visible && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 999,
+          }}
+          onClick={handleCloseMenu}
+        ></div>
+      )}
     </div>
   );
 }

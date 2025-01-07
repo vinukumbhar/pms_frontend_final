@@ -60,23 +60,102 @@ const MyAccount = () => {
     }
   };
 
+//   const fetchData = async () => {
+//     try {
+//       const url = `${LOGIN_API}/common/user/${logindata.user.id}`;
+//       const response = await fetch(url);
+//       const data = await response.json();
+// console.log("adata", data)
+//       const validTime = logindata.user.exp - logindata.user.iat;
+//       setSignedTime(formatTimePeriod(validTime));
+
+//       setuserdata(data);
+//       fetchAdminData(data.email);
+//       fetchNotificationData(logindata.user.id);
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//     }
+//   };
+
+  // const fetchAdminData = async (email) => {
+  //   try {
+  //     const url = `${LOGIN_API}/admin/adminsignup/adminbyemail/${email}`;
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setadmindata(data.admin[0]);
+  //     console.log(data.admin[0]);
+  //     setFirstName(data.admin[0].firstName);
+  //     setMiddleName(data.admin[0].middleName);
+  //     setLastName(data.admin[0].lastName);
+  //     setPhoneNumber(data.admin[0].phoneNumber);
+  //     setEmail(data.admin[0].email);
+
+
+
+  //     const profilePicFilename = data.admin[0].profilePicture.split("\\").pop(); // Extract filename
+
+  //     setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
+  //     console.log(profilePicture)
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // const handleSaveButtonClick = () => {
+  //   const myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+
+  //   const raw = JSON.stringify({
+  //     firstName: firstName,
+  //     middleName: middleName,
+  //     lastName: lastname,
+  //     phoneNumber: phonenumber,
+  //   });
+
+  //   const requestOptions = {
+  //     method: "PATCH",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow",
+  //   };
+
+  //   const url = `${LOGIN_API}/admin/adminsignup/${admindata._id}`;
+  //   fetch(url, requestOptions)
+  //     .then((response) => response.text())
+  //     .then((result) => {
+  //       console.log(result);
+  //       toast.success("Data updated successful!");
+  //       // window.location.reload();
+  //       fetchAdminData();
+  //       setIsEditable(false);
+  //       setShowSaveButtons(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       toast.error("An error occurred!");
+  //     });
+  // };
+
+  //******************* */
   const fetchData = async () => {
     try {
       const url = `${LOGIN_API}/common/user/${logindata.user.id}`;
       const response = await fetch(url);
       const data = await response.json();
-console.log("adata", data)
+
       const validTime = logindata.user.exp - logindata.user.iat;
       setSignedTime(formatTimePeriod(validTime));
 
       setuserdata(data);
       fetchAdminData(data.email);
+
       fetchNotificationData(logindata.user.id);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   const fetchAdminData = async (email) => {
     try {
       const url = `${LOGIN_API}/admin/adminsignup/adminbyemail/${email}`;
@@ -84,54 +163,119 @@ console.log("adata", data)
       const data = await response.json();
 
       setadmindata(data.admin[0]);
-      console.log(data.admin[0]);
+      console.log("admin data", data.admin[0]);
       setFirstName(data.admin[0].firstName);
       setMiddleName(data.admin[0].middleName);
       setLastName(data.admin[0].lastName);
       setPhoneNumber(data.admin[0].phoneNumber);
       setEmail(data.admin[0].email);
+
+      const profilePicFilename = data.admin[0].profilePicture.split("\\").pop(); // Extract filename
+
+      setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
+      console.log(profilePicture)
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  const handleSaveButtonClick = () => {
+  
+ 
+ 
+  const handleSaveButtonClick = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+  
     const raw = JSON.stringify({
       firstName: firstName,
       middleName: middleName,
       lastName: lastname,
       phoneNumber: phonenumber,
     });
-
+  
     const requestOptions = {
       method: "PATCH",
       headers: myHeaders,
       body: raw,
       redirect: "follow",
     };
-
+  
     const url = `${LOGIN_API}/admin/adminsignup/${admindata._id}`;
-    fetch(url, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
-        toast.success("Data updated successful!");
-        // window.location.reload();
-        fetchAdminData();
-        setIsEditable(false);
-        setShowSaveButtons(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("An error occurred!");
-      });
+    console.log(url)
+    console.log(admindata._id);
+  
+    try {
+      const response = await fetch(url, requestOptions);
+      const result = await response.text();
+      console.log(result);
+
+
+
+
+
+      toast.success("Data updated successfully!");
+  
+      updateProfilePicture(); 
+  
+      await fetchAdminData();  
+      setIsEditable(false);
+      setShowSaveButtons(false);
+    } catch (error) {
+      console.error("Error in handleSaveButtonClick:", error);
+      toast.error("An error occurred!");
+    }
   };
+  
+ 
+ 
+ 
+  // const handleSaveButtonClick = async () => {
+  //   const myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+  
+  //   const raw = JSON.stringify({
+  //     firstName: firstName,
+  //     middleName: middleName,
+  //     lastName: lastname,
+  //     phoneNumber: phonenumber,
+  //   });
+  
+  //   const requestOptions = {
+  //     method: "PATCH",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow",
+  //   };
+  
+  //   const url = `${LOGIN_API}/admin/adminsignup/${admindata._id}`;
+  //   console.log(url)
+  //   console.log(admindata._id);
+  
+  //   try {
+  //     const response = await fetch(url, requestOptions);
+  //     const result = await response.text();
+  //     console.log(result);
 
-  //******************* */
 
+
+
+
+  //     toast.success("Data updated successfully!");
+  
+  //     updateProfilePicture(); 
+  
+  //     await fetchAdminData();  
+  //     setIsEditable(false);
+  //     setShowSaveButtons(false);
+  //   } catch (error) {
+  //     console.error("Error in handleSaveButtonClick:", error);
+  //     toast.error("An error occurred!");
+  //   }
+  // };
+ 
+ 
+ 
+ 
   const handleEditClick = () => {
     setIsEditable(true);
     setShowSaveButtons(true);
@@ -1045,6 +1189,70 @@ console.log("adata", data)
 
 
 
+
+  
+  const [selectedFile, setSelectedFile] = useState(null);
+ 
+  
+  const updateProfilePicture = () => {
+    const formdata = new FormData();
+
+    if (selectedFile) {
+      // Check directly if selectedFile is set
+      formdata.append("ProfilePicture", selectedFile);
+      console.log(selectedFile); // Debugging: Log the selected file
+
+      const requestOptions = {
+        method: "PATCH",
+        body: formdata,
+        redirect: "follow",
+      };
+
+      fetch(`${LOGIN_API}/admin/adminsignup/${admindata._id}`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+    } else {
+      console.error("No file selected"); // This will execute if no file is selected
+    }
+  };
+
+  const [error, setError] = useState(""); // Error state
+  const [profilePicture, setProfilePicture] = useState("");
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if file size exceeds 1MB (1048576 bytes)
+      if (file.size > 1048576) {
+        setError("File size exceeds 1MB. Please upload a smaller file.");
+        return;
+      }
+
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = () => {
+        const width = img.width;
+        const height = img.height;
+
+        // Check if the image size exceeds 512x512 pixels
+        if (width > 512 || height > 512) {
+          setError("Image dimensions exceed 512x512 pixels. Please resize the image.");
+        } else {
+          // File is valid, proceed with setting the file
+          setError("");
+          setSelectedFile(file);
+          setProfilePicture(URL.createObjectURL(file)); // For displaying the preview
+        }
+      };
+    }
+  };
+
+  
+
+  const handleDeletePhoto = () => setProfilePicture(null);
+
   return (
     <>
       <Box>
@@ -1052,7 +1260,7 @@ console.log("adata", data)
       </Box>
       <Box className="account-settings">
         <Box className="accounts-details-user">
-          <Box>
+          {/* <Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box className="hr">
                 <Typography variant="h6">Personal details</Typography>
@@ -1134,6 +1342,219 @@ console.log("adata", data)
                 >
                   Cancel
                 </Button>
+              </Box>
+            )}
+          </Box> */}
+
+<Box>
+            {/* Header */}
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px",borderBottom:'1px solid #f1f1f1',p:1.5 }}>
+              <Typography variant="h6">Personal details</Typography>
+              {isEditable ? (
+                <Button onClick={() => setIsEditable(false)} sx={{ color: "#1168bf", fontWeight: "bold" }}>
+                  Finish editing
+                </Button>
+              ) : (
+                <BorderColorRoundedIcon
+                  sx={{ cursor: "pointer", color: "#1168bf" }}
+                  onClick={handleEditClick}
+                />
+              )}
+            </Box>
+
+            {/* Profile Section */}
+            <Box sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+              <Box
+                sx={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgb(139, 193, 182)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  color: "#ffffff",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                {profilePicture ? (
+                  <img
+                    src={profilePicture}
+                    alt="Profile"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                ) : (
+                  <>
+                    {firstName[0]}
+                    {lastname[0]}
+                  </>
+                )}
+              </Box>
+              <Box sx={{ marginLeft: "15px" }}>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  {firstName} {lastname}
+                </Typography>
+                <Typography variant="body2">{phonenumber}</Typography>
+              </Box>
+            </Box>
+
+            {/* Upload Photo Section */}
+            {/* <Box sx={{ marginBottom: "20px" }}>
+              {!profilePicture ? (
+                <>
+                  <Button
+                    variant="text"
+                    component="label"
+                    sx={{ color: "#1168bf", textTransform: "none" }}
+                  >
+                    Upload Photo
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      
+                    />
+                  </Button>
+                </>
+              ) : (
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Button
+                    variant="text"
+                    component="label"
+                    sx={{ color: "#1168bf", textTransform: "none" }}
+                  >
+                    Edit Photo
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  <Button
+                    variant="text"
+                    onClick={handleDeletePhoto}
+                    sx={{ color: "#ff1744", textTransform: "none" }}
+                  >
+                    close
+                  </Button>
+                </Box>
+              )}
+            </Box> */}
+            <Box sx={{ marginBottom: "20px" }}>
+              {!profilePicture ? (
+                <>
+                  <Button
+                    variant="text"
+                    component="label"
+                    sx={{ color: "#1168bf", textTransform: "none" }}
+                  >
+                    Upload Photo
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                </>
+              ) : (
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Button
+                    variant="text"
+                    component="label"
+                    sx={{ color: "#1168bf", textTransform: "none" }}
+                  >
+                    Edit Photo
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  <Button
+                    variant="text"
+                    onClick={handleDeletePhoto}
+                    sx={{ color: "#ff1744", textTransform: "none" }}
+                  >
+                    Close
+                  </Button>
+                </Box>
+              )}
+              {/* Error message display */}
+              {error && (
+                <Box sx={{ color: "red", marginTop: "10px", fontSize: "14px" }}>
+                  {error}
+                </Box>
+              )}
+            </Box>
+
+            {/* Form Section */}
+            {isEditable && (
+              <Box>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, marginBottom: "20px" }}>
+                  <TextField
+                    label="First name"
+                    value={firstName}
+                     onChange={(e) => setFirstName(e.target.value)}
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true
+                    }}
+                  />
+                  <TextField
+                    label="Middle name"
+                    value={middleName}
+                    onChange={(e) => setMiddleName(e.target.value)}
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true
+                    }}
+                  />
+                  <TextField
+                    label="Last name"
+                    value={lastname}
+                    onChange={(e) => setLastName(e.target.value)}
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true
+                    }}
+                  />
+                  <TextField
+                    label="Phone number"
+                    value={phonenumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true
+                    }}
+                  />
+                </Box>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSaveButtonClick}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleCancelButtonClick}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
               </Box>
             )}
           </Box>

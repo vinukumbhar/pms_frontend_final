@@ -309,16 +309,6 @@ const Pipeline = ({ charLimit = 4000 }) => {
     
     console.log("account id automation", accountId);
     
-    // useEffect(() => {
-    //   // Ensure automations is not empty and then set the automation type and template
-    //   if (automations.length > 0) {
-    //     setAutomationType(automations[0].type);
-    //     setAutomationTemp(automations[0].template.value);
-    //     // console.log(automations[0].template.value);
-    //   }
-    //   setAutomationAccountId(accountId);
-    // }, [automations]);
-    // console.log("account id automation", accountId);
     // fetch invoive temp by id
     const fetchinvoicetempbyid = async (automationTemp) => {
       const requestOptions = {
@@ -732,7 +722,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
           ) : (
             <Typography>No automations available</Typography>
           )}
-          <Button
+          {/* <Button
             onClick={async () => {
               // Filter only selected and enabled automations
               const selectedAutomations = selectedAutomationIndices
@@ -785,7 +775,60 @@ const Pipeline = ({ charLimit = 4000 }) => {
             sx={{ marginTop: 2 }}
           >
             Move
-          </Button>
+          </Button> */}
+ <Button
+  onClick={async () => {
+    // Filter only selected and enabled automations
+    const selectedAutomations = selectedAutomationIndices
+      .map((index) => automations[index])
+      .filter((automation) =>
+        automation.tags.some((tag) =>
+          accountTags.some((accountTag) => accountTag._id === tag._id)
+        )
+      );
+
+    if (selectedAutomations.length > 0) {
+      // Process all valid automations
+      for (const automation of selectedAutomations) {
+        const { type, template } = automation;
+        const templateValue = template?.value;
+
+        if (type && templateValue && automationAccountId) {
+          try {
+            // Call the API for each automation
+            await selectAutomationApi(
+              type,
+              templateValue,
+              automationAccountId
+            );
+          } catch (error) {
+            console.error(
+              "Error processing automation:",
+              automation,
+              error
+            );
+          }
+        } else {
+          console.warn(
+            "Skipping automation due to missing parameters:",
+            automation
+          );
+        }
+      }
+    }
+
+    // Move the job to the target stage after processing (even if no automations are selected)
+    onMoveJob(jobId, targetStage);
+
+    // Close the drawer
+    onClose();
+  }}
+  variant="contained"
+  color="primary"
+  sx={{ marginTop: 2 }}
+>
+  Move
+</Button>
 
           <Button onClick={onClose} variant="contained" sx={{ marginTop: 2 }}>
             Close

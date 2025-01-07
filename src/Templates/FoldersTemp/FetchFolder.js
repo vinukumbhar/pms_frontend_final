@@ -12,7 +12,7 @@ import { HiDocumentArrowUp } from "react-icons/hi2";
 import { FaRegFolderClosed } from "react-icons/fa6";
 import { toast, } from "react-toastify";
 function FetchFolder({ folderData, setSelectedFolder, selectedFolder, templateId ,setSubfolder}) {
-  const API_KEY = process.env.REACT_APP_API_IP;
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
   const [menuVisible, setMenuVisible] = useState(false);
   const [menuVisibleFile, setMenuVisibleFile] = useState(false);
   const [selectedFolderIndex, setSelectedFolderIndex] = useState(null);

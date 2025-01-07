@@ -11,7 +11,7 @@ import { Box, Typography, Paper } from "@mui/material";
 import FolderTempEdit from "./FolderTempEdit";
 import { CircularProgress } from "@mui/material";
 const FolderTemp = () => {
-  const API_KEY = process.env.REACT_APP_API_IP;
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
   const [isOpenClientDocs, setIsOpenClientDocs] = useState(false);
   const [isOpenSharedDocs, setIsOpenSharedDocs] = useState(false);
   const [isOpenPrivate, setIsOpenPrivate] = useState(false);
@@ -68,7 +68,7 @@ const [loading, setLoading] = useState(true); // Loader state
     setIsTempEditForm(true);
     setTemplateId(_id);
 
-    // navigate('FoldertempUpdate/'+_id)
+   
   };
 
   const [showTable, setShowTable] = useState(true);

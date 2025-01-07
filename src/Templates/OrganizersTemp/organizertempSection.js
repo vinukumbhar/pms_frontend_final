@@ -239,83 +239,18 @@ const Section = ({
   //  setSelectedSection(section);
 
   const [selectedSectionData, setSelectedSectionData] = useState(null);
-  // const handleSectionSettingsClick = () => {
-  //   setSelectedSectionData(section);
-  //   setSelectedSectionId(section.id); // Store the ID of the section to open
-  //   // console.log('Selected single Section Data:', selectedSectionData);
-
-  //   toggleDrawer(true); // Open the drawer
-  //   // if (selectedSectionData) {
-  //   //   // Fetch or perform an action based on selectedSectionData
-  //   //   console.log("Selected single Section Data:", selectedSectionData);
-    
-  //   //   setRepeateButton(
-  //   //     selectedSectionData.sectionSettings.sectionRepeatingMode || false
-  //   //   );
-  //   //   setRepeatButtonName(
-  //   //     selectedSectionData.sectionSettings.buttonName || "Repeat Section"
-  //   //   );
-  //   //   setConditionButton(
-  //   //     selectedSectionData.sectionSettings.conditional || false
-  //   //   );
-  //   //   setSectionMode(selectedSectionData.sectionSettings.sectionMode || "Any");
-  //   //   setSectionQuestionAnswers(
-  //   //     selectedSectionData.sectionSettings.conditions || []
-  //   //   );
-  //   // }
-  //   if (section && section.sectionSettings) {
-  //     // If sectionSettings exists in section
-  //     setRepeateButton(section.sectionSettings.sectionRepeatingMode || false);
-  //     setRepeatButtonName(section.sectionSettings.buttonName || "Repeat Section");
-  //     setConditionButton(section.sectionSettings.conditional || false);
-  //     setSectionMode(section.sectionSettings.sectionMode || "Any");
-  //     setSectionQuestionAnswers(section.sectionSettings.conditions || []);
-  
-  //     console.log("Selected single Section Data:", selectedSectionData);
-  //   } else {
-  //     // Handle the case where sectionSettings is not present
-  //     console.log("Section settings not found.");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (selectedSectionData) {
-  //     // Fetch or perform an action based on selectedSectionData
-  //     console.log("Selected single Section Data:", selectedSectionData);
-    
-  //     setRepeateButton(
-  //       selectedSectionData.sectionSettings.sectionRepeatingMode || false
-  //     );
-  //     setRepeatButtonName(
-  //       selectedSectionData.sectionSettings.buttonName || "Repeat Section"
-  //     );
-  //     setConditionButton(
-  //       selectedSectionData.sectionSettings.conditional || false
-  //     );
-  //     setSectionMode(selectedSectionData.sectionSettings.sectionMode || "Any");
-  //     setSectionQuestionAnswers(
-  //       selectedSectionData.sectionSettings.conditions || []
-  //     );
-  //   }
-  // }, [selectedSectionData]);
-  // Set the settings for the selected section
-  // setRepeateButton(section.sectionSettings.repeateButton || false);
-  // setRepeatButtonName(section.sectionSettings.repeatButtonName || '');
-  // setConditionButton(section.sectionSettings.conditionButton || false);
-  // setSectionMode(section.sectionSettings.sectionMode || 'Any');
-  // setSelectedSectionQuestions(section.sectionSettings.selectedSectionQuestions || []);
-  // setSelectedSectionAnswers(section.sectionSettings.selectedSectionAnswers || []);
-  // setSectionQuestionAnswers(section.sectionSettings.sectionQuestionAnswers || []);
   
   const handleSectionSettingsClick = () => {
+
     if (section && section.sectionSettings) {
+      console.log("sections",section.sectionSettings)
         // Open the drawer with the updated data
         toggleDrawer(true); // Open the drawer
       // Set the selected section data before opening the drawer
       setSelectedSectionData(section);
       setSelectedSectionId(section.id); // Store the ID of the section to open
   
-      // Set the section settings immediately
+      // Set the section settings 
       setRepeateButton(section.sectionSettings.sectionRepeatingMode || false);
       setRepeatButtonName(section.sectionSettings.buttonName || "Repeat Section");
       setConditionButton(section.sectionSettings.conditional || false);
@@ -331,11 +266,11 @@ const Section = ({
     }
   };
   
-  useEffect(() => {
-    if (isDrawerOpen && selectedSectionData) {
-      console.log("Drawer opened with section data:", selectedSectionData);
-    }
-  }, [isDrawerOpen, selectedSectionData]);
+  // useEffect(() => {
+  //   if (isDrawerOpen && selectedSectionData) {
+  //     console.log("Drawer opened with section data:", selectedSectionData);
+  //   }
+  // }, [isDrawerOpen, selectedSectionData]);
   
   
   const toggleDrawer = (open) => {
@@ -1068,50 +1003,7 @@ const Section = ({
             <HiOutlineDuplicate />
           </IconButton>
 
-          {/* <IconButton
-            onClick={() => {
-              // Ensure sections is defined and has at least one element
-              if (sections && sections.length > 0 && sections[0].sectionsettings) {
-                const sectionSettingsData = sections[0].sectionsettings;
-
-                // Update state with section settings
-                setSectionSettings(sectionSettingsData);
-                setRepeateButton(sectionSettingsData.sectionRepeatingMode || false);
-                setRepeatButtonName(sectionSettingsData.buttonName || '');
-                setConditionButton(sectionSettingsData.conditional || false);
-                setSectionMode(sectionSettingsData.mode || 'Any');
-                setSectionQuestionAnswers(sectionSettingsData.conditions || []);
-              } else {
-                console.error('No section settings available'); // Log error or handle it accordingly
-              }
-
-              toggleDrawer(true);
-            }}
-          >
-            <IoSettingsOutline />
-          </IconButton> */}
-          {/* <IconButton
-      onClick={() => {
-        // Ensure the current section is defined and has settings
-        if (section && section.sectionsettings) {
-          const sectionSettingsData = section.sectionsettings;
-
-          // Update state with section settings
-          setSectionSettings(sectionSettingsData);
-          setRepeateButton(sectionSettingsData.sectionRepeatingMode || false);
-          setRepeatButtonName(sectionSettingsData.buttonName || 'Repeat Section');
-          setConditionButton(sectionSettingsData.conditional || false);
-          setSectionMode(sectionSettingsData.mode || 'Any');
-          setSectionQuestionAnswers(sectionSettingsData.conditions || []);
-        } else {
-          console.error('No section settings available for this section'); // Log error or handle it accordingly
-        }
-
-        toggleDrawer(true);
-      }}
-    >
-      <IoSettingsOutline />
-    </IconButton> */}
+        
           <IconButton onClick={handleSectionSettingsClick}>
             <IoSettingsOutline />
           </IconButton>
@@ -1643,3 +1535,66 @@ const Section = ({
 };
 
 export default Section;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {/* <IconButton
+            onClick={() => {
+              // Ensure sections is defined and has at least one element
+              if (sections && sections.length > 0 && sections[0].sectionsettings) {
+                const sectionSettingsData = sections[0].sectionsettings;
+
+                // Update state with section settings
+                setSectionSettings(sectionSettingsData);
+                setRepeateButton(sectionSettingsData.sectionRepeatingMode || false);
+                setRepeatButtonName(sectionSettingsData.buttonName || '');
+                setConditionButton(sectionSettingsData.conditional || false);
+                setSectionMode(sectionSettingsData.mode || 'Any');
+                setSectionQuestionAnswers(sectionSettingsData.conditions || []);
+              } else {
+                console.error('No section settings available'); // Log error or handle it accordingly
+              }
+
+              toggleDrawer(true);
+            }}
+          >
+            <IoSettingsOutline />
+          </IconButton> */}
+          {/* <IconButton
+      onClick={() => {
+        // Ensure the current section is defined and has settings
+        if (section && section.sectionsettings) {
+          const sectionSettingsData = section.sectionsettings;
+
+          // Update state with section settings
+          setSectionSettings(sectionSettingsData);
+          setRepeateButton(sectionSettingsData.sectionRepeatingMode || false);
+          setRepeatButtonName(sectionSettingsData.buttonName || 'Repeat Section');
+          setConditionButton(sectionSettingsData.conditional || false);
+          setSectionMode(sectionSettingsData.mode || 'Any');
+          setSectionQuestionAnswers(sectionSettingsData.conditions || []);
+        } else {
+          console.error('No section settings available for this section'); // Log error or handle it accordingly
+        }
+
+        toggleDrawer(true);
+      }}
+    >
+      <IoSettingsOutline />
+    </IconButton> */}
