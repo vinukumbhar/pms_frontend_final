@@ -301,14 +301,14 @@ const Pipeline = ({ charLimit = 4000 }) => {
         setAutomationType(automations[0].type);
         setAutomationTemp(automations[0].template.value);
       }
-      
+
       // If accountId is an array, extract the first value
       const accountValue = Array.isArray(accountId) ? accountId[0] : accountId;
       setAutomationAccountId(accountValue);
     }, [automations, accountId]);
-    
+
     console.log("account id automation", accountId);
-    
+
     // fetch invoive temp by id
     const fetchinvoicetempbyid = async (automationTemp) => {
       const requestOptions = {
@@ -776,59 +776,59 @@ const Pipeline = ({ charLimit = 4000 }) => {
           >
             Move
           </Button> */}
- <Button
-  onClick={async () => {
-    // Filter only selected and enabled automations
-    const selectedAutomations = selectedAutomationIndices
-      .map((index) => automations[index])
-      .filter((automation) =>
-        automation.tags.some((tag) =>
-          accountTags.some((accountTag) => accountTag._id === tag._id)
-        )
-      );
+          <Button
+            onClick={async () => {
+              // Filter only selected and enabled automations
+              const selectedAutomations = selectedAutomationIndices
+                .map((index) => automations[index])
+                .filter((automation) =>
+                  automation.tags.some((tag) =>
+                    accountTags.some((accountTag) => accountTag._id === tag._id)
+                  )
+                );
 
-    if (selectedAutomations.length > 0) {
-      // Process all valid automations
-      for (const automation of selectedAutomations) {
-        const { type, template } = automation;
-        const templateValue = template?.value;
+              if (selectedAutomations.length > 0) {
+                // Process all valid automations
+                for (const automation of selectedAutomations) {
+                  const { type, template } = automation;
+                  const templateValue = template?.value;
 
-        if (type && templateValue && automationAccountId) {
-          try {
-            // Call the API for each automation
-            await selectAutomationApi(
-              type,
-              templateValue,
-              automationAccountId
-            );
-          } catch (error) {
-            console.error(
-              "Error processing automation:",
-              automation,
-              error
-            );
-          }
-        } else {
-          console.warn(
-            "Skipping automation due to missing parameters:",
-            automation
-          );
-        }
-      }
-    }
+                  if (type && templateValue && automationAccountId) {
+                    try {
+                      // Call the API for each automation
+                      await selectAutomationApi(
+                        type,
+                        templateValue,
+                        automationAccountId
+                      );
+                    } catch (error) {
+                      console.error(
+                        "Error processing automation:",
+                        automation,
+                        error
+                      );
+                    }
+                  } else {
+                    console.warn(
+                      "Skipping automation due to missing parameters:",
+                      automation
+                    );
+                  }
+                }
+              }
 
-    // Move the job to the target stage after processing (even if no automations are selected)
-    onMoveJob(jobId, targetStage);
+              // Move the job to the target stage after processing (even if no automations are selected)
+              onMoveJob(jobId, targetStage);
 
-    // Close the drawer
-    onClose();
-  }}
-  variant="contained"
-  color="primary"
-  sx={{ marginTop: 2 }}
->
-  Move
-</Button>
+              // Close the drawer
+              onClose();
+            }}
+            variant="contained"
+            color="primary"
+            sx={{ marginTop: 2 }}
+          >
+            Move
+          </Button>
 
           <Button onClick={onClose} variant="contained" sx={{ marginTop: 2 }}>
             Close
@@ -2042,20 +2042,57 @@ const Pipeline = ({ charLimit = 4000 }) => {
   const [accountName, setAccountName] = useState("");
   const [accountId, setAccountId] = useState("");
 
-  const handleDrop = (jobId, targetStageName) => {
-    const sourceStage = stages.find((stage) =>
-      jobs.find((job) => job.id === jobId)?.Stage.includes(stage.name)
-    );
+  // const handleDrop = (jobId, targetStageName) => {
+  //   const sourceStage = stages.find((stage) =>
+  //     jobs.find((job) => job.id === jobId)?.Stage.includes(stage.name)
+  //   );
 
+  //   const targetStage = stages.find((stage) => stage.name === targetStageName);
+  //   const job = jobs.find((job) => job.id === jobId);
+  //   if (job) {
+  //     setAccountName(job.Account.join(", ")); // Store the account name
+  //     setAccountId(job.AccountId); // Store the account ID
+  //   }
+  //   // If the source stage has automations, show the drawer
+  //   if (sourceStage?.automations?.length > 0) {
+  //     setAutomationData(sourceStage.automations); // Set automation data for drawer
+  //     setCurrentJobId(jobId); // Store the current job ID
+  //     setCurrentTargetStage(targetStage); // Store the target stage
+  //     setAutomationDrawerOpen(true); // Open the automation drawer
+  //   } else {
+  //     // If no automations, immediately update the job's stage
+  //     const updatedJobs = jobs.map((job) => {
+  //       if (job.id === jobId) {
+  //         return { ...job, Stage: [targetStageName] };
+  //       }
+  //       return job;
+  //     });
+
+  //     setJobs(updatedJobs); // Update the job in the local state
+
+  //     // Optionally, refresh job data after updating
+  //     setTimeout(() => {
+  //       fetchJobData();
+  //     }, 1000);
+
+  //     updateJobStage(jobId, targetStage);
+  //   }
+  //   setTempJobData({ jobId, targetStageName });
+  // };
+  
+  
+  const handleDrop = (jobId, targetStageName) => {
     const targetStage = stages.find((stage) => stage.name === targetStageName);
     const job = jobs.find((job) => job.id === jobId);
+  
     if (job) {
       setAccountName(job.Account.join(", ")); // Store the account name
       setAccountId(job.AccountId); // Store the account ID
     }
-    // If the source stage has automations, show the drawer
-    if (sourceStage?.automations?.length > 0) {
-      setAutomationData(sourceStage.automations); // Set automation data for drawer
+  
+    // If the target stage has automations, show the drawer
+    if (targetStage?.automations?.length > 0) {
+      setAutomationData(targetStage.automations); // Set automation data for drawer
       setCurrentJobId(jobId); // Store the current job ID
       setCurrentTargetStage(targetStage); // Store the target stage
       setAutomationDrawerOpen(true); // Open the automation drawer
@@ -2067,18 +2104,21 @@ const Pipeline = ({ charLimit = 4000 }) => {
         }
         return job;
       });
-
+  
       setJobs(updatedJobs); // Update the job in the local state
-
+  
       // Optionally, refresh job data after updating
       setTimeout(() => {
         fetchJobData();
       }, 1000);
-
+  
       updateJobStage(jobId, targetStage);
     }
     setTempJobData({ jobId, targetStageName });
   };
+  
+  
+  
   const handleMoveJob = (jobId, targetStage) => {
     // Call the API to update the job stage in the backend
     const updateJobStage = async () => {
