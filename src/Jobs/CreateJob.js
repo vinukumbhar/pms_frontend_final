@@ -1,4 +1,23 @@
-import { Chip, Box, InputLabel, InputAdornment, IconButton, Popover, ListItem, ListItemText, Button, List, Grid, Typography, TextField, label, Switch, FormControlLabel, Autocomplete } from "@mui/material";
+import {
+  Chip,
+  Box,
+  InputLabel,
+  InputAdornment,
+  IconButton,
+  Popover,
+  ListItem,
+  ListItemText,
+  Button,
+  List,
+  Grid,
+  Typography,
+  TextField,
+  label,
+  Switch,
+  FormControlLabel,
+  Autocomplete,
+  Drawer,
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Priority from "../Templates/Priority/Priority";
 import Editor from "../Templates/Texteditor/Editor";
@@ -141,7 +160,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
     if (newValue && newValue.value) {
       const templateId = newValue.value;
       try {
-        const response = await fetch(`${JOBS_TEMP_API}/workflow/jobtemplate/jobtemplate/jobtemplatelist/${templateId}`);
+        const response = await fetch(
+          `${JOBS_TEMP_API}/workflow/jobtemplate/jobtemplate/jobtemplatelist/${templateId}`
+        );
         const data = await response.json();
         const template = data.jobTemplate;
 
@@ -207,10 +228,22 @@ const CreateJob = ({ charLimit = 4000 }) => {
   // pipeline data
   const [pipelineData, setPipelineData] = useState([]);
   const [selectedPipeline, setselectedPipeline] = useState();
+  const [selectedPipelineDetails, setSelectedPipelineDetails] = useState(null);
 
-  const handlePipelineChange = (selectedOptions) => {
+  const handlePipelineChange = async (selectedOptions) => {
     setselectedPipeline(selectedOptions);
     console.log(selectedOptions);
+    if (selectedOptions) {
+      try {
+        const url = `${PIPELINE_API}/workflow/pipeline/pipeline/${selectedOptions.value}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setSelectedPipelineDetails(data);
+        console.log("Pipeline details:", data);
+      } catch (error) {
+        console.error("Error fetching pipeline details:", error);
+      }
+    }
   };
   useEffect(() => {
     fetchPipelineData();
@@ -231,7 +264,75 @@ const CreateJob = ({ charLimit = 4000 }) => {
   }));
   // console.log("Job Assignees Values:", selectedAssigneesUser);
 
+  // const createjob = () => {
+
+  //   const myHeaders = {
+  //     "Content-Type": "application/json",
+  //   };
+
+  //   const data = {
+  //     accounts: combinedaccountValues,
+  //     pipeline: selectedPipeline.value,
+  //     templatename: selectedtemp.value,
+  //     jobname: jobName,
+  //     jobassignees: combinedAssigneesValues,
+  //     priority: priority,
+  //     description: description,
+  //     absolutedates: absoluteDate,
+  //     startsin: startsin,
+  //     startsinduration: startsInDuration,
+  //     duein: duein,
+  //     dueinduration: dueinduration,
+  //     // comments: comments,
+  //     showinclientportal: clientFacingStatus,
+  //     jobnameforclient: inputText,
+  //     clientfacingstatus: selectedJob?.value,
+  //     clientfacingDescription: clientDescription,
+  //     startdate: startDate,
+  //     enddate: dueDate,
+  //   };
+  //   // console.log("jobs", data)
+  //   const config = {
+  //     method: "post",
+  //     maxBodyLength: Infinity,
+  //     url: `${JOBS_API}/workflow/jobs/newjob`,
+  //     headers: myHeaders,
+  //     data: JSON.stringify(data),
+  //   };
+
+  //   axios
+  //     .request(config)
+  //     .then((response) => {
+  //       console.log("Job created successfully");
+  //       toast.success("Job created successfully");
+  //       navigate("/workflow/jobs");
+  //       // Handle success, e.g., toast or redirect
+  //     })
+  //     .catch((error) => {
+  //       console.error("Failed to create Job Template:", error);
+  //       toast.error("Failed to create Job");
+  //       // Handle errors, e.g., toast error
+  //     });
+  // };
+  const [automations, setAutomations] = useState([]);
   const createjob = () => {
+    // Check if the first stage of the selected pipeline contains automations
+    if (
+      selectedPipelineDetails?.pipeline?.stages?.[0]?.automations?.length > 0
+    ) {
+      // Get automations data from the first stage
+      const automationsData =
+        selectedPipelineDetails?.pipeline?.stages?.[0]?.automations || [];
+      console.log("janavi", automationsData);
+      setAutomations(automationsData);
+
+      
+      
+      // Open the drawer with the automations data
+      openDrawer(automationsData);
+      return; // Stop further execution of createjob
+    }
+
     const myHeaders = {
       "Content-Type": "application/json",
     };
@@ -249,7 +350,6 @@ const CreateJob = ({ charLimit = 4000 }) => {
       startsinduration: startsInDuration,
       duein: duein,
       dueinduration: dueinduration,
-      // comments: comments,
       showinclientportal: clientFacingStatus,
       jobnameforclient: inputText,
       clientfacingstatus: selectedJob?.value,
@@ -272,13 +372,18 @@ const CreateJob = ({ charLimit = 4000 }) => {
         console.log("Job created successfully");
         toast.success("Job created successfully");
         navigate("/workflow/jobs");
-        // Handle success, e.g., toast or redirect
       })
       .catch((error) => {
         console.error("Failed to create Job Template:", error);
         toast.error("Failed to create Job");
-        // Handle errors, e.g., toast error
       });
+  };
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  // Function to open the drawer
+  const openDrawer = () => {
+    // Replace this with your actual drawer opening logic
+    console.log("Drawer is now open");
+    setDrawerOpen(true); // Example state change
   };
 
   const [shortcuts, setShortcuts] = useState([]);
@@ -289,7 +394,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   useEffect(() => {
     // Simulate filtered shortcuts based on some logic (e.g., search)
-    setFilteredShortcuts(shortcuts.filter((shortcut) => shortcut.title.toLowerCase().includes("")));
+    setFilteredShortcuts(
+      shortcuts.filter((shortcut) => shortcut.title.toLowerCase().includes(""))
+    );
   }, [shortcuts]);
 
   useEffect(() => {
@@ -298,7 +405,11 @@ const CreateJob = ({ charLimit = 4000 }) => {
       const contactShortcuts = [
         { title: "Account Shortcodes", isBold: true },
         { title: "Account Name", isBold: false, value: "ACCOUNT_NAME" },
-        { title: "Custom field:Website", isBold: false, value: "ACCOUNT_CUSTOM_FIELD:Website" },
+        {
+          title: "Custom field:Website",
+          isBold: false,
+          value: "ACCOUNT_CUSTOM_FIELD:Website",
+        },
         { title: "Contact Shortcodes", isBold: true },
         { title: "Contact Name", isBold: false, value: "CONTACT_NAME" },
         { title: "First Name", isBold: false, value: "FIRST_NAME" },
@@ -311,29 +422,65 @@ const CreateJob = ({ charLimit = 4000 }) => {
         { title: "City", isBold: false, value: "CITY" },
         { title: "State/Province", isBold: false, value: "STATE / PROVINCE" },
         { title: "Zip/Postal code", isBold: false, value: "ZIP / POSTAL CODE" },
-        { title: "Custom field:Email", isBold: false, value: "CONTACT_CUSTOM_FIELD:Email" },
+        {
+          title: "Custom field:Email",
+          isBold: false,
+          value: "CONTACT_CUSTOM_FIELD:Email",
+        },
         { title: "Date Shortcodes", isBold: true },
-        { title: "Current day full date", isBold: false, value: "CURRENT_DAY_FULL_DATE" },
-        { title: "Current day number", isBold: false, value: "CURRENT_DAY_NUMBER" },
+        {
+          title: "Current day full date",
+          isBold: false,
+          value: "CURRENT_DAY_FULL_DATE",
+        },
+        {
+          title: "Current day number",
+          isBold: false,
+          value: "CURRENT_DAY_NUMBER",
+        },
         { title: "Current day name", isBold: false, value: "CURRENT_DAY_NAME" },
         { title: "Current week", isBold: false, value: "CURRENT_WEEK" },
-        { title: "Current month number", isBold: false, value: "CURRENT_MONTH_NUMBER" },
-        { title: "Current month name", isBold: false, value: "CURRENT_MONTH_NAME" },
+        {
+          title: "Current month number",
+          isBold: false,
+          value: "CURRENT_MONTH_NUMBER",
+        },
+        {
+          title: "Current month name",
+          isBold: false,
+          value: "CURRENT_MONTH_NAME",
+        },
         { title: "Current quarter", isBold: false, value: "CURRENT_QUARTER" },
         { title: "Current year", isBold: false, value: "CURRENT_YEAR" },
-        { title: "Last day full date", isBold: false, value: "LAST_DAY_FULL_DATE" },
+        {
+          title: "Last day full date",
+          isBold: false,
+          value: "LAST_DAY_FULL_DATE",
+        },
         { title: "Last day number", isBold: false, value: "LAST_DAY_NUMBER" },
         { title: "Last day name", isBold: false, value: "LAST_DAY_NAME" },
         { title: "Last week", isBold: false, value: "LAST_WEEK" },
-        { title: "Last month number", isBold: false, value: "LAST_MONTH_NUMBER" },
+        {
+          title: "Last month number",
+          isBold: false,
+          value: "LAST_MONTH_NUMBER",
+        },
         { title: "Last month name", isBold: false, value: "LAST_MONTH_NAME" },
         { title: "Last quarter", isBold: false, value: "LAST_QUARTER" },
         { title: "Last_year", isBold: false, value: "LAST_YEAR" },
-        { title: "Next day full date", isBold: false, value: "NEXT_DAY_FULL_DATE" },
+        {
+          title: "Next day full date",
+          isBold: false,
+          value: "NEXT_DAY_FULL_DATE",
+        },
         { title: "Next day number", isBold: false, value: "NEXT_DAY_NUMBER" },
         { title: "Next day name", isBold: false, value: "NEXT_DAY_NAME" },
         { title: "Next week", isBold: false, value: "NEXT_WEEK" },
-        { title: "Next month number", isBold: false, value: "NEXT_MONTH_NUMBER" },
+        {
+          title: "Next month number",
+          isBold: false,
+          value: "NEXT_MONTH_NUMBER",
+        },
         { title: "Next month name", isBold: false, value: "NEXT_MONTH_NAME" },
         { title: "Next quarter", isBold: false, value: "NEXT_QUARTER" },
         { title: "Next year", isBold: false, value: "NEXT_YEAR" },
@@ -343,29 +490,65 @@ const CreateJob = ({ charLimit = 4000 }) => {
       const accountShortcuts = [
         { title: "Account Shortcodes", isBold: true },
         { title: "Account Name", isBold: false, value: "ACCOUNT_NAME" },
-        { title: "Custom field:Website", isBold: false, value: "ACCOUNT_CUSTOM_FIELD:Website" },
+        {
+          title: "Custom field:Website",
+          isBold: false,
+          value: "ACCOUNT_CUSTOM_FIELD:Website",
+        },
         { title: "Date Shortcodes", isBold: true },
-        { title: "Current day full date", isBold: false, value: "CURRENT_DAY_FULL_DATE" },
-        { title: "Current day number", isBold: false, value: "CURRENT_DAY_NUMBER" },
+        {
+          title: "Current day full date",
+          isBold: false,
+          value: "CURRENT_DAY_FULL_DATE",
+        },
+        {
+          title: "Current day number",
+          isBold: false,
+          value: "CURRENT_DAY_NUMBER",
+        },
         { title: "Current day name", isBold: false, value: "CURRENT_DAY_NAME" },
         { title: "Current week", isBold: false, value: "CURRENT_WEEK" },
-        { title: "Current month number", isBold: false, value: "CURRENT_MONTH_NUMBER" },
-        { title: "Current month name", isBold: false, value: "CURRENT_MONTH_NAME" },
+        {
+          title: "Current month number",
+          isBold: false,
+          value: "CURRENT_MONTH_NUMBER",
+        },
+        {
+          title: "Current month name",
+          isBold: false,
+          value: "CURRENT_MONTH_NAME",
+        },
         { title: "Current quarter", isBold: false, value: "CURRENT_QUARTER" },
         { title: "Current year", isBold: false, value: "CURRENT_YEAR" },
-        { title: "Last day full date", isBold: false, value: "LAST_DAY_FULL_DATE" },
+        {
+          title: "Last day full date",
+          isBold: false,
+          value: "LAST_DAY_FULL_DATE",
+        },
         { title: "Last day number", isBold: false, value: "LAST_DAY_NUMBER" },
         { title: "Last day name", isBold: false, value: "LAST_DAY_NAME" },
         { title: "Last week", isBold: false, value: "LAST_WEEK" },
-        { title: "Last month number", isBold: false, value: "LAST_MONTH_NUMBER" },
+        {
+          title: "Last month number",
+          isBold: false,
+          value: "LAST_MONTH_NUMBER",
+        },
         { title: "Last month name", isBold: false, value: "LAST_MONTH_NAME" },
         { title: "Last quarter", isBold: false, value: "LAST_QUARTER" },
         { title: "Last_year", isBold: false, value: "LAST_YEAR" },
-        { title: "Next day full date", isBold: false, value: "NEXT_DAY_FULL_DATE" },
+        {
+          title: "Next day full date",
+          isBold: false,
+          value: "NEXT_DAY_FULL_DATE",
+        },
         { title: "Next day number", isBold: false, value: "NEXT_DAY_NUMBER" },
         { title: "Next day name", isBold: false, value: "NEXT_DAY_NAME" },
         { title: "Next week", isBold: false, value: "NEXT_WEEK" },
-        { title: "Next month number", isBold: false, value: "NEXT_MONTH_NUMBER" },
+        {
+          title: "Next month number",
+          isBold: false,
+          value: "NEXT_MONTH_NUMBER",
+        },
         { title: "Next month name", isBold: false, value: "NEXT_MONTH_NAME" },
         { title: "Next quarter", isBold: false, value: "NEXT_QUARTER" },
         { title: "Next year", isBold: false, value: "NEXT_YEAR" },
@@ -390,13 +573,15 @@ const CreateJob = ({ charLimit = 4000 }) => {
   const [clientFacingJobs, setClientFacingJobs] = useState([]);
   const fetchClientFacingJobsData = async () => {
     try {
-      const response = await fetch(`${CLIENT_FACING_API}/workflow/clientfacingjobstatus/`);
+      const response = await fetch(
+        `${CLIENT_FACING_API}/workflow/clientfacingjobstatus/`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
       setClientFacingJobs(data.clientFacingJobStatues); // Ensure data is set correctly
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -418,14 +603,18 @@ const CreateJob = ({ charLimit = 4000 }) => {
     if (newValue && newValue.value) {
       const clientjobId = newValue.value;
       try {
-        const response = await fetch(`${CLIENT_FACING_API}/workflow/clientfacingjobstatus/${clientjobId}`);
+        const response = await fetch(
+          `${CLIENT_FACING_API}/workflow/clientfacingjobstatus/${clientjobId}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
 
         console.log(data);
-        setClientDescription(data.clientfacingjobstatuses.clientfacingdescription);
+        setClientDescription(
+          data.clientfacingjobstatuses.clientfacingdescription
+        );
         console.log(data.clientfacingjobstatuses.clientfacingdescription);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -475,7 +664,13 @@ const CreateJob = ({ charLimit = 4000 }) => {
       <Box>
         <form>
           <Box>
-            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <Typography variant="h5" gutterBottom>
                 Add Jobs
               </Typography>
@@ -485,7 +680,14 @@ const CreateJob = ({ charLimit = 4000 }) => {
               <hr />
             </Box>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={5} ml={2} className="left-side-container" mt={2}>
+              <Grid
+                item
+                xs={12}
+                sm={5}
+                ml={2}
+                className="left-side-container"
+                mt={2}
+              >
                 <Box>
                   <label className="job-input-label">Accounts</label>
 
@@ -503,7 +705,15 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         {option.label}
                       </Box>
                     )}
-                    renderInput={(params) => <TextField {...params} placeholder="Select Accounts" variant="outlined" size="small" sx={{ backgroundColor: "#fff" }} />}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="Select Accounts"
+                        variant="outlined"
+                        size="small"
+                        sx={{ backgroundColor: "#fff" }}
+                      />
+                    )}
                     sx={{ width: "100%", marginTop: "8px" }}
                   />
                 </Box>
@@ -514,8 +724,12 @@ const CreateJob = ({ charLimit = 4000 }) => {
                     options={optionpipeline}
                     getOptionLabel={(option) => option.label}
                     value={selectedPipeline}
-                    onChange={(event, newValue) => handlePipelineChange(newValue)}
-                    isOptionEqualToValue={(option, value) => option.value === value.value}
+                    onChange={(event, newValue) =>
+                      handlePipelineChange(newValue)
+                    }
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    }
                     renderOption={(props, option) => (
                       <Box
                         component="li"
@@ -525,7 +739,15 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         {option.label}
                       </Box>
                     )}
-                    renderInput={(params) => <TextField {...params} sx={{ backgroundColor: "#fff" }} placeholder="Pipeline" variant="outlined" size="small" />}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        sx={{ backgroundColor: "#fff" }}
+                        placeholder="Pipeline"
+                        variant="outlined"
+                        size="small"
+                      />
+                    )}
                     sx={{ width: "100%", marginTop: "8px" }}
                     clearOnEscape // Enable clearable functionality
                   />
@@ -537,7 +759,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
                     getOptionLabel={(option) => option.label}
                     value={selectedtemp}
                     onChange={handletemp}
-                    isOptionEqualToValue={(option, value) => option.value === value.value}
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    }
                     renderOption={(props, option) => (
                       <Box
                         component="li"
@@ -547,14 +771,30 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         {option.label}
                       </Box>
                     )}
-                    renderInput={(params) => <TextField {...params} sx={{ backgroundColor: "#fff" }} placeholder="Job Template" variant="outlined" size="small" />}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        sx={{ backgroundColor: "#fff" }}
+                        placeholder="Job Template"
+                        variant="outlined"
+                        size="small"
+                      />
+                    )}
                     sx={{ width: "100%", marginTop: "8px" }}
                     clearOnEscape // Enable clearable functionality
                   />
                 </Box>
                 <Box mt={2}>
                   <label className="job-input-label">Name</label>
-                  <TextField fullWidth value={jobName} onChange={(e) => setJobName(e.target.value)} margin="normal" size="small" placeholder="Job Name" sx={{ backgroundColor: "#fff" }} />
+                  <TextField
+                    fullWidth
+                    value={jobName}
+                    onChange={(e) => setJobName(e.target.value)}
+                    margin="normal"
+                    size="small"
+                    placeholder="Job Name"
+                    sx={{ backgroundColor: "#fff" }}
+                  />
                 </Box>
                 <Box mt={2}>
                   <label className="job-input-label">Job Assignees</label>
@@ -575,18 +815,37 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         {option.label}
                       </Box>
                     )}
-                    renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Job Assignees" sx={{ backgroundColor: "#fff" }} />}
-                    isOptionEqualToValue={(option, value) => option.value === value.value}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        placeholder="Job Assignees"
+                        sx={{ backgroundColor: "#fff" }}
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    }
                   />
                 </Box>
                 <Box mt={2}>
-                  <Priority onPriorityChange={handlePriorityChange} selectedPriority={priority} />
+                  <Priority
+                    onPriorityChange={handlePriorityChange}
+                    selectedPriority={priority}
+                  />
                 </Box>
                 <Box mt={3}>
-                  <Editor initialContent={description} onChange={handleEditorChange} />
+                  <Editor
+                    initialContent={description}
+                    onChange={handleEditorChange}
+                  />
                 </Box>
                 <Box mt={7}>
-                  <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <Box
+                    display={"flex"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                  >
                     <Typography variant="h6">Start and Due Date</Typography>
                     <Box className="absolutes-dates">
                       <FormControlLabel
@@ -594,7 +853,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
                           <Switch
                             checked={absoluteDate}
                             // onChange={handleAbsolutesDates}
-                            onChange={(event) => handleAbsolutesDates(event.target.checked)}
+                            onChange={(event) =>
+                              handleAbsolutesDates(event.target.checked)
+                            }
                             color="primary"
                           />
                         }
@@ -614,7 +875,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         // onChange={handleStartDateChange}
                         value={startDate}
                         onChange={handleStartDateChange}
-                        renderInput={(params) => <TextField {...params} size="small" />}
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
                       />
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
@@ -626,7 +889,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         // onChange={handleDueDateChange}
                         value={dueDate}
                         onChange={handleDueDateChange}
-                        renderInput={(params) => <TextField {...params} size="small" />}
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
                       />
                     </Box>
                   </>
@@ -635,17 +900,44 @@ const CreateJob = ({ charLimit = 4000 }) => {
                   <>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                       <Typography>Start In</Typography>
-                      <TextField size="small" margin="normal" fullWidth defaultValue={0} placeholder="0" sx={{ ml: 1, backgroundColor: "#fff" }} value={startsin} onChange={(e) => setstartsin(e.target.value)} />
+                      <TextField
+                        size="small"
+                        margin="normal"
+                        fullWidth
+                        defaultValue={0}
+                        placeholder="0"
+                        sx={{ ml: 1, backgroundColor: "#fff" }}
+                        value={startsin}
+                        onChange={(e) => setstartsin(e.target.value)}
+                      />
                       <Autocomplete
                         options={dayOptions}
                         size="small"
                         getOptionLabel={(option) => option.label}
-                        value={startsInDuration ? dayOptions.find((option) => option.value === startsInDuration) : null}
+                        value={
+                          startsInDuration
+                            ? dayOptions.find(
+                                (option) => option.value === startsInDuration
+                              )
+                            : null
+                        }
                         onChange={handleStartInDateChange}
-                        renderInput={(params) => <TextField {...params} variant="outlined" sx={{ backgroundColor: "#fff" }} />}
-                        isOptionEqualToValue={(option, value) => option.value === value.value}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            sx={{ backgroundColor: "#fff" }}
+                          />
+                        )}
+                        isOptionEqualToValue={(option, value) =>
+                          option.value === value.value
+                        }
                         renderOption={(props, option) => (
-                          <Box component="li" {...props} sx={{ cursor: "pointer", margin: "5px 10px" }}>
+                          <Box
+                            component="li"
+                            {...props}
+                            sx={{ cursor: "pointer", margin: "5px 10px" }}
+                          >
                             {option.label}
                           </Box>
                         )}
@@ -671,13 +963,31 @@ const CreateJob = ({ charLimit = 4000 }) => {
                         options={dayOptions}
                         getOptionLabel={(option) => option.label}
                         // onChange={handledueindateChange}
-                        value={dueinduration ? dayOptions.find((option) => option.value === dueinduration) : null}
+                        value={
+                          dueinduration
+                            ? dayOptions.find(
+                                (option) => option.value === dueinduration
+                              )
+                            : null
+                        }
                         onChange={handleDueInDateChange}
                         size="small"
-                        renderInput={(params) => <TextField {...params} variant="outlined" sx={{ backgroundColor: "#fff" }} />}
-                        isOptionEqualToValue={(option, value) => option.value === value.value}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            sx={{ backgroundColor: "#fff" }}
+                          />
+                        )}
+                        isOptionEqualToValue={(option, value) =>
+                          option.value === value.value
+                        }
                         renderOption={(props, option) => (
-                          <Box component="li" {...props} sx={{ cursor: "pointer", margin: "5px 10px" }}>
+                          <Box
+                            component="li"
+                            {...props}
+                            sx={{ cursor: "pointer", margin: "5px 10px" }}
+                          >
                             {option.label}
                           </Box>
                         )}
@@ -688,7 +998,12 @@ const CreateJob = ({ charLimit = 4000 }) => {
                   </>
                 )}
               </Grid>
-              <Grid item xs={12} sm={1} sx={{ display: { xs: "none", sm: "block" } }}>
+              <Grid
+                item
+                xs={12}
+                sm={1}
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
                 <Box
                   className="vertical-line"
                   sx={{
@@ -698,24 +1013,62 @@ const CreateJob = ({ charLimit = 4000 }) => {
                   }}
                 ></Box>
               </Grid>
-              <Grid item xs={12} sm={5} ml={{ xs: 0, sm: 3 }} className="right-side-container" mt={2}>
+              <Grid
+                item
+                xs={12}
+                sm={5}
+                ml={{ xs: 0, sm: 3 }}
+                className="right-side-container"
+                mt={2}
+              >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Box mt={2}>
                     <Box style={{ display: "flex", alignItems: "center" }}>
                       {/* <EditCalendarRoundedIcon sx={{ fontSize: '120px', color: '#c6c7c7', }} /> */}
-                      <Box style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <Box
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "8px",
+                          width: "100%",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
                           <Typography variant="body">
                             <b>Client-facing status</b>
                           </Typography>
-                          <FormControlLabel control={<Switch onChange={(event) => handleClientFacing(event.target.checked)} checked={clientFacingStatus} color="primary" />} label="Show in Client portal" />
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                onChange={(event) =>
+                                  handleClientFacing(event.target.checked)
+                                }
+                                checked={clientFacingStatus}
+                                color="primary"
+                              />
+                            }
+                            label="Show in Client portal"
+                          />
                         </Box>
                         <Box>
                           {clientFacingStatus && (
                             <>
                               <Typography>Job name for client</Typography>
-                              <TextField fullWidth name="subject" value={inputText + selectedJobShortcut} onChange={handlechatsubject} placeholder="Job name for client" size="small" sx={{ background: "#fff", mt: 2 }} />
-
+                              <TextField
+                                fullWidth
+                                name="subject"
+                                value={inputText + selectedJobShortcut}
+                                onChange={handlechatsubject}
+                                placeholder="Job name for client"
+                                size="small"
+                                sx={{ background: "#fff", mt: 2 }}
+                              />
 
                               <Box mt={2}>
                                 <Typography>Status</Typography>
@@ -726,14 +1079,17 @@ const CreateJob = ({ charLimit = 4000 }) => {
                                   value={selectedJob}
                                   onChange={handleJobChange}
                                   getOptionLabel={(option) => option.label}
-                                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                                  isOptionEqualToValue={(option, value) =>
+                                    option.value === value.value
+                                  }
                                   renderOption={(props, option) => (
                                     <Box component="li" {...props}>
                                       {/* Color dot */}
                                       <Chip
                                         size="small"
                                         style={{
-                                          backgroundColor: option.clientfacingColour,
+                                          backgroundColor:
+                                            option.clientfacingColour,
                                           marginRight: 8,
                                           marginLeft: 8,
                                           borderRadius: "50%",
@@ -750,11 +1106,17 @@ const CreateJob = ({ charLimit = 4000 }) => {
                                       InputProps={{
                                         ...params.InputProps,
                                         startAdornment:
-                                          params.inputProps.value && clientFacingJobs.length > 0 ? (
+                                          params.inputProps.value &&
+                                          clientFacingJobs.length > 0 ? (
                                             <Chip
                                               size="small"
                                               style={{
-                                                backgroundColor: clientFacingJobs.find((job) => job.clientfacingName === params.inputProps.value)?.clientfacingColour, // Set color from selection
+                                                backgroundColor:
+                                                  clientFacingJobs.find(
+                                                    (job) =>
+                                                      job.clientfacingName ===
+                                                      params.inputProps.value
+                                                  )?.clientfacingColour, // Set color from selection
                                                 marginRight: 8,
                                                 marginLeft: 2,
                                                 borderRadius: "50%",
@@ -768,7 +1130,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
                                 />
                               </Box>
                               <Box sx={{ position: "relative", mt: 2 }}>
-                                <InputLabel sx={{ color: "black" }}>Description</InputLabel>
+                                <InputLabel sx={{ color: "black" }}>
+                                  Description
+                                </InputLabel>
                                 <TextField
                                   fullWidth
                                   size="small"
@@ -781,7 +1145,15 @@ const CreateJob = ({ charLimit = 4000 }) => {
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
-                                        <Typography sx={{ color: "gray", fontSize: "12px", position: "absolute", bottom: "15px", right: "15px" }}>
+                                        <Typography
+                                          sx={{
+                                            color: "gray",
+                                            fontSize: "12px",
+                                            position: "absolute",
+                                            bottom: "15px",
+                                            right: "15px",
+                                          }}
+                                        >
                                           {charCount}/{charLimit}
                                         </Typography>
                                       </InputAdornment>
@@ -849,6 +1221,57 @@ const CreateJob = ({ charLimit = 4000 }) => {
           </Box>
         </form>
       </Box>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <Box sx={{ width: 400, padding: 2 }}>
+          <Typography variant="h6">Automations</Typography>
+          {automations.length > 0 && (
+            <Box>
+              {automations.map((automation, index) => (
+                <Box key={index}>
+                  <Typography variant="body1">
+                    <strong>Type:</strong> {automation.type}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Template:</strong> {automation.template.label}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Tags:</strong>
+                  </Typography>
+                  {automation.tags.map((tag) => (
+                    <Box
+                      key={tag._id}
+                      sx={{
+                        display: "inline-block",
+                        backgroundColor: tag.tagColour,
+                        color: "white",
+                        borderRadius: "8px",
+                        padding: "2px 6px",
+                        marginRight: "4px",
+                      }}
+                    >
+                      {tag.tagName}
+                    </Box>
+                  ))}
+                </Box>
+              ))}
+            </Box>
+          )}
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              setDrawerOpen(false);
+            }}
+          >
+            Proceed
+          </Button>
+        </Box>
+      </Drawer>
     </LocalizationProvider>
   );
 };

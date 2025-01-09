@@ -940,7 +940,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
     };
 
     const truncateName = (name) => {
-      const maxLength = 12;
+      const maxLength = 15;
       if (name.length > maxLength) {
         return name.substring(0, maxLength) + "...";
       }
@@ -2007,6 +2007,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
         job.Pipeline === selectedPipeline.pipelineName &&
         job.Stage.includes(stage.name)
     );
+    console.log("jobs for stage",stageJobs)
     const [displayCount, setDisplayCount] = useState(3);
     const displayedJobs = stageJobs.slice(0, displayCount);
     const truncatedStageName =

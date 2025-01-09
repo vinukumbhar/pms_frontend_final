@@ -1439,7 +1439,7 @@ const assignfoldertemp = (automationAccountId, automationTemp) => {
             <Button variant="contained" color="primary" onClick={createjob}>
               Save
             </Button>
-            <Button variant="outlined">Cancel</Button>
+            <Button variant="outlined" onClick={handleDrawerClose}>Cancel</Button>
           </Box>
         </Box>
       </LocalizationProvider>

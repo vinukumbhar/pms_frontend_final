@@ -670,7 +670,7 @@ const Stage = ({ stage, jobs, moveJob ,onCheckboxChange }) => {
     <Box
       ref={drop}
       sx={{
-        width: 250,
+        minWidth: "180px",
         height: 500,
         padding: 2,
         backgroundColor: isOver ? "white" : "#f2f7f7",
@@ -678,7 +678,9 @@ const Stage = ({ stage, jobs, moveJob ,onCheckboxChange }) => {
         overflowX: 'hidden',
         borderRadius: '10px',
         flexShrink: 0,
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
       }}
+      // className="stage"
     >
       <p>{stage.name}</p>
       {jobs.map((job) => (
@@ -697,7 +699,7 @@ const Job = ({ job,onCheckboxChange  }) => {
     }),
   });
   const truncateName = (name) => {
-    const maxLength = 20;
+    const maxLength = 15;
     if (name.length > maxLength) {
       return name.substring(0, maxLength) + "...";
     }
@@ -707,7 +709,7 @@ const Job = ({ job,onCheckboxChange  }) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   };
-  const truncateDescription = (description, maxLength = 30) => {
+  const truncateDescription = (description, maxLength = 20) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";
     }
@@ -766,17 +768,20 @@ const Job = ({ job,onCheckboxChange  }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       sx={{
-        padding: 1,
-        border: "1px solid #ccc",
-        marginTop: 2,
-        width: 230,
+        padding: 2,
+        border: "1px solid #ddd",
+        // marginTop: 2,
+        width: "160px",
         background: isDragging ? "#f0f0f0" : "#f9f9f9",
         textAlign: "left",
         opacity: isDragging ? 0.5 : 1,
-        borderRadius: '5px',
+        borderRadius: '8px',
         cursor: 'pointer',
         position: "relative",
+        transition: "transform 0.2s ease",
+        boxShadow:"02.s ease"
       }}
+     
     >
       {(isHovered || isChecked) && (
         <input
