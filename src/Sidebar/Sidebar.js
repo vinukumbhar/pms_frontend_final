@@ -320,6 +320,7 @@ function Sidebar() {
       if (data.user.role === "Admin") {
         localStorage.setItem("userRole", data.user.role);
         fetchUserData(data.user.id);
+        getadminsignup(data.user.id)
         fetchSidebarData()
         navigate("/");
       } else if (data.user.role === "Client") {
@@ -345,6 +346,8 @@ function Sidebar() {
 
   const [userData, setUserData] = useState("");
   const [username, setUsername] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+
   const [userid, setUserid] = useState("");
   const fetchUserData = async (id) => {
 
@@ -406,6 +409,26 @@ function Sidebar() {
     } else {
       return str;
     }
+  };
+  const getadminsignup = async (id) => {
+    console.log("tset", id)
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    const url = `${LOGIN_API}/admin/adminsignup/${id}`;
+    console.log(id)
+    fetch(url + loginsData, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("id", result);
+        const profilePicFilename = result.admin.profilePicture.split("\\").pop(); // Extract filename
+
+        setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
+        console.log(profilePicture)
+
+      });
   };
 
 
@@ -524,7 +547,12 @@ function Sidebar() {
                   <Link to="#" className="logout-link">
                     <div className="info" >
                       <div>
-                        <img src={user} alt="user" className="user-icon" style={{ height: "50px", width: "50px" }} />
+                      <img
+                          src={profilePicture || user}
+                          alt="user"
+                          className="user-icon"
+                          style={{ height: "55px", width: "55px",borderRadius: "50%" }}
+                        />
                       </div>
                       <span className="hidden-text" >
                         <b>{username}</b>

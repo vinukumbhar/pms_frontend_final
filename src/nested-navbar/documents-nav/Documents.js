@@ -499,7 +499,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 
 const Documents = () => {
-  const API_KEY = process.env.REACT_APP_API_IP;
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
   const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE
   const [folderTemplates, setFolderTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);

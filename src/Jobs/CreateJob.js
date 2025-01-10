@@ -17,6 +17,7 @@ import {
   FormControlLabel,
   Autocomplete,
   Drawer,
+  Checkbox,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Priority from "../Templates/Priority/Priority";
@@ -326,10 +327,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
       console.log("janavi", automationsData);
       setAutomations(automationsData);
 
-      
-      
       // Open the drawer with the automations data
-      openDrawer(automationsData);
+      // openDrawer(automationsData);
+      setDrawerOpen(true);
       return; // Stop further execution of createjob
     }
 
@@ -659,6 +659,628 @@ const CreateJob = ({ charLimit = 4000 }) => {
     setShowDropdownDescription(!showDropdownDescription);
   };
 
+  // Drawer Component
+  const DrawerContent = () => {
+    // Get the tags for the selected accounts
+    const accountTags = combinedaccountValues
+      .map((accountId) => {
+        const account = accountdata.find(
+          (account) => account._id === accountId
+        );
+        return account ? account.tags || [] : []; // Assuming accounts have tags
+      })
+      .flat(); // Flattening array to get all tags
+    const INVOICE_API = process.env.REACT_APP_INVOICE_TEMP_URL;
+    const INVOICE_NEW = process.env.REACT_APP_INVOICES_URL;
+    const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_TEMP_URL;
+    const PROPOSAL_ACCOUNT_API = process.env.REACT_APP_PROPOSAL_URL;
+    const ORGANIZER_TEMP_API = process.env.REACT_APP_ORGANIZER_TEMP_URL;
+    const AUTOMATION_API = process.env.REACT_APP_AUTOMATION_API;
+    // fetch invoive temp by id
+    const fetchinvoicetempbyid = async (automationTemp) => {
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+      const url = `${INVOICE_API}/workflow/invoicetemp/invoicetemplate/${automationTemp}`;
+      try {
+        const response = await fetch(url, requestOptions); // Fetch the data
+        const result = await response.json(); // Parse the JSON response
+        console.log("Fetched invoice template:", result.invoiceTemplate);
+        return result.invoiceTemplate; // Return the data
+      } catch (error) {
+        console.error("Error fetching invoice template:", error);
+        throw error; // Let the calling function handle the error
+      }
+    };
+    // fetch proposal temp by id
+    const fetchproposalbyid = async (automationTemp) => {
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+      const url = `${PROPOSAL_API}/Workflow/proposalesandels/proposalesandels/${automationTemp}`;
+      try {
+        const response = await fetch(url, requestOptions); // Fetch the data
+        const result = await response.json(); // Parse the JSON response
+        console.log(
+          "Fetched proposalsels template:",
+          result.proposalesAndElsTemplate
+        );
+        return result.proposalesAndElsTemplate; // Return the data
+      } catch (error) {
+        console.error("Error fetching proposal template:", error);
+        throw error; // Let the calling function handle the error
+      }
+    };
+    // fetch organizer temp by id
+    const fetchorganizertempbyid = async (automationTemp) => {
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+      const url = `${ORGANIZER_TEMP_API}/workflow/organizers/organizertemplate/${automationTemp}`;
+
+      try {
+        const response = await fetch(url, requestOptions); // Fetch the data
+        const result = await response.json(); // Parse the JSON response
+        console.log("Fetched organizer template:", result.organizerTemplate);
+        return result.organizerTemplate; // Return the data
+      } catch (error) {
+        console.error("Error fetching organizer template:", error);
+        throw error; // Let the calling function handle the error
+      }
+    };
+
+    const getCurrentDate = () => {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+      const day = String(today.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
+    };
+
+    const assignInvoiceToAccount = (invoiceData, automationTemp, accountId) => {
+      // console.log(
+      //   "Assigning invoice",
+      //   invoiceData,
+      //   automationTemp,
+      //   accountId
+      // );
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      // Dynamically prepare the payload from invoiceData
+      const raw = JSON.stringify({
+        account: accountId,
+        invoicenumber: "", // Fill in if required
+        invoicedate: getCurrentDate(), // Today's date
+        description: invoiceData.description || "",
+        invoicetemplate: automationTemp,
+        paymentMethod: invoiceData.paymentMethod || "",
+        teammember: "673060953342d61826f80208", // Fill in if required
+        payInvoicewithcredits: invoiceData.payInvoicewithcredits || false,
+        emailinvoicetoclient: invoiceData.sendEmailWhenInvCreated || false,
+        reminders: invoiceData.sendReminderstoClients || false,
+        daysuntilnextreminder: invoiceData.daysuntilnextreminder || null,
+        numberOfreminder: invoiceData.numberOfreminder || null,
+        scheduleinvoice: false, // Optional, adjust as needed
+        scheduleinvoicedate: "", // Optional, adjust as needed
+        scheduleinvoicetime: "", // Optional, adjust as needed
+        lineItems: invoiceData.lineItems.map((item) => ({
+          productorService: item.productorService || "",
+          description: item.description || "",
+          rate: item.rate || "",
+          quantity: item.quantity || "",
+          amount: item.amount || "",
+          tax: item.tax || false,
+        })),
+        summary: {
+          subtotal: invoiceData.summary.subtotal || "",
+          taxRate: invoiceData.summary.taxRate || "",
+          taxTotal: invoiceData.summary.taxTotal || "",
+          total: invoiceData.summary.total || "",
+        },
+      });
+      console.log("invoices", raw);
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+      fetch(`${INVOICE_NEW}/workflow/invoices/invoice`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log("Invoice assigned successfully:", result);
+        })
+        .catch((error) => console.error("Error assigning invoice:", error));
+    };
+    const assignProposalToAccount = (
+      proposalesandelsData,
+      automationTemp,
+      automationAccountId
+    ) => {
+      console.log(
+        "Assigning proposal",
+        proposalesandelsData,
+        automationTemp,
+        automationAccountId
+      );
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accountids: automationAccountId,
+          proposaltemplateid: automationTemp,
+          templatename: proposalesandelsData.templatename,
+          teammember: proposalesandelsData.teammember,
+          proposalname: proposalesandelsData.proposalname,
+          introduction: proposalesandelsData.introduction,
+          terms: proposalesandelsData.terms,
+          servicesandinvoices: proposalesandelsData.servicesandinvoices,
+          introductiontext: proposalesandelsData.introductiontext,
+          custommessageinemail: proposalesandelsData.custommessageinemail,
+          custommessageinemailtext:
+            proposalesandelsData.custommessageinemailtext,
+          reminders: proposalesandelsData.reminders,
+          daysuntilnextreminder: proposalesandelsData.daysuntilnextreminder,
+          numberofreminder: proposalesandelsData.numberofreminder,
+          introductiontextname: proposalesandelsData.introductiontextname,
+          termsandconditionsname: proposalesandelsData.termsandconditionsname,
+          termsandconditions: proposalesandelsData.termsandconditions,
+          lineItems: proposalesandelsData.lineItems,
+          summary: proposalesandelsData.summary,
+          Addinvoiceoraskfordeposit:
+            proposalesandelsData.Addinvoiceoraskfordeposit,
+          Additemizedserviceswithoutcreatinginvoices:
+            proposalesandelsData.Additemizedserviceswithoutcreatinginvoices,
+          invoicetemplatename: proposalesandelsData.invoicetemplatename,
+          invoiceteammember: proposalesandelsData.invoiceteammember,
+          issueinvoice: proposalesandelsData.issueinvoice,
+          specificdate: proposalesandelsData.specificdate,
+          specifictime: proposalesandelsData.specifictime,
+          description: proposalesandelsData.description,
+          notetoclient: proposalesandelsData.notetoclient,
+          paymentterms: proposalesandelsData.paymentterms,
+          paymentduedate: proposalesandelsData.paymentduedate,
+          paymentamount: proposalesandelsData.paymentamount,
+          active: true,
+        }),
+      };
+      const url = `${PROPOSAL_ACCOUNT_API}/proposalandels/proposalaccountwise/`;
+      console.log(url); // Log the URL for debugging
+      console.log(options.body); // Log request body for debugging
+      fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.error("Fetch Error:", error);
+          // toast.error("An error occurred while updating ProposalesAndEls.");
+        });
+    };
+    const assignOrganizerToAccount = (
+      organizerData,
+      automationTemp,
+      accountId
+    ) => {
+      console.log(
+        "Assigning proposal",
+        organizerData,
+        automationTemp,
+        accountId
+      );
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      const raw = JSON.stringify({
+        accountid: accountId,
+        organizertemplateid: automationTemp,
+        reminders: organizerData.reminders,
+        noofreminders: organizerData.noOfReminder,
+        daysuntilnextreminder: organizerData.daysuntilNextReminder,
+        sections: organizerData.sections,
+        active: true,
+      });
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+      console.log(raw);
+      const url = `${ORGANIZER_TEMP_API}/workflow/orgaccwise/organizeraccountwise/org`;
+      fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => console.error(error));
+    };
+
+    const CLIENT_DOCS_API = process.env.REACT_APP_CLIENT_DOCS_MANAGE;
+    const assignfoldertemp = (accountId, automationTemp) => {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const raw = JSON.stringify({
+        accountId: accountId,
+        foldertempId: automationTemp,
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      console.log(raw);
+      fetch(`${CLIENT_DOCS_API}/clientdocs/accountfoldertemp`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+    };
+    const selectAutomationApi = async (
+      automationType,
+      automationTemp,
+      automationAccountId
+    ) => {
+      if (!automationType || !automationTemp || !automationAccountId) {
+        console.error("Missing required parameters");
+        return;
+      }
+      const accountIds = Array.isArray(automationAccountId)
+        ? automationAccountId
+        : [automationAccountId];
+      switch (automationType) {
+        case "Send Invoice":
+          console.log(
+            `Processing 'Send Invoice' with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
+          try {
+            const invoiceData = await fetchinvoicetempbyid(automationTemp); // Await the fetched data
+            console.log("Fetched invoice data", invoiceData);
+            // assignInvoiceToAccount(invoiceData, automationTemp, automationAccountId);
+            // Iterate through each account ID
+            // Iterate through each account ID
+            for (const accountId of accountIds) {
+              console.log(`Assigning invoice to account ID: ${accountId}`);
+              assignInvoiceToAccount(invoiceData, automationTemp, accountId);
+            }
+          } catch (error) {
+            console.error("Error processing 'Send Invoice':", error);
+          }
+          break;
+
+        case "Apply folder template":
+          console.log(
+            `Apply folder template with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
+          try {
+            for (const accountId of accountIds) {
+              console.log(`Assigning invoice to account ID: ${accountId}`);
+              assignfoldertemp( accountId,automationTemp, );
+            }
+            // await assignfoldertemp(automationAccountId, automationTemp);
+            console.log("Folder template assigned successfully");
+          } catch (error) {
+            console.error("Error applying folder template:", error);
+          }
+          break;
+
+        case "Create Organizer":
+          console.log(
+            `Processing 'Create Organizer' with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
+          try {
+            const organizerData = await fetchorganizertempbyid(automationTemp); // Await the fetched data
+            console.log("Fetched organizer data", organizerData);
+            // assignOrganizerToAccount(
+            //   organizerData,
+            //   automationTemp,
+            //   automationAccountId
+            // );
+            for (const accountId of accountIds) {
+              console.log(`Assigning invoice to account ID: ${accountId}`);
+              assignOrganizerToAccount(organizerData, automationTemp, accountId);
+            }
+          } catch (error) {
+            console.error("Error processing 'Send Invoice':", error);
+          }
+          break;
+
+        case "Send Proposal/Els":
+          console.log(
+            `Creating Proposals with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
+          try {
+            const proposalesandelsData =
+              await fetchproposalbyid(automationTemp); // Await the fetched data
+            console.log("Fetched Proposals data", proposalesandelsData);
+            assignProposalToAccount(
+              proposalesandelsData,
+              automationTemp,
+              automationAccountId
+            );
+            // for (const accountId of accountIds) {
+            //   console.log(`Assigning invoice to account ID: ${accountId}`);
+            //   assignProposalToAccount(proposalesandelsData, automationTemp, accountId);
+            // }
+          } catch (error) {
+            console.error("Error processing 'Send Invoice':", error);
+          }
+          break;
+
+        case "Send Email":
+          console.log(
+            `Sending email with template: ${automationTemp}, Account ID: ${automationAccountId}`
+          );
+          const myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          const raw = JSON.stringify({
+            automationType,
+            templateId: automationTemp,
+            accountId: automationAccountId,
+          });
+
+          const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+          };
+
+          fetch(`${AUTOMATION_API}/automations/`, requestOptions)
+            .then((response) => response.json())
+            .then((result) => console.log(result))
+            .catch((error) => console.error(error));
+          break;
+
+        default:
+          console.warn(`Unhandled automation type: ${automationType}`);
+          break;
+      }
+    };
+
+    // Function to handle "Move" button click
+    // const handleMove = async () => {
+    // // Loop through selected automations
+    // selectedAutomations.forEach((automationIndex) => {
+    //   const automation = stageAutomations[automationIndex];
+
+    //   // Ensure automation has the necessary fields
+    //   if (!automation || !automation.type || !automation.template || !automation.template.value ) {
+    //     console.error("Missing required automation data");
+    //     return;
+    //   }
+
+    //   const automationType = automation.type;
+    //   const automationTemp = automation.template.value; // Assuming the template has an _id field
+    //   const automationAccountId = combinedaccountValues; // Use the selected account IDs
+
+    //   // Ensure automationAccountId is not empty or invalid
+    //   if (!automationAccountId || automationAccountId.length === 0) {
+    //     console.error("Missing required account IDs");
+    //     return;
+    //   }
+
+    //   // Call the selectAutomationApi with the necessary parameters
+    //   selectAutomationApi(automationType, automationTemp, automationAccountId);
+    // });
+    //   // Proceed with job creation after all automations are done
+    //   createJob();
+    // };
+    const [selectedAutomations, setSelectedAutomations] = useState([]);
+    const handleCheckboxChange = (index) => {
+      setSelectedAutomations((prevSelected) =>
+        prevSelected.includes(index)
+          ? prevSelected.filter((i) => i !== index)
+          : [...prevSelected, index]
+      );
+    };
+    const handleMove = async () => {
+      // Flag to track whether all automations are successful
+      let allAutomationsSuccessful = true;
+
+      // Loop through selected automations
+      for (const automationIndex of selectedAutomations) {
+        const automation = automations[automationIndex];
+
+        // Ensure automation has the necessary fields
+        if (
+          !automation ||
+          !automation.type ||
+          !automation.template ||
+          !automation.template.value
+        ) {
+          console.error(
+            "Missing required automation data for automation index:",
+            automationIndex
+          );
+          allAutomationsSuccessful = false; // Mark as failed
+          break; // Exit the loop if required data is missing
+        }
+
+        const automationType = automation.type;
+        const automationTemp = automation.template.value; // Assuming the template has a `value` field
+        const automationAccountId = combinedaccountValues; // Use the selected account IDs
+
+        // Ensure automationAccountId is not empty or invalid
+        if (!automationAccountId || automationAccountId.length === 0) {
+          console.error(
+            "Missing required account IDs for automation index:",
+            automationIndex
+          );
+          allAutomationsSuccessful = false; // Mark as failed
+          break; // Exit the loop if account IDs are missing
+        }
+
+        try {
+          // Await the result of the automation API call
+          await selectAutomationApi(
+            automationType,
+            automationTemp,
+            automationAccountId
+          );
+        } catch (error) {
+          console.error("Error processing automation:", error);
+          allAutomationsSuccessful = false; // Mark as failed
+          break; // Exit the loop on error
+        }
+      }
+
+      // If all automations were successful, create the job
+      if (allAutomationsSuccessful) {
+        try {
+          await createJob();
+        } catch (error) {
+          console.error("Failed to create job:", error);
+          toast.error("Failed to create job");
+        }
+      } else {
+        console.error("One or more automations failed, job creation aborted.");
+        toast.error("Automations failed, job not created.");
+      }
+    };
+
+    // Function to create job
+    const createJob = () => {
+      const myHeaders = {
+        "Content-Type": "application/json",
+      };
+
+      const data = {
+        accounts: combinedaccountValues,
+        // stageid: selectedStage.value,
+        pipeline: selectedPipeline.value,
+        templatename: selectedtemp.value,
+        jobname: jobName,
+        jobassignees: combinedAssigneesValues,
+        priority: priority,
+        description: description,
+        absolutedates: absoluteDate,
+        startsin: startsin,
+        startsinduration: startsInDuration,
+        duein: duein,
+        dueinduration: dueinduration,
+        showinclientportal: clientFacingStatus,
+        jobnameforclient: inputText,
+        clientfacingstatus: selectedJob?.value,
+        clientfacingDescription: clientDescription,
+        startdate: startDate,
+        enddate: dueDate,
+      };
+
+      const config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${JOBS_API}/workflow/jobs/newjob`,
+        headers: myHeaders,
+        data: JSON.stringify(data),
+      };
+
+      console.log(data);
+
+      axios
+        .request(config)
+        .then((response) => {
+          console.log("Job created successfully");
+          // toast.success("Job created successfully");
+          setDrawerOpen(false);
+          toast.success("Job created successfully");
+          navigate("/workflow/jobs");
+        })
+        .catch((error) => {
+          console.error("Failed to create Job Template:", error);
+          toast.error("Failed to create Job");
+        });
+    };
+    return (
+      <Box p={2}>
+        <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
+          Automations for{" "}
+          <Typography variant="h6" ml={1}>
+            {combinedaccountValues
+              .map((accountId) => {
+                const account = accountdata.find(
+                  (account) => account._id === accountId
+                );
+                return account ? account.accountName : null;
+              })
+              .join(", ")}
+          </Typography>
+        </Typography>
+
+        <Box>
+          {automations.map((automation, index) => {
+            // Check if the automation's tags match any of the selected account tags
+            const hasMatchingTags = automation.tags.some((automationTag) =>
+              accountTags.some(
+                (accountTag) => accountTag._id === automationTag._id
+              )
+            );
+
+            return (
+              <Box key={index} sx={{ marginBottom: 2 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selectedAutomations.includes(index)}
+                      onChange={() => handleCheckboxChange(index)}
+                      disabled={!hasMatchingTags} // Disable checkbox if tags don't match
+                    />
+                  }
+                />
+                <Typography variant="body1">
+                  <strong>Type:</strong> {automation.type}
+                </Typography>
+
+                <Typography variant="body1">
+                  <strong>Template:</strong> {automation.template.label}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Tags:</strong>
+                </Typography>
+                {automation.tags.map((tag) => (
+                  <Box
+                    key={tag._id}
+                    sx={{
+                      display: "inline-block",
+                      backgroundColor: tag.tagColour,
+                      color: "white",
+                      borderRadius: "15px",
+                      padding: "3px 8px",
+                      marginRight: "4px",
+                    }}
+                  >
+                    {tag.tagName}
+                  </Box>
+                ))}
+              </Box>
+            );
+          })}
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 5 }}>
+          <Button variant="contained" onClick={handleMove}>
+            Move
+          </Button>
+          <Button variant="outlined" onClick={() => setDrawerOpen(false)}>
+            Close
+          </Button>
+        </Box>
+      </Box>
+    );
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box>
@@ -1226,7 +1848,7 @@ const CreateJob = ({ charLimit = 4000 }) => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       >
-        <Box sx={{ width: 400, padding: 2 }}>
+        {/* <Box sx={{ width: 400, padding: 2 }}>
           <Typography variant="h6">Automations</Typography>
           {automations.length > 0 && (
             <Box>
@@ -1270,6 +1892,9 @@ const CreateJob = ({ charLimit = 4000 }) => {
           >
             Proceed
           </Button>
+        </Box> */}
+        <Box sx={{ width: 500 }}>
+          <DrawerContent selectedAccounts={combinedaccountValues} />
         </Box>
       </Drawer>
     </LocalizationProvider>

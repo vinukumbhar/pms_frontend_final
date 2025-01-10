@@ -770,7 +770,7 @@ const PipelineTempUpdate = () => {
   }));
 
   // folder templates
-  const API_KEY = process.env.REACT_APP_API_IP;
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
   const [folderTemplates, setFolderTemplates] = useState([]);
 
   useEffect(() => {
