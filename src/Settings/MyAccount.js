@@ -97,19 +97,30 @@ const MyAccount = () => {
       setLastName(data.admin[0].lastName);
       setPhoneNumber(data.admin[0].phoneNumber);
       setEmail(data.admin[0].email);
-     
+      
       const profilePicFilename = data.admin[0].profilePicture.split("\\").pop(); // Extract filename
 
       setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
       console.log(profilePicture)
+
+   
     } catch (error) {
       console.error("Error fetching email templates:", error);
     }
   };
   
- 
- 
+ // Function to encode image to base64 (for profile picture)
+const encodeImageToBase64 = (imageFile) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile); // Read the file as base64
+    reader.onloadend = () => resolve(reader.result); // Resolve with base64 encoded string
+    reader.onerror = reject; // Reject on error
+  });
+};
+  
   const handleSaveButtonClick = async () => {
+   
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
   
@@ -118,6 +129,7 @@ const MyAccount = () => {
       middleName: middleName,
       lastName: lastname,
       phoneNumber: phonenumber,
+    
     });
   
     const requestOptions = {
@@ -135,15 +147,8 @@ const MyAccount = () => {
       const response = await fetch(url, requestOptions);
       const result = await response.text();
       console.log(result);
-
-
-
-
-
       toast.success("Data updated successfully!");
-  
       updateProfilePicture(); 
-  
       await fetchAdminData();  
       setIsEditable(false);
       setShowSaveButtons(false);
@@ -152,7 +157,7 @@ const MyAccount = () => {
       toast.error("An error occurred!");
     }
   };
-
+  
   const handleEditClick = () => {
     setIsEditable(true);
     setShowSaveButtons(true);
@@ -979,10 +984,6 @@ const MyAccount = () => {
     }
   };
 
-
-
-
-  
   const [selectedFile, setSelectedFile] = useState(null);
  
   
@@ -1057,10 +1058,9 @@ const MyAccount = () => {
             
               {/* <Box className="user-profile-container">
                 <img src={user} alt="" className="user-profile-image" style={{ width: "40px", height: "40px", borderRadius: "50%", marginTop: "25px" }} />
+              
               </Box> */}
-            {/* Profile Section */}
-            <Box sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-              <Box
+         <Box
                 sx={{
                   width: "80px",
                   height: "80px",
@@ -1082,10 +1082,8 @@ const MyAccount = () => {
                     alt="Profile"
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
-                )}
+                ) }
               </Box>
-             
-            </Box>
               <Box sx={{ marginBottom: "20px" }}>
               {!profilePicture ? (
                 <>
@@ -1118,13 +1116,13 @@ const MyAccount = () => {
                       onChange={handleFileChange}
                     />
                   </Button>
-                  {/* <Button
+                  <Button
                     variant="text"
                     onClick={handleDeletePhoto}
                     sx={{ color: "#ff1744", textTransform: "none" }}
                   >
                     Close
-                  </Button> */}
+                  </Button>
                 </Box>
               )}
               {/* Error message display */}
@@ -1134,9 +1132,12 @@ const MyAccount = () => {
                 </Box>
               )}
             </Box>
+            
               <Box className="hr">
                 <BorderColorRoundedIcon sx={{ float: "right", marginBottom: "10px", cursor: "pointer", color: "#1168bf" }} onClick={handleEditClick} />
               </Box>
+              
+       
             </Box>
             <Box className="contact-details">
               <Box

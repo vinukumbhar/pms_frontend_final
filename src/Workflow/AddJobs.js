@@ -12,7 +12,7 @@ import {
   Button,
   Checkbox,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,6 +21,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Priority from "../Templates/Priority/Priority";
 import Editor from "../Templates/Texteditor/Editor";
+import { LoginContext } from '../Sidebar/Context/Context'
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 const AddJobs = ({
@@ -31,6 +32,8 @@ const AddJobs = ({
   fetchJobData,
 }) => {
   console.log("janavi stage ", stages);
+   const { logindata } = useContext(LoginContext);
+   const [loginuserid, setLoginUserId] = useState("");
   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const JOBS_API = process.env.REACT_APP_ADD_JOBS_URL;
   const JOBS_TEMP_API = process.env.REACT_APP_JOBS_TEMP_URL;
@@ -532,15 +535,15 @@ const assignInvoiceToAccount = (
     description: invoiceData.description || "",
     invoicetemplate: automationTemp,
     paymentMethod: invoiceData.paymentMethod || "",
-    teammember: "673060953342d61826f80208", // Fill in if required
+    teammember: loginuserid, // Fill in if required
     payInvoicewithcredits: invoiceData.payInvoicewithcredits || false,
     emailinvoicetoclient: invoiceData.sendEmailWhenInvCreated || false,
     reminders: invoiceData.sendReminderstoClients || false,
     daysuntilnextreminder: invoiceData.daysuntilnextreminder || null,
     numberOfreminder: invoiceData.numberOfreminder || null,
     scheduleinvoice: false, // Optional, adjust as needed
-    scheduleinvoicedate: "", // Optional, adjust as needed
-    scheduleinvoicetime: "", // Optional, adjust as needed
+    scheduleinvoicedate: new Date(), // Current date and time
+    scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
     lineItems: invoiceData.lineItems.map((item) => ({
       productorService: item.productorService || "",
       description: item.description || "",

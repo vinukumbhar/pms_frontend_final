@@ -19,7 +19,7 @@ import {
   Drawer,
   Checkbox,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Priority from "../Templates/Priority/Priority";
 import Editor from "../Templates/Texteditor/Editor";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -30,10 +30,19 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import axios from "axios";
+import { LoginContext } from '../Sidebar/Context/Context'
 import DeleteIcon from "@mui/icons-material/Delete";
 // Initialize the plugin
 dayjs.extend(customParseFormat);
 const CreateJob = ({ charLimit = 4000 }) => {
+   const { logindata } = useContext(LoginContext);
+   const [loginuserid, setLoginUserId] = useState("");
+  
+   useEffect(() => {
+       if (logindata?.user?.id) { // Check if logindata and user.id exist
+        setLoginUserId(logindata.user.id);
+       }
+   }, [logindata]);
   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const JOBS_API = process.env.REACT_APP_ADD_JOBS_URL;
   const JOBS_TEMP_API = process.env.REACT_APP_JOBS_TEMP_URL;
@@ -759,15 +768,15 @@ const CreateJob = ({ charLimit = 4000 }) => {
         description: invoiceData.description || "",
         invoicetemplate: automationTemp,
         paymentMethod: invoiceData.paymentMethod || "",
-        teammember: "673060953342d61826f80208", // Fill in if required
+        teammember: loginuserid,  // Fill in if required
         payInvoicewithcredits: invoiceData.payInvoicewithcredits || false,
         emailinvoicetoclient: invoiceData.sendEmailWhenInvCreated || false,
         reminders: invoiceData.sendReminderstoClients || false,
         daysuntilnextreminder: invoiceData.daysuntilnextreminder || null,
         numberOfreminder: invoiceData.numberOfreminder || null,
         scheduleinvoice: false, // Optional, adjust as needed
-        scheduleinvoicedate: "", // Optional, adjust as needed
-        scheduleinvoicetime: "", // Optional, adjust as needed
+        scheduleinvoicedate: new Date(), // Current date and time
+        scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
         lineItems: invoiceData.lineItems.map((item) => ({
           productorService: item.productorService || "",
           description: item.description || "",

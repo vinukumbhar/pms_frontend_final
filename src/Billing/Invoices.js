@@ -1,5 +1,36 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Menu, useMediaQuery, Checkbox, Autocomplete, Switch, FormControlLabel, Box, Button, Drawer, Typography, IconButton, Divider, Select, MenuItem, InputLabel, TextField, FormControl, FormLabel, InputAdornment, Popover, ListItem, List, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Menu,
+  useMediaQuery,
+  Checkbox,
+  Autocomplete,
+  Switch,
+  FormControlLabel,
+  Box,
+  Button,
+  Drawer,
+  Typography,
+  IconButton,
+  Divider,
+  Select,
+  MenuItem,
+  InputLabel,
+  TextField,
+  FormControl,
+  FormLabel,
+  InputAdornment,
+  Popover,
+  ListItem,
+  List,
+  ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Unstable_Grid2";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,14 +43,17 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import "./invoices.css";
 import { toast } from "react-toastify";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { CiMenuKebab } from "react-icons/ci";
 import { useTheme } from "@mui/material/styles";
 import { RxCross2 } from "react-icons/rx";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import CreatableSelect from "react-select/creatable";
 import { useNavigate } from "react-router-dom";
-import PlagiarismIcon from '@mui/icons-material/Plagiarism';
+import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 const Invoices = ({ charLimit = 4000 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -27,7 +61,7 @@ const Invoices = ({ charLimit = 4000 }) => {
   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const SERVICE_API = process.env.REACT_APP_SERVICES_URL;
   const INVOICE_NEW = process.env.REACT_APP_INVOICES_URL;
-  const CONTACT_API= process.env.REACT_APP_CONTACTS_URL;
+  const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [payInvoice, setIsPayInvoice] = useState(false);
@@ -85,7 +119,9 @@ const Invoices = ({ charLimit = 4000 }) => {
 
   useEffect(() => {
     // Simulate filtered shortcuts based on some logic (e.g., search)
-    setFilteredShortcuts(shortcuts.filter((shortcut) => shortcut.title.toLowerCase().includes("")));
+    setFilteredShortcuts(
+      shortcuts.filter((shortcut) => shortcut.title.toLowerCase().includes(""))
+    );
   }, [shortcuts]);
 
   useEffect(() => {
@@ -94,7 +130,11 @@ const Invoices = ({ charLimit = 4000 }) => {
       const contactShortcuts = [
         { title: "Account Shortcodes", isBold: true },
         { title: "Account Name", isBold: false, value: "ACCOUNT_NAME" },
-        { title: "Custom field:Website", isBold: false, value: "ACCOUNT_CUSTOM_FIELD:Website" },
+        {
+          title: "Custom field:Website",
+          isBold: false,
+          value: "ACCOUNT_CUSTOM_FIELD:Website",
+        },
         { title: "Contact Shortcodes", isBold: true },
         { title: "Contact Name", isBold: false, value: "CONTACT_NAME" },
         { title: "First Name", isBold: false, value: "FIRST_NAME" },
@@ -107,29 +147,65 @@ const Invoices = ({ charLimit = 4000 }) => {
         { title: "City", isBold: false, value: "CITY" },
         { title: "State/Province", isBold: false, value: "STATE / PROVINCE" },
         { title: "Zip/Postal code", isBold: false, value: "ZIP / POSTAL CODE" },
-        { title: "Custom field:Email", isBold: false, value: "CONTACT_CUSTOM_FIELD:Email" },
+        {
+          title: "Custom field:Email",
+          isBold: false,
+          value: "CONTACT_CUSTOM_FIELD:Email",
+        },
         { title: "Date Shortcodes", isBold: true },
-        { title: "Current day full date", isBold: false, value: "CURRENT_DAY_FULL_DATE" },
-        { title: "Current day number", isBold: false, value: "CURRENT_DAY_NUMBER" },
+        {
+          title: "Current day full date",
+          isBold: false,
+          value: "CURRENT_DAY_FULL_DATE",
+        },
+        {
+          title: "Current day number",
+          isBold: false,
+          value: "CURRENT_DAY_NUMBER",
+        },
         { title: "Current day name", isBold: false, value: "CURRENT_DAY_NAME" },
         { title: "Current week", isBold: false, value: "CURRENT_WEEK" },
-        { title: "Current month number", isBold: false, value: "CURRENT_MONTH_NUMBER" },
-        { title: "Current month name", isBold: false, value: "CURRENT_MONTH_NAME" },
+        {
+          title: "Current month number",
+          isBold: false,
+          value: "CURRENT_MONTH_NUMBER",
+        },
+        {
+          title: "Current month name",
+          isBold: false,
+          value: "CURRENT_MONTH_NAME",
+        },
         { title: "Current quarter", isBold: false, value: "CURRENT_QUARTER" },
         { title: "Current year", isBold: false, value: "CURRENT_YEAR" },
-        { title: "Last day full date", isBold: false, value: "LAST_DAY_FULL_DATE" },
+        {
+          title: "Last day full date",
+          isBold: false,
+          value: "LAST_DAY_FULL_DATE",
+        },
         { title: "Last day number", isBold: false, value: "LAST_DAY_NUMBER" },
         { title: "Last day name", isBold: false, value: "LAST_DAY_NAME" },
         { title: "Last week", isBold: false, value: "LAST_WEEK" },
-        { title: "Last month number", isBold: false, value: "LAST_MONTH_NUMBER" },
+        {
+          title: "Last month number",
+          isBold: false,
+          value: "LAST_MONTH_NUMBER",
+        },
         { title: "Last month name", isBold: false, value: "LAST_MONTH_NAME" },
         { title: "Last quarter", isBold: false, value: "LAST_QUARTER" },
         { title: "Last_year", isBold: false, value: "LAST_YEAR" },
-        { title: "Next day full date", isBold: false, value: "NEXT_DAY_FULL_DATE" },
+        {
+          title: "Next day full date",
+          isBold: false,
+          value: "NEXT_DAY_FULL_DATE",
+        },
         { title: "Next day number", isBold: false, value: "NEXT_DAY_NUMBER" },
         { title: "Next day name", isBold: false, value: "NEXT_DAY_NAME" },
         { title: "Next week", isBold: false, value: "NEXT_WEEK" },
-        { title: "Next month number", isBold: false, value: "NEXT_MONTH_NUMBER" },
+        {
+          title: "Next month number",
+          isBold: false,
+          value: "NEXT_MONTH_NUMBER",
+        },
         { title: "Next month name", isBold: false, value: "NEXT_MONTH_NAME" },
         { title: "Next quarter", isBold: false, value: "NEXT_QUARTER" },
         { title: "Next year", isBold: false, value: "NEXT_YEAR" },
@@ -139,29 +215,65 @@ const Invoices = ({ charLimit = 4000 }) => {
       const accountShortcuts = [
         { title: "Account Shortcodes", isBold: true },
         { title: "Account Name", isBold: false, value: "ACCOUNT_NAME" },
-        { title: "Custom field:Website", isBold: false, value: "ACCOUNT_CUSTOM_FIELD:Website" },
+        {
+          title: "Custom field:Website",
+          isBold: false,
+          value: "ACCOUNT_CUSTOM_FIELD:Website",
+        },
         { title: "Date Shortcodes", isBold: true },
-        { title: "Current day full date", isBold: false, value: "CURRENT_DAY_FULL_DATE" },
-        { title: "Current day number", isBold: false, value: "CURRENT_DAY_NUMBER" },
+        {
+          title: "Current day full date",
+          isBold: false,
+          value: "CURRENT_DAY_FULL_DATE",
+        },
+        {
+          title: "Current day number",
+          isBold: false,
+          value: "CURRENT_DAY_NUMBER",
+        },
         { title: "Current day name", isBold: false, value: "CURRENT_DAY_NAME" },
         { title: "Current week", isBold: false, value: "CURRENT_WEEK" },
-        { title: "Current month number", isBold: false, value: "CURRENT_MONTH_NUMBER" },
-        { title: "Current month name", isBold: false, value: "CURRENT_MONTH_NAME" },
+        {
+          title: "Current month number",
+          isBold: false,
+          value: "CURRENT_MONTH_NUMBER",
+        },
+        {
+          title: "Current month name",
+          isBold: false,
+          value: "CURRENT_MONTH_NAME",
+        },
         { title: "Current quarter", isBold: false, value: "CURRENT_QUARTER" },
         { title: "Current year", isBold: false, value: "CURRENT_YEAR" },
-        { title: "Last day full date", isBold: false, value: "LAST_DAY_FULL_DATE" },
+        {
+          title: "Last day full date",
+          isBold: false,
+          value: "LAST_DAY_FULL_DATE",
+        },
         { title: "Last day number", isBold: false, value: "LAST_DAY_NUMBER" },
         { title: "Last day name", isBold: false, value: "LAST_DAY_NAME" },
         { title: "Last week", isBold: false, value: "LAST_WEEK" },
-        { title: "Last month number", isBold: false, value: "LAST_MONTH_NUMBER" },
+        {
+          title: "Last month number",
+          isBold: false,
+          value: "LAST_MONTH_NUMBER",
+        },
         { title: "Last month name", isBold: false, value: "LAST_MONTH_NAME" },
         { title: "Last quarter", isBold: false, value: "LAST_QUARTER" },
         { title: "Last_year", isBold: false, value: "LAST_YEAR" },
-        { title: "Next day full date", isBold: false, value: "NEXT_DAY_FULL_DATE" },
+        {
+          title: "Next day full date",
+          isBold: false,
+          value: "NEXT_DAY_FULL_DATE",
+        },
         { title: "Next day number", isBold: false, value: "NEXT_DAY_NUMBER" },
         { title: "Next day name", isBold: false, value: "NEXT_DAY_NAME" },
         { title: "Next week", isBold: false, value: "NEXT_WEEK" },
-        { title: "Next month number", isBold: false, value: "NEXT_MONTH_NUMBER" },
+        {
+          title: "Next month number",
+          isBold: false,
+          value: "NEXT_MONTH_NUMBER",
+        },
         { title: "Next month name", isBold: false, value: "NEXT_MONTH_NAME" },
         { title: "Next quarter", isBold: false, value: "NEXT_QUARTER" },
         { title: "Next year", isBold: false, value: "NEXT_YEAR" },
@@ -205,9 +317,13 @@ const Invoices = ({ charLimit = 4000 }) => {
       .then((result) => {
         console.log(result.serviceTemplate);
 
-        const service = Array.isArray(result.serviceTemplate) ? result.serviceTemplate[0] : result.serviceTemplate;
+        const service = Array.isArray(result.serviceTemplate)
+          ? result.serviceTemplate[0]
+          : result.serviceTemplate;
         // const rate = typeof service.rate === 'number' ? service.rate : 0;
-        const rate = service.rate ? parseFloat(service.rate.replace("$", "")) : 0;
+        const rate = service.rate
+          ? parseFloat(service.rate.replace("$", ""))
+          : 0;
         const updatedRow = {
           productName: service.serviceName || "", // Assuming serviceName corresponds to productName
           description: service.description || "",
@@ -265,7 +381,25 @@ const Invoices = ({ charLimit = 4000 }) => {
   };
 
   const addRow = (isDiscountRow = false) => {
-    const newRow = isDiscountRow ? { productName: "", description: "", rate: "$-10.00", qty: "1", amount: "$-10.00", tax: false, isDiscount: true } : { productName: "", description: "", rate: "$0.00", qty: "1", amount: "$0.00", tax: false, isDiscount: false };
+    const newRow = isDiscountRow
+      ? {
+          productName: "",
+          description: "",
+          rate: "$-10.00",
+          qty: "1",
+          amount: "$-10.00",
+          tax: false,
+          isDiscount: true,
+        }
+      : {
+          productName: "",
+          description: "",
+          rate: "$0.00",
+          qty: "1",
+          amount: "$0.00",
+          tax: false,
+          isDiscount: false,
+        };
     setRows([...rows, newRow]);
   };
 
@@ -278,7 +412,10 @@ const Invoices = ({ charLimit = 4000 }) => {
   const paymentsOptions = [
     { value: "Bank Debits", label: "Bank Debits" },
     { value: "Credit Card", label: "Credit Card" },
-    { value: "Credit Card or Bank Debits", label: "Credit Card or Bank Debits" },
+    {
+      value: "Credit Card or Bank Debits",
+      label: "Credit Card or Bank Debits",
+    },
   ];
   const handlePaymentOptionChange = (event, selectedOption) => {
     setPaymentMode(selectedOption);
@@ -324,7 +461,7 @@ const Invoices = ({ charLimit = 4000 }) => {
 
   const fetchUserData = async () => {
     try {
-      const url =`${LOGIN_API}/common/users/roles?roles=TeamMember,Admin`;
+      const url = `${LOGIN_API}/common/users/roles?roles=TeamMember,Admin`;
       const response = await fetch(url);
       const data = await response.json();
       setUserData(data);
@@ -398,7 +535,9 @@ const Invoices = ({ charLimit = 4000 }) => {
         setPaymentMode(paymentMethod);
         // Assuming lineitems is an array of objects and each object matches the structure needed for rows
         console.log(result.invoiceTemplate.lineItems);
-        const rate = service.rate ? parseFloat(service.rate.replace("$", "")) : 0;
+        const rate = service.rate
+          ? parseFloat(service.rate.replace("$", ""))
+          : 0;
         const lineitems = result.invoiceTemplate.lineItems.map((item) => ({
           productName: item.productorService || "",
           description: item.description || "",
@@ -472,7 +611,7 @@ const Invoices = ({ charLimit = 4000 }) => {
       calculateTotal(subtotal, taxRate);
     };
     calculateSubtotal();
-  }, [rows,taxRate]);
+  }, [rows, taxRate]);
 
   const lineItems = rows.map((item) => ({
     productorService: item.productName, // Assuming productName maps to productorService
@@ -495,8 +634,11 @@ const Invoices = ({ charLimit = 4000 }) => {
       paymentMethod: paymentMode.value,
       teammember: selecteduser.value,
       emailinvoicetoclient: emailInvoice,
-      scheduleinvoicedate: "Wed May 08 2024 00:00:00 GMT+0530 (India Standard Time)",
-      scheduleinvoicetime: "12.00",
+      // scheduleinvoicedate:
+      //   "Wed May 08 2024 00:00:00 GMT+0530 (India Standard Time)",
+      // scheduleinvoicetime: "12.00",
+      scheduleinvoicedate: new Date(), // Current date and time
+      scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
       payInvoicewithcredits: payInvoice,
       reminders: reminders,
       scheduleinvoice: scheduledInvoice,
@@ -573,7 +715,7 @@ const Invoices = ({ charLimit = 4000 }) => {
         header: "Invoice Number",
         Cell: ({ row }) => (
           <Typography
-            sx={{ color: "#2c59fa", cursor: "pointer", fontWeight: 'bold' }}
+            sx={{ color: "#2c59fa", cursor: "pointer", fontWeight: "bold" }}
             onClick={() => handleEdit(row.original._id)}
           >
             {row.original.invoicenumber}
@@ -585,14 +727,34 @@ const Invoices = ({ charLimit = 4000 }) => {
         accessorKey: "Setting",
         header: "Setting",
         Cell: ({ row }) => (
-          <IconButton onClick={() => toggleMenu(row.original._id)} style={{ color: "#2c59fa" }}>
+          <IconButton
+            onClick={() => toggleMenu(row.original._id)}
+            style={{ color: "#2c59fa" }}
+          >
             <CiMenuKebab style={{ fontSize: "25px" }} />
             {openMenuId === row.original._id && (
-              <Box sx={{ position: "absolute", zIndex: 1, backgroundColor: "#fff", boxShadow: 1, borderRadius: 1, p: 1, left: "30px", m: 2 }}>
-                <Typography sx={{ fontSize: "12px", fontWeight: "bold" }} onClick={() => handleEdit(row.original._id)}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  zIndex: 1,
+                  backgroundColor: "#fff",
+                  boxShadow: 1,
+                  borderRadius: 1,
+                  p: 1,
+                  left: "30px",
+                  m: 2,
+                }}
+              >
+                <Typography
+                  sx={{ fontSize: "12px", fontWeight: "bold" }}
+                  onClick={() => handleEdit(row.original._id)}
+                >
                   Edit
                 </Typography>
-                <Typography sx={{ fontSize: "12px", color: "red", fontWeight: "bold" }} onClick={() => handleDelete(row.original._id)}>
+                <Typography
+                  sx={{ fontSize: "12px", color: "red", fontWeight: "bold" }}
+                  onClick={() => handleDelete(row.original._id)}
+                >
                   Delete
                 </Typography>
               </Box>
@@ -614,11 +776,17 @@ const Invoices = ({ charLimit = 4000 }) => {
     enablePagination: true,
     muiTableContainerProps: { sx: { maxHeight: "400px" } },
     initialState: {
-      columnPinning: { left: ["mrt-row-select", "tagName"], right: ["settings"] },
+      columnPinning: {
+        left: ["mrt-row-select", "tagName"],
+        right: ["settings"],
+      },
     },
     muiTableBodyCellProps: {
       sx: (theme) => ({
-        backgroundColor: theme.palette.mode === "dark-theme" ? theme.palette.grey[900] : theme.palette.grey[50],
+        backgroundColor:
+          theme.palette.mode === "dark-theme"
+            ? theme.palette.grey[900]
+            : theme.palette.grey[50],
       }),
     },
   });
@@ -689,7 +857,9 @@ const Invoices = ({ charLimit = 4000 }) => {
       const updatedRows = [...rows];
 
       // Calculate the amount based on rate and qty
-      const rateValue = parseFloat(selectedRowData.rate.replace(/[^0-9.-]+/g, "")); // Removing currency symbol
+      const rateValue = parseFloat(
+        selectedRowData.rate.replace(/[^0-9.-]+/g, "")
+      ); // Removing currency symbol
       const qtyValue = parseInt(selectedRowData.qty) || 0; // Convert to integer
 
       const amount = (rateValue * qtyValue).toFixed(2); // Calculate amount
@@ -716,7 +886,9 @@ const Invoices = ({ charLimit = 4000 }) => {
     if (selectedRow !== null) {
       const duplicatedRow = {
         ...rows[selectedRow],
-        productName: rows[selectedRow].productName ? `${rows[selectedRow].productName} Copy` : "Copy",
+        productName: rows[selectedRow].productName
+          ? `${rows[selectedRow].productName} Copy`
+          : "Copy",
       };
       const updatedRows = [...rows, duplicatedRow];
       setRows(updatedRows); // Update the state with the duplicated row
@@ -787,7 +959,10 @@ const Invoices = ({ charLimit = 4000 }) => {
       .then((result) => {
         console.log(result.message);
 
-        if (result && result.message === "ServiceTemplate created successfully") {
+        if (
+          result &&
+          result.message === "ServiceTemplate created successfully"
+        ) {
           toast.success("ServiceTemplate created successfully");
           handleNewDrawerClose();
           // fetchServicesData();
@@ -804,7 +979,10 @@ const Invoices = ({ charLimit = 4000 }) => {
       })
       .catch((error) => {
         console.log(error);
-        const errorMessage = error.response && error.response.message ? error.response.message : "Failed to create invoice";
+        const errorMessage =
+          error.response && error.response.message
+            ? error.response.message
+            : "Failed to create invoice";
         toast.error(errorMessage);
       });
   };
@@ -898,12 +1076,18 @@ const Invoices = ({ charLimit = 4000 }) => {
     const qty = selectedRowData?.qty || 0;
     const calculatedAmount = rate * qty;
 
-    console.log("Rate: ", rate, "Qty: ", qty, "Total Amount: $", calculatedAmount.toFixed(2));
+    console.log(
+      "Rate: ",
+      rate,
+      "Qty: ",
+      qty,
+      "Total Amount: $",
+      calculatedAmount.toFixed(2)
+    );
     setTotalamount(`$${calculatedAmount.toFixed(2)}`);
   }, [selectedRowData?.rate, selectedRowData?.qty]);
 
   console.log(totalamount);
-
 
   const [firstContactEmail, setFirstContactEmail] = useState("");
 
@@ -912,18 +1096,24 @@ const Invoices = ({ charLimit = 4000 }) => {
       method: "GET",
       redirect: "follow",
     };
-  
+
     console.log("Calling API with ID:", selectedaccount?.value); // Debug log
-  
-    fetch(`${CONTACT_API}/accounts/accountdetails/accountdetailslist/listbyid/${selectedaccount?.value}`, requestOptions)
+
+    fetch(
+      `${CONTACT_API}/accounts/accountdetails/accountdetailslist/listbyid/${selectedaccount?.value}`,
+      requestOptions
+    )
       .then((response) => {
         console.log("Response status:", response.status); // Debug log
         return response.json();
       })
       .then((result) => {
         console.log("API Result:", result); // Debug log
-        
-        if (result?.accountlist?.Contacts && Array.isArray(result.accountlist.Contacts)) {
+
+        if (
+          result?.accountlist?.Contacts &&
+          Array.isArray(result.accountlist.Contacts)
+        ) {
           const email = result.accountlist.Contacts[0]?.email;
           if (email) {
             console.log("First Contact Email:", email); // Debug log
@@ -942,16 +1132,16 @@ const Invoices = ({ charLimit = 4000 }) => {
         setFirstContactEmail("Error fetching email"); // Handle fetch error
       });
   };
-  
+
   useEffect(() => {
     if (selectedaccount?.value) {
       contactMail();
     }
   }, [selectedaccount]);
- //preview drawer
- const [previewDrawerOpen, setpreviewDrawerOpen] = useState(false);
- const handleOpenpreviewDrawer = () => setpreviewDrawerOpen(true);
- const handleClosepreviewDrawer = () => setpreviewDrawerOpen(false);
+  //preview drawer
+  const [previewDrawerOpen, setpreviewDrawerOpen] = useState(false);
+  const handleOpenpreviewDrawer = () => setpreviewDrawerOpen(true);
+  const handleClosepreviewDrawer = () => setpreviewDrawerOpen(false);
 
   return (
     <Box>
@@ -979,40 +1169,38 @@ const Invoices = ({ charLimit = 4000 }) => {
             <CloseIcon />
           </IconButton>
         </Box> */}
-         <Box
-  sx={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 2,
-    m:2
-  }}
->
-  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-    Create invoice
-  </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+            m: 2,
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            Create invoice
+          </Typography>
 
-  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-    <Box
-      onClick={handleOpenpreviewDrawer}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        cursor: "pointer",
-        color: "primary.main",
-      }}
-    >
-      <PlagiarismIcon sx={{ marginRight: 0.5 }} fontSize="small" />
-      <Typography color="primary">Preview</Typography>
-    </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Box
+              onClick={handleOpenpreviewDrawer}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                color: "primary.main",
+              }}
+            >
+              <PlagiarismIcon sx={{ marginRight: 0.5 }} fontSize="small" />
+              <Typography color="primary">Preview</Typography>
+            </Box>
 
-   
-
-    <Box onClick={handleClose} sx={{ cursor: "pointer" }}>
-      <CloseIcon />
-    </Box>
-  </Box>
-</Box>
+            <Box onClick={handleClose} sx={{ cursor: "pointer" }}>
+              <CloseIcon />
+            </Box>
+          </Box>
+        </Box>
         <Divider />
 
         <Box>
@@ -1024,38 +1212,76 @@ const Invoices = ({ charLimit = 4000 }) => {
               sx: {
                 width: 800,
                 p: 2,
-                background: '#f8fafc',
-
+                background: "#f8fafc",
               },
             }}
           >
             <Box sx={{ padding: 4 }}>
               {/* Invoice Header */}
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Typography>Preview</Typography>
-                <CloseIcon sx={{ cursor: "pointer", color: "rgb(24, 118, 211)" }} onClick={handleClosepreviewDrawer} />
+                <CloseIcon
+                  sx={{ cursor: "pointer", color: "rgb(24, 118, 211)" }}
+                  onClick={handleClosepreviewDrawer}
+                />
               </Box>
               <Divider sx={{ mt: 2 }} />
 
               {/* Table */}
-              <TableContainer component={Paper} sx={{ background: '#fdfdfd', marginBottom: 4, height: { xs: '50vh', md: 'auto' }, mt: 4 }}>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  background: "#fdfdfd",
+                  marginBottom: 4,
+                  height: { xs: "50vh", md: "auto" },
+                  mt: 4,
+                }}
+              >
                 <Typography
                   variant="h5"
-                  sx={{ color: '#ff6700', fontWeight: 'bold', marginBottom: 2, ml: 2, mt: 2 }}
+                  sx={{
+                    color: "#ff6700",
+                    fontWeight: "bold",
+                    marginBottom: 2,
+                    ml: 2,
+                    mt: 2,
+                  }}
                 >
                   Invoice
                 </Typography>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }}>
-                    {selectedaccount?.label || '[ACCOUNT NAME]'}
+                    {selectedaccount?.label || "[ACCOUNT NAME]"}
                   </Typography>
                   <Typography fontSize={13}>
-                    Invoice number: <Typography component="span" sx={{ color: '#cbd5e1', mr: 2, marginBottom: 2, fontSize: 13 }}>[INVOICE_NUMBER]</Typography>
+                    Invoice number:{" "}
+                    <Typography
+                      component="span"
+                      sx={{
+                        color: "#cbd5e1",
+                        mr: 2,
+                        marginBottom: 2,
+                        fontSize: 13,
+                      }}
+                    >
+                      [INVOICE_NUMBER]
+                    </Typography>
                   </Typography>
                 </Box>
-
-
 
                 {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }} >{firstContactEmail || "No email available"}</Typography>
@@ -1066,22 +1292,36 @@ const Invoices = ({ charLimit = 4000 }) => {
                   </Typography>
                 </Box> */}
 
-
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }} >{firstContactEmail || "[CONTACT EMAIL]"}</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography sx={{ marginBottom: 2, ml: 2, fontSize: 13 }}>
+                    {firstContactEmail || "[CONTACT EMAIL]"}
+                  </Typography>
                   <Typography fontSize={13}>
-                    Date: <Typography component="span" sx={{ mr: 2, marginBottom: 2, fontSize: 13 }}>
-                      {startDate ? startDate.format('YYYY-MM-DD') : ''}
+                    Date:{" "}
+                    <Typography
+                      component="span"
+                      sx={{ mr: 2, marginBottom: 2, fontSize: 13 }}
+                    >
+                      {startDate ? startDate.format("YYYY-MM-DD") : ""}
                     </Typography>
                   </Typography>
                 </Box>
 
-                <Box sx={{ ml: 2, marginBottom: 5, }} >
-                  <Typography sx={{ fontSize: 13 }}>Description: {description}</Typography>
+                <Box sx={{ ml: 2, marginBottom: 5 }}>
+                  <Typography sx={{ fontSize: 13 }}>
+                    Description: {description}
+                  </Typography>
                 </Box>
 
-                <Table sx={{ marginBottom: 5 }} >
-                  <TableHead >
+                <Table sx={{ marginBottom: 5 }}>
+                  <TableHead>
                     <TableRow sx={{ background: "#fff8f5" }}>
                       <TableCell>
                         <strong>Product/Service</strong>
@@ -1107,9 +1347,13 @@ const Invoices = ({ charLimit = 4000 }) => {
                       <TableRow key={index}>
                         <TableCell>{row.productName}</TableCell>
                         <TableCell>{row.description}</TableCell>
-                        <TableCell align="right">{row.rate || '$0.00'}</TableCell>
-                        <TableCell align="right">{row.qty || '1'}</TableCell>
-                        <TableCell align="right">{row.amount || '$0.00'}</TableCell>
+                        <TableCell align="right">
+                          {row.rate || "$0.00"}
+                        </TableCell>
+                        <TableCell align="right">{row.qty || "1"}</TableCell>
+                        <TableCell align="right">
+                          {row.amount || "$0.00"}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1118,15 +1362,15 @@ const Invoices = ({ charLimit = 4000 }) => {
 
               {/* Summary Section */}
               <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-end',
-                  marginRight: 3,
-                  mt: 0
-                }}
+              // sx={{
+              //   display: 'flex',
+              //   flexDirection: 'column',
+              //   alignItems: 'flex-end',
+              //   marginRight: 3,
+              //   mt: 0
+              // }}
               >
-                <Typography sx={{ textAlign: 'right', width: '100%' }}>
+                {/* <Typography sx={{ textAlign: 'right', width: '100%' }}>
                   <strong>Subtotal:</strong> ${subtotal || '0.00'}
                 </Typography>
                 <Typography sx={{ textAlign: 'right', width: '100%' }}>
@@ -1139,15 +1383,44 @@ const Invoices = ({ charLimit = 4000 }) => {
                   sx={{ textAlign: 'right', fontWeight: 'bold', width: '100%', marginTop: 1 }}
                 >
                   <strong>Total:</strong> ${totalAmount || '0.00'}
-                </Typography>
+                </Typography> */}
+                <Table sx={{ width: "50%", ml: "auto" }}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Subtotal:</strong>
+                      </TableCell>
+                      <TableCell>${subtotal || "0.00"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Tax Rate:</strong>
+                      </TableCell>
+                      <TableCell>{taxRate || "0.00"}%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Tax Total:</strong>
+                      </TableCell>
+                      <TableCell>${taxTotal?.toFixed(2) || "0.00"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        <strong>Total:</strong>
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        ${totalAmount || "0.00"}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </Box>
-
 
               {/* Footer Buttons */}
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
+                  display: "flex",
+                  justifyContent: "space-between",
                   marginTop: 3,
                 }}
               >
@@ -1155,21 +1428,30 @@ const Invoices = ({ charLimit = 4000 }) => {
                   variant="contained"
                   color="primary"
                   onClick={createinvoice}
-
                 >
                   Save & Exit
                 </Button>
-
               </Box>
             </Box>
           </Drawer>
         </Box>
-        <Box mt={3} p={2} sx={{ height: "80vh", overflowY: "auto" }} className="create-invoice">
+        <Box
+          mt={3}
+          p={2}
+          sx={{ height: "80vh", overflowY: "auto" }}
+          className="create-invoice"
+        >
           <Box>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
               <Grid xs={6}>
                 <Box>
-                  <InputLabel sx={{ color: "black" }}>Account name,ID or email</InputLabel>
+                  <InputLabel sx={{ color: "black" }}>
+                    Account name,ID or email
+                  </InputLabel>
 
                   <Autocomplete
                     options={accountoptions}
@@ -1184,39 +1466,111 @@ const Invoices = ({ charLimit = 4000 }) => {
                         {option.label}
                       </Box>
                     )}
-                    renderInput={(params) => <TextField {...params} placeholder="Select Account" variant="outlined" size="small" sx={{ backgroundColor: "#fff" }} />}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="Select Account"
+                        variant="outlined"
+                        size="small"
+                        sx={{ backgroundColor: "#fff" }}
+                      />
+                    )}
                     sx={{ width: "100%", marginTop: "8px" }}
                   />
                 </Box>
               </Grid>
               <Grid xs={6}>
                 <Box>
-                  <InputLabel sx={{ color: "black" }}>Invoice Template</InputLabel>
-                  <Autocomplete options={invoiceoptions} sx={{ mt: 1, mb: 2, backgroundColor: "#fff" }} size="small" value={selectInvoiceTemp} onChange={handleInvoiceTempChange} isOptionEqualToValue={(option, value) => option.value === value.value} getOptionLabel={(option) => option.label || ""} renderInput={(params) => <TextField {...params} placeholder="Invoice Template" />} isClearable={true} />
+                  <InputLabel sx={{ color: "black" }}>
+                    Invoice Template
+                  </InputLabel>
+                  <Autocomplete
+                    options={invoiceoptions}
+                    sx={{ mt: 1, mb: 2, backgroundColor: "#fff" }}
+                    size="small"
+                    value={selectInvoiceTemp}
+                    onChange={handleInvoiceTempChange}
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    }
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Invoice Template" />
+                    )}
+                    isClearable={true}
+                  />
                 </Box>
               </Grid>
             </Grid>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
               <Grid xs={6}>
                 <Box>
-                  <InputLabel sx={{ color: "black" }}>Invoice Number</InputLabel>
-                  <TextField fullWidth onChange={(e) => setinvoicenumber(e.target.value)} placeholder="Invoice Number" size="small" sx={{ mt: 1 }} />
+                  <InputLabel sx={{ color: "black" }}>
+                    Invoice Number
+                  </InputLabel>
+                  <TextField
+                    fullWidth
+                    onChange={(e) => setinvoicenumber(e.target.value)}
+                    placeholder="Invoice Number"
+                    size="small"
+                    sx={{ mt: 1 }}
+                  />
                 </Box>
               </Grid>
               <Grid xs={6}>
                 <Box>
-                  <InputLabel sx={{ color: "black" }}>Choose payment method</InputLabel>
-                  <Autocomplete size="small" fullWidth sx={{ mt: 1 }} options={paymentsOptions} getOptionLabel={(option) => option?.label || ""} onChange={handlePaymentOptionChange} value={paymentMode} renderInput={(params) => <TextField {...params} placeholder="Select Payment Mode" variant="outlined" />} isOptionEqualToValue={(option, value) => option.value === value?.value} clearOnEscape />
+                  <InputLabel sx={{ color: "black" }}>
+                    Choose payment method
+                  </InputLabel>
+                  <Autocomplete
+                    size="small"
+                    fullWidth
+                    sx={{ mt: 1 }}
+                    options={paymentsOptions}
+                    getOptionLabel={(option) => option?.label || ""}
+                    onChange={handlePaymentOptionChange}
+                    value={paymentMode}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="Select Payment Mode"
+                        variant="outlined"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value?.value
+                    }
+                    clearOnEscape
+                  />
                 </Box>
               </Grid>
             </Grid>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} mt={2}>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+              mt={2}
+            >
               <Grid xs={6}>
                 <Box>
                   <FormControl fullWidth>
-                    <FormLabel sx={{ marginBottom: "8px", color: "black" }}>Date</FormLabel>
+                    <FormLabel sx={{ marginBottom: "8px", color: "black" }}>
+                      Date
+                    </FormLabel>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker format="DD/MM/YYYY" sx={{ width: "100%", backgroundColor: "#fff" }} selected={startDate} onChange={handleStartDateChange} renderInput={(params) => <TextField {...params} size="small" />} />
+                      <DatePicker
+                        format="DD/MM/YYYY"
+                        sx={{ width: "100%", backgroundColor: "#fff" }}
+                        selected={startDate}
+                        onChange={handleStartDateChange}
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
+                      />
                     </LocalizationProvider>
                   </FormControl>
                 </Box>
@@ -1225,7 +1579,21 @@ const Invoices = ({ charLimit = 4000 }) => {
                 <Box>
                   <label className="email-input-label">Team Member</label>
 
-                  <Autocomplete options={useroptions} sx={{ mt: 2, mb: 2, backgroundColor: "#fff" }} size="small" value={selecteduser} onChange={handleuserChange} isOptionEqualToValue={(option, value) => option.value === value.value} getOptionLabel={(option) => option.label || ""} renderInput={(params) => <TextField {...params} placeholder="Team Member" />} isClearable={true} />
+                  <Autocomplete
+                    options={useroptions}
+                    sx={{ mt: 2, mb: 2, backgroundColor: "#fff" }}
+                    size="small"
+                    value={selecteduser}
+                    onChange={handleuserChange}
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    }
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Team Member" />
+                    )}
+                    isClearable={true}
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -1242,7 +1610,15 @@ const Invoices = ({ charLimit = 4000 }) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Typography sx={{ color: "gray", fontSize: "12px", position: "absolute", bottom: "15px", right: "15px" }}>
+                      <Typography
+                        sx={{
+                          color: "gray",
+                          fontSize: "12px",
+                          position: "absolute",
+                          bottom: "15px",
+                          right: "15px",
+                        }}
+                      >
                         {charCount}/{charLimit}
                       </Typography>
                     </InputAdornment>
@@ -1251,7 +1627,12 @@ const Invoices = ({ charLimit = 4000 }) => {
               />
             </Box>
             <Box>
-              <Button variant="contained" color="primary" onClick={toggleDropdown} sx={{ mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={toggleDropdown}
+                sx={{ mt: 2 }}
+              >
                 Add Shortcode
               </Button>
 
@@ -1269,9 +1650,15 @@ const Invoices = ({ charLimit = 4000 }) => {
                 }}
               >
                 <Box>
-                  <List className="dropdown-list" sx={{ width: "300px", height: "300px", cursor: "pointer" }}>
+                  <List
+                    className="dropdown-list"
+                    sx={{ width: "300px", height: "300px", cursor: "pointer" }}
+                  >
                     {filteredShortcuts.map((shortcut, index) => (
-                      <ListItem key={index} onClick={() => handleAddShortcut(shortcut.value)}>
+                      <ListItem
+                        key={index}
+                        onClick={() => handleAddShortcut(shortcut.value)}
+                      >
                         <ListItemText
                           primary={shortcut.title}
                           primaryTypographyProps={{
@@ -1291,16 +1678,52 @@ const Invoices = ({ charLimit = 4000 }) => {
                 Additioal
               </Typography>
               <Box mt={2}>
-                <FormControlLabel control={<Switch checked={payInvoice} onChange={handlePayInvoiceChange} color="primary" />} label={"Pay invoice using client credits"} />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={payInvoice}
+                      onChange={handlePayInvoiceChange}
+                      color="primary"
+                    />
+                  }
+                  label={"Pay invoice using client credits"}
+                />
               </Box>
               <Box mt={1}>
-                <FormControlLabel control={<Switch checked={emailInvoice} onChange={handleEmailInvoiceChange} color="primary" />} label={"Email invoice to client"} />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={emailInvoice}
+                      onChange={handleEmailInvoiceChange}
+                      color="primary"
+                    />
+                  }
+                  label={"Email invoice to client"}
+                />
               </Box>
               <Box mt={1}>
-                <FormControlLabel control={<Switch checked={reminders} onChange={handleRemindersChange} color="primary" />} label={"Reminders"} />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={reminders}
+                      onChange={handleRemindersChange}
+                      color="primary"
+                    />
+                  }
+                  label={"Reminders"}
+                />
               </Box>
               <Box mt={1}>
-                <FormControlLabel control={<Switch checked={scheduledInvoice} onChange={handleScheduledInvoiceChange} color="primary" />} label={"Scheduled invoice"} />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={scheduledInvoice}
+                      onChange={handleScheduledInvoiceChange}
+                      color="primary"
+                    />
+                  }
+                  label={"Scheduled invoice"}
+                />
               </Box>
             </Box>
 
@@ -1309,93 +1732,217 @@ const Invoices = ({ charLimit = 4000 }) => {
                 <Typography sx={{ mt: 2, fontWeight: "bold" }} variant="h5">
                   Line Items
                 </Typography>
-                <p style={{ color: "grey" }}>Client-facing itemized list of products and services</p>
+                <p style={{ color: "grey" }}>
+                  Client-facing itemized list of products and services
+                </p>
               </Box>
               {/* <Box >
                                 <MaterialReactTable columns={columns} table={table} />
                             </Box> */}
-               <Box  sx={{overflow: "auto", width: "100%"  }}>
-                          <Table >
-                            <TableHead>
-                              <TableRow>
-                                <TableCell sx={{ position: "sticky", left: 0, backgroundColor: "white", zIndex: 1 , width: '20%'}}>Product or service</TableCell>
-                                <TableCell >Description</TableCell>
-                                <TableCell >Rate</TableCell>
-                                <TableCell >Qty</TableCell>
-                                <TableCell >Amount</TableCell>
-                                <TableCell >Tax</TableCell>
-                                <TableCell>Settings</TableCell>
-                               
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {rows.map((row, index) => (
-                                <TableRow key={index}>
-                                  <TableCell sx={{ position: "sticky", left: 0, backgroundColor: "white", zIndex: 1 }}>
-                                    <CreatableSelect
-                                      // placeholder='Product or Service'
-                                      placeholder={row.isDiscount ? "Reason for discount" : "Product or Service"}
-                                      options={serviceoptions}
-                                      // value={serviceoptions.find(option => option.label === row.productName) || { label: row.productName, value: row.productName }}
-                                      value={row.productName ? serviceoptions.find((option) => option.label === row.productName) || { label: row.productName, value: row.productName } : null}
-                                      onChange={(selectedOption) => handleServiceChange(index, selectedOption)}
-                                      onInputChange={(inputValue, actionMeta) => handleServiceInputChange(inputValue, actionMeta, index)}
-                                      isClearable
-                                      styles={{
-                                        container: (provided) => ({ ...provided, width: "180px" }),
-                                        control: (provided) => ({ ...provided, width: "180px" }),
-                                        menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
-                                      }}
-                                      menuPortalTarget={document.body}
-                                    />
-                                  </TableCell>
+              <Box sx={{ overflow: "auto", width: "100%" }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell
+                        sx={{
+                          position: "sticky",
+                          left: 0,
+                          backgroundColor: "white",
+                          zIndex: 1,
+                          width: "20%",
+                        }}
+                      >
+                        Product or service
+                      </TableCell>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Rate</TableCell>
+                      <TableCell>Qty</TableCell>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>Tax</TableCell>
+                      <TableCell>Settings</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell
+                          sx={{
+                            position: "sticky",
+                            left: 0,
+                            backgroundColor: "white",
+                            zIndex: 1,
+                          }}
+                        >
+                          <CreatableSelect
+                            // placeholder='Product or Service'
+                            placeholder={
+                              row.isDiscount
+                                ? "Reason for discount"
+                                : "Product or Service"
+                            }
+                            options={serviceoptions}
+                            // value={serviceoptions.find(option => option.label === row.productName) || { label: row.productName, value: row.productName }}
+                            value={
+                              row.productName
+                                ? serviceoptions.find(
+                                    (option) => option.label === row.productName
+                                  ) || {
+                                    label: row.productName,
+                                    value: row.productName,
+                                  }
+                                : null
+                            }
+                            onChange={(selectedOption) =>
+                              handleServiceChange(index, selectedOption)
+                            }
+                            onInputChange={(inputValue, actionMeta) =>
+                              handleServiceInputChange(
+                                inputValue,
+                                actionMeta,
+                                index
+                              )
+                            }
+                            isClearable
+                            styles={{
+                              container: (provided) => ({
+                                ...provided,
+                                width: "180px",
+                              }),
+                              control: (provided) => ({
+                                ...provided,
+                                width: "180px",
+                              }),
+                              menuPortal: (provided) => ({
+                                ...provided,
+                                zIndex: 9999,
+                              }),
+                            }}
+                            menuPortalTarget={document.body}
+                          />
+                        </TableCell>
 
-                                  <TableCell>
-                                    <input type="text" name="description" value={row.description} onChange={(e) => handleInputChange(index, e)} style={{ border: "none" }} placeholder="Description" />
-                                  </TableCell>
+                        <TableCell>
+                          <input
+                            type="text"
+                            name="description"
+                            value={row.description}
+                            onChange={(e) => handleInputChange(index, e)}
+                            style={{ border: "none" }}
+                            placeholder="Description"
+                          />
+                        </TableCell>
 
-                                  <TableCell>
-                                    <input type="text" name="rate" value={row.rate} onChange={(e) => handleInputChange(index, e)} style={{ border: "none" }} />
-                                  </TableCell>
+                        <TableCell>
+                          <input
+                            type="text"
+                            name="rate"
+                            value={row.rate}
+                            onChange={(e) => handleInputChange(index, e)}
+                            style={{ border: "none" }}
+                          />
+                        </TableCell>
 
-                                  <TableCell>
-                                    <input type="text" name="qty" value={row.qty} onChange={(e) => handleInputChange(index, e)} style={{ border: "none" }} />
-                                  </TableCell>
+                        <TableCell>
+                          <input
+                            type="text"
+                            name="qty"
+                            value={row.qty}
+                            onChange={(e) => handleInputChange(index, e)}
+                            style={{ border: "none" }}
+                          />
+                        </TableCell>
 
-                                  <TableCell>{row.amount}</TableCell>
+                        <TableCell>{row.amount}</TableCell>
 
-                                  <TableCell>
-                                    <Checkbox name="tax" checked={row.tax} onChange={(e) => handleInputChange(index, e)} />
-                                  </TableCell>
+                        <TableCell>
+                          <Checkbox
+                            name="tax"
+                            checked={row.tax}
+                            onChange={(e) => handleInputChange(index, e)}
+                          />
+                        </TableCell>
 
-                                  <TableCell>
-                                    <IconButton onClick={(event) => handleMenuOpen(event, index)}>
-                                      <BsThreeDotsVertical />
-                                    </IconButton>
-                                    <Menu anchorEl={anchorElNew} open={Boolean(anchorElNew) && selectedRow === index} onClose={handleMenuClose} anchorOrigin={{ vertical: "top", horizontal: "left" }} transformOrigin={{ vertical: "top", horizontal: "left" }}>
-                                      <MenuItem onClick={() => handleEditService(row, index)}>Edit</MenuItem>
-                                      <MenuItem onClick={handleDeleteService}>Delete</MenuItem>
-                                      <MenuItem onClick={() => handleSaveAsNewService(row)}>Save as new service</MenuItem>
-                                      <MenuItem onClick={handleDuplicate}>Duplicate</MenuItem>
-                                    </Menu>
-                                  </TableCell>
+                        <TableCell>
+                          <IconButton
+                            onClick={(event) => handleMenuOpen(event, index)}
+                          >
+                            <BsThreeDotsVertical />
+                          </IconButton>
+                          <Menu
+                            anchorEl={anchorElNew}
+                            open={Boolean(anchorElNew) && selectedRow === index}
+                            onClose={handleMenuClose}
+                            anchorOrigin={{
+                              vertical: "top",
+                              horizontal: "left",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "left",
+                            }}
+                          >
+                            <MenuItem
+                              onClick={() => handleEditService(row, index)}
+                            >
+                              Edit
+                            </MenuItem>
+                            <MenuItem onClick={handleDeleteService}>
+                              Delete
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handleSaveAsNewService(row)}
+                            >
+                              Save as new service
+                            </MenuItem>
+                            <MenuItem onClick={handleDuplicate}>
+                              Duplicate
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
 
-                                  <TableCell>
-                                    <IconButton onClick={() => deleteRow(index)}>
-                                      <RiCloseLine />
-                                    </IconButton>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </Box>
+                        <TableCell>
+                          <IconButton onClick={() => deleteRow(index)}>
+                            <RiCloseLine />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
 
-              <Box style={{ display: "flex", alignItems: "center", gap: "20px", marginTop: "20px" }}>
-                <Box onClick={() => addRow()} style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", color: "blue", fontSize: "18px" }}>
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "20px",
+                  marginTop: "20px",
+                }}
+              >
+                <Box
+                  onClick={() => addRow()}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    cursor: "pointer",
+                    color: "blue",
+                    fontSize: "18px",
+                  }}
+                >
                   <AiOutlinePlusCircle /> Line item
                 </Box>
-                <Box onClick={() => addRow(true)} style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", color: "blue", fontSize: "18px" }}>
+                <Box
+                  onClick={() => addRow(true)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    cursor: "pointer",
+                    color: "blue",
+                    fontSize: "18px",
+                  }}
+                >
                   <CiDiscount1 /> Discount
                 </Box>
               </Box>
@@ -1419,11 +1966,22 @@ const Invoices = ({ charLimit = 4000 }) => {
                     <TableBody>
                       <TableRow>
                         <TableCell>
-                        $
-                          <input type="number" value={subtotal} onChange={handleSubtotalChange} style={{ border: "none" }} />
+                          $
+                          <input
+                            type="number"
+                            value={subtotal}
+                            onChange={handleSubtotalChange}
+                            style={{ border: "none" }}
+                          />
                         </TableCell>
                         <TableCell>
-                          <input type="number" value={taxRate} onChange={handleTaxRateChange} style={{ border: "none" }} />%
+                          <input
+                            type="number"
+                            value={taxRate}
+                            onChange={handleTaxRateChange}
+                            style={{ border: "none" }}
+                          />
+                          %
                         </TableCell>
                         <TableCell>${taxTotal.toFixed(2)}</TableCell>
                         <TableCell>${totalAmount}</TableCell>
@@ -1434,10 +1992,16 @@ const Invoices = ({ charLimit = 4000 }) => {
               </Box>
             </Box>
             <Box sx={{ pt: 4, display: "flex", alignItems: "center", gap: 5 }}>
-              <Button variant="contained" color="primary" onClick={createinvoice}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={createinvoice}
+              >
                 Save
               </Button>
-              <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+              <Button variant="outlined" onClick={handleClose}>
+                Cancel
+              </Button>
             </Box>
           </Box>
         </Box>
@@ -1455,11 +2019,25 @@ const Invoices = ({ charLimit = 4000 }) => {
           },
         }}
       >
-        <Box role="presentation" sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}>
+        <Box
+          role="presentation"
+          sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}
+        >
           <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2, borderBottom: "1px solid grey" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                p: 2,
+                borderBottom: "1px solid grey",
+              }}
+            >
               <Typography variant="h6">Create Service</Typography>
-              <RxCross2 onClick={handleNewDrawerClose} style={{ cursor: "pointer" }} />
+              <RxCross2
+                onClick={handleNewDrawerClose}
+                style={{ cursor: "pointer" }}
+              />
             </Box>
           </Box>
           <form style={{ margin: "15px" }}>
@@ -1474,7 +2052,12 @@ const Invoices = ({ charLimit = 4000 }) => {
                   size="small"
                   margin="normal"
                   value={selectedRowData?.productName || ""} // Use selected row data
-                  onChange={(e) => setSelectedRowData({ ...selectedRowData, productName: e.target.value })}
+                  onChange={(e) =>
+                    setSelectedRowData({
+                      ...selectedRowData,
+                      productName: e.target.value,
+                    })
+                  }
                 />
               </Box>
               <Box sx={{ mt: 1 }}>
@@ -1486,7 +2069,12 @@ const Invoices = ({ charLimit = 4000 }) => {
                   size="small"
                   margin="normal"
                   value={selectedRowData?.description || ""} // Use selected row data
-                  onChange={(e) => setSelectedRowData({ ...selectedRowData, description: e.target.value })}
+                  onChange={(e) =>
+                    setSelectedRowData({
+                      ...selectedRowData,
+                      description: e.target.value,
+                    })
+                  }
                 />
               </Box>
               {/* <Box sx={{ width: "100%", mt: 2 }}>
@@ -1544,9 +2132,13 @@ const Invoices = ({ charLimit = 4000 }) => {
                     placeholder="Rate"
                     size="small"
                     sx={{ mt: 1 }}
-                  
                     value={selectedRowData?.rate || ""} // Use selected row data
-                    onChange={(e) => setSelectedRowData({ ...selectedRowData, rate: e.target.value })}
+                    onChange={(e) =>
+                      setSelectedRowData({
+                        ...selectedRowData,
+                        rate: e.target.value,
+                      })
+                    }
                   />
                 </Box>
 
@@ -1560,8 +2152,16 @@ const Invoices = ({ charLimit = 4000 }) => {
                     getOptionLabel={(option) => option?.label || ""}
                     value={selectedOption}
                     onChange={handleRateTypeChange}
-                    renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select Rate Type" />}
-                    isOptionEqualToValue={(option, value) => option.value === value.value}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        placeholder="Select Rate Type"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    }
                     renderOption={(props, option) => (
                       <Box
                         component="li"
@@ -1582,7 +2182,9 @@ const Invoices = ({ charLimit = 4000 }) => {
                   control={
                     <Switch
                       checked={selectedRowData?.tax || false} // Use the tax value from state
-                      onChange={(event) => handleServiceSwitch(event.target.checked)}
+                      onChange={(event) =>
+                        handleServiceSwitch(event.target.checked)
+                      }
                       color="primary"
                     />
                   }
@@ -1591,12 +2193,18 @@ const Invoices = ({ charLimit = 4000 }) => {
               </Box>
               <Box>
                 <Box>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", mt: 2 }}>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{ fontWeight: "bold", mt: 2 }}
+                  >
                     Category
                   </Typography>
                 </Box>
                 <Box>
-                  <InputLabel sx={{ color: "black", mt: 2 }}>Category Name</InputLabel>
+                  <InputLabel sx={{ color: "black", mt: 2 }}>
+                    Category Name
+                  </InputLabel>
                   <Autocomplete
                     size="small"
                     fullWidth
@@ -1605,14 +2213,27 @@ const Invoices = ({ charLimit = 4000 }) => {
                     getOptionLabel={(option) => option.label} // Adjust based on your data structure
                     value={selectedCategory}
                     onChange={handleCategoryChange}
-                    renderInput={(params) => <TextField {...params} placeholder="Category Name" variant="outlined" />}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="Category Name"
+                        variant="outlined"
+                      />
+                    )}
                     clearOnEscape // Equivalent to isClearable
-                    isOptionEqualToValue={(option, value) => option.value === value.value} // Compare options for equality
+                    isOptionEqualToValue={(option, value) =>
+                      option.value === value.value
+                    } // Compare options for equality
                   />
                 </Box>
               </Box>
               <Box>
-                <Button variant="contained" color="primary" onClick={setCategoryFormOpen} sx={{ mt: 4, ml: 1 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={setCategoryFormOpen}
+                  sx={{ mt: 4, ml: 1 }}
+                >
                   Create category
                 </Button>
 
@@ -1630,28 +2251,76 @@ const Invoices = ({ charLimit = 4000 }) => {
                   }}
                 >
                   <Box>
-                    <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px" }}>
-                      <ArrowBackRoundedIcon onClick={handleCategoryFormClose} style={{ cursor: "pointer" }} />
+                    <Box
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "20px",
+                      }}
+                    >
+                      <ArrowBackRoundedIcon
+                        onClick={handleCategoryFormClose}
+                        style={{ cursor: "pointer" }}
+                      />
                     </Box>
                     <Divider />
                   </Box>
                   <Box p={3}>
-                    <InputLabel sx={{ color: "black", mt: 2 }}>Category Name</InputLabel>
+                    <InputLabel sx={{ color: "black", mt: 2 }}>
+                      Category Name
+                    </InputLabel>
 
-                    <TextField fullWidth name="Rate" placeholder="Category Name" size="small" margin="normal" value={categorycreate} onChange={(e) => setcategorycreate(e.target.value)} />
+                    <TextField
+                      fullWidth
+                      name="Rate"
+                      placeholder="Category Name"
+                      size="small"
+                      margin="normal"
+                      value={categorycreate}
+                      onChange={(e) => setcategorycreate(e.target.value)}
+                    />
                   </Box>
-                  <Box sx={{ pt: 2, display: "flex", alignItems: "center", gap: 5, margin: "8px", ml: 3 }}>
-                    <Button variant="contained" color="primary" onClick={createCategory}>
+                  <Box
+                    sx={{
+                      pt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                      margin: "8px",
+                      ml: 3,
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={createCategory}
+                    >
                       Create
                     </Button>
-                    <Button variant="outlined" onClick={handleCategoryFormClose}>
+                    <Button
+                      variant="outlined"
+                      onClick={handleCategoryFormClose}
+                    >
                       Cancel
                     </Button>
                   </Box>
                 </Drawer>
               </Box>
-              <Box sx={{ pt: 5, display: "flex", alignItems: "center", gap: 5, ml: 1 }}>
-                <Button variant="contained" color="primary" onClick={createservicetemp}>
+              <Box
+                sx={{
+                  pt: 5,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  ml: 1,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={createservicetemp}
+                >
                   Save
                 </Button>
                 <Button variant="outlined" onClick={handleNewDrawerClose}>
@@ -1676,17 +2345,44 @@ const Invoices = ({ charLimit = 4000 }) => {
         }}
       >
         <Box>
-          <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px" }}>
-            <ArrowBackRoundedIcon onClick={handleCategoryFormClose} style={{ cursor: "pointer" }} />
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "20px",
+            }}
+          >
+            <ArrowBackRoundedIcon
+              onClick={handleCategoryFormClose}
+              style={{ cursor: "pointer" }}
+            />
           </Box>
           <Divider />
         </Box>
         <Box p={3}>
           <InputLabel sx={{ color: "black", mt: 2 }}>Category Name</InputLabel>
 
-          <TextField fullWidth name="Rate" placeholder="Category Name" size="small" margin="normal" value={categorycreate} onChange={(e) => setcategorycreate(e.target.value)} />
+          <TextField
+            fullWidth
+            name="Rate"
+            placeholder="Category Name"
+            size="small"
+            margin="normal"
+            value={categorycreate}
+            onChange={(e) => setcategorycreate(e.target.value)}
+          />
         </Box>
-        <Box sx={{ pt: 2, display: "flex", alignItems: "center", gap: 5, margin: "8px", ml: 3 }}>
+        <Box
+          sx={{
+            pt: 2,
+            display: "flex",
+            alignItems: "center",
+            gap: 5,
+            margin: "8px",
+            ml: 3,
+          }}
+        >
           <Button variant="contained" color="primary" onClick={createCategory}>
             Create
           </Button>
@@ -1709,39 +2405,124 @@ const Invoices = ({ charLimit = 4000 }) => {
           },
         }}
       >
-        <Box role="presentation" sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}>
+        <Box
+          role="presentation"
+          sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}
+        >
           <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2, borderBottom: "1px solid grey" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                p: 2,
+                borderBottom: "1px solid grey",
+              }}
+            >
               <Typography variant="h6">Edit Item</Typography>
-              <RxCross2 onClick={handleEditDrawerClose} style={{ cursor: "pointer" }} />
+              <RxCross2
+                onClick={handleEditDrawerClose}
+                style={{ cursor: "pointer" }}
+              />
             </Box>
             <Box p={2}>
               <Typography variant="h6" fontWeight="bold">
                 Product or service
               </Typography>
-              <TextField size="small" margin="normal" value={selectedRowData?.productName || ""} fullWidth onChange={(e) => setSelectedRowData({ ...selectedRowData, productName: e.target.value })} />
+              <TextField
+                size="small"
+                margin="normal"
+                value={selectedRowData?.productName || ""}
+                fullWidth
+                onChange={(e) =>
+                  setSelectedRowData({
+                    ...selectedRowData,
+                    productName: e.target.value,
+                  })
+                }
+              />
               <Box>
                 <Typography>Description</Typography>
-                <TextField size="small" margin="normal" value={selectedRowData?.description || ""} fullWidth multiline onChange={(e) => setSelectedRowData({ ...selectedRowData, description: e.target.value })} />
+                <TextField
+                  size="small"
+                  margin="normal"
+                  value={selectedRowData?.description || ""}
+                  fullWidth
+                  multiline
+                  onChange={(e) =>
+                    setSelectedRowData({
+                      ...selectedRowData,
+                      description: e.target.value,
+                    })
+                  }
+                />
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: "10px", mt: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  mt: 1,
+                }}
+              >
                 <Box>
                   <Typography>Rate</Typography>
-                  <TextField size="small" margin="normal" value={selectedRowData?.rate || ""} fullWidth onChange={(e) => setSelectedRowData({ ...selectedRowData, rate: e.target.value })} />
+                  <TextField
+                    size="small"
+                    margin="normal"
+                    value={selectedRowData?.rate || ""}
+                    fullWidth
+                    onChange={(e) =>
+                      setSelectedRowData({
+                        ...selectedRowData,
+                        rate: e.target.value,
+                      })
+                    }
+                  />
                 </Box>
                 <Box>
                   <Typography>QTY</Typography>
-                  <TextField size="small" margin="normal" value={selectedRowData?.qty || ""} fullWidth onChange={(e) => setSelectedRowData({ ...selectedRowData, qty: e.target.value })} />
+                  <TextField
+                    size="small"
+                    margin="normal"
+                    value={selectedRowData?.qty || ""}
+                    fullWidth
+                    onChange={(e) =>
+                      setSelectedRowData({
+                        ...selectedRowData,
+                        qty: e.target.value,
+                      })
+                    }
+                  />
                 </Box>
                 <Box>
                   <Typography>Amount</Typography>
-                  <TextField size="small" margin="normal" fullWidth disabled value={totalamount} />
+                  <TextField
+                    size="small"
+                    margin="normal"
+                    fullWidth
+                    disabled
+                    value={totalamount}
+                  />
                 </Box>
               </Box>
               <Box mt={2}>
-                <FormControlLabel control={<Switch checked={selectedRowData?.tax} onChange={(event) => handleServiceWitch(event.target.checked)} color="primary" />} label={"Tax"} />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={selectedRowData?.tax}
+                      onChange={(event) =>
+                        handleServiceWitch(event.target.checked)
+                      }
+                      color="primary"
+                    />
+                  }
+                  label={"Tax"}
+                />
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 2 }}>
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 2, mt: 2 }}
+              >
                 <Button variant="contained" onClick={handleSaveChanges}>
                   Save
                 </Button>

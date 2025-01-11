@@ -462,8 +462,8 @@ const CreateInvoice = ({ charLimit = 4000, onClose }) => {
       paymentMethod: paymentMode.value,
       teammember: selecteduser.value,
       emailinvoicetoclient: emailInvoice,
-      scheduleinvoicedate: "Wed May 08 2024 00:00:00 GMT+0530 (India Standard Time)",
-      scheduleinvoicetime: "12.00",
+      scheduleinvoicedate: new Date(), // Current date and time
+      scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
       payInvoicewithcredits: payInvoice,
       reminders: reminders,
       scheduleinvoice: scheduledInvoice,

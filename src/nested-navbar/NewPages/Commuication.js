@@ -512,6 +512,10 @@ console.log(raw)
       })
       .catch((error) => console.error(error));
   };
+   // Call accountwiseChatlist in useEffect
+   useEffect(() => {
+    accountwiseChatlist(data, isActiveTrue);
+  }, [data, isActiveTrue]); // Dependencies
   console.log(chatList)
   const [expanded, setExpanded] = useState(false);
   const [activeChatIndex, setActiveChatIndex] = useState(null);
@@ -551,6 +555,9 @@ console.log(raw)
         console.log(result);
 
         toast.success("Chat deleted successfully!");
+
+        accountwiseChatlist(data, isActiveTrue)
+        setExpanded(false);
       })
       .catch((error) => {
         console.error(error);

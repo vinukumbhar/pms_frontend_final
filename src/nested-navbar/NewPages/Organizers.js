@@ -18,10 +18,84 @@ const Organizers = () => {
   const [tempIdget, setTempIdGet] = useState("");
   const [showOrganizerTemplateForm, setShowOrganizerTemplateForm] = useState(false);
 
+  // const fetchOrganizerTemplates = async (accountid) => {
+  //   try {
+  //     const url = `${ORGANIZER_TEMP_API}/workflow/orgaccwise/organizeraccountwise/organizerbyaccount/${accountid}`;
+  //     console.log(url);
+  //     const response = await fetch(url);
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch email templates");
+  //     }
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setOrganizerTemplatesData(data.organizerAccountWise);
+  //   } catch (error) {
+  //     console.error("Error fetching email templates:", error);
+  //   }
+  // };
+//for active & Archived
+const [activeButton, setActiveButton] = useState("active");
+  const [isActiveTrue, setIsActiveTrue] = useState(true);
+  const [activeorarchive, setActiveorarchive] = React.useState('Active');
+
+  const handleActiveClick = () => {
+    setIsActiveTrue(true);
+    setActiveButton("active");
+    setActiveorarchive("Archive");
+    // fetchOrganizerTemplates(data,true)
+    fetchOrganizerTemplates()
+    console.log("Active action triggered.");
+  };
+
+  const handleArchivedClick = () => {
+    setIsActiveTrue(false);
+    setActiveButton("archived");
+    setActiveorarchive("Active");
+    // fetchOrganizerTemplates(data,false)
+    fetchOrganizerTemplates()
+    console.log("Archive action triggered.");
+  };
+
+  const handleArchive=(_id)=>{
+   console.log(_id)
+    // handleSubmit(id);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      active: !isActiveTrue,
+    });
+    console.log(raw);
+    const requestOptions = {
+      method: "PATCH",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    const url = `${ORGANIZER_TEMP_API}/workflow/orgaccwise/organizeraccountwise/${_id}`
+
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        // console.log(result.updatedAccount); // Log the result
+        // setAccountId(result.updatedAccount._id);
+        toast.success("orgnizer updated successfully"); // Display success toast
+        fetchOrganizerTemplates(data);
+      })
+      .catch((error) => {
+        console.error(error); // Log the error
+        toast.error("An error occurred while submitting the form"); // Display error toast
+      });
+    
+  }
   const fetchOrganizerTemplates = async (accountid) => {
     try {
-      const url = `${ORGANIZER_TEMP_API}/workflow/orgaccwise/organizeraccountwise/organizerbyaccount/${accountid}`;
-      console.log(url);
+      // const url = http://127.0.0.1:7600/workflow/orgaccwise/organizeraccountwise/${isActiveTrue}/${accountid};
+
+      const url = `${ORGANIZER_TEMP_API}/workflow/orgaccwise/organizeraccountwise/organizerbyaccount/${accountid}/${isActiveTrue}`;
+
+      console.log("|URLLL",url);
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch email templates");
@@ -29,10 +103,23 @@ const Organizers = () => {
       const data = await response.json();
       console.log(data);
       setOrganizerTemplatesData(data.organizerAccountWise);
+      console.log('orgData:',data.organizerAccountWise )
+      // if (isActiveTrue === true) {
+      //   setActiveButton("active");
+      //   setActiveorarchive("Archive");
+      // }
+      // else if (isActiveTrue === false) {
+      //   setActiveButton("archived");
+      //   setActiveorarchive("Active");
+      // }
+
     } catch (error) {
       console.error("Error fetching email templates:", error);
-    }
-  };
+    }
+  };
+useEffect(() => {
+  fetchOrganizerTemplates(data);
+}, [isActiveTrue]);
 
   const handleSealed = (_id, issealed) => {
     // navigate('OrganizerTempUpdate/' + _id)
@@ -241,6 +328,29 @@ const Organizers = () => {
         New Organizer
       </Button>
       {/* <MaterialReactTable columns={columns} table={table} /> */}
+      <Box>
+  <Button
+            style={{
+              backgroundColor: activeButton === "active" ? "blue" : "transparent",
+              color: activeButton === "active" ? "white" : "black",
+              fontWeight: activeButton === "active" ? "bold" : "normal",
+            }}
+            onClick={handleActiveClick}
+          >
+            Active
+          </Button>
+
+          <Button
+            style={{
+              backgroundColor: activeButton === "archived" ? "blue" : "transparent",
+              color: activeButton === "archived" ? "white" : "black",
+              fontWeight: activeButton === "archived" ? "bold" : "normal",
+            }}
+            onClick={handleArchivedClick}
+          >
+            Archived
+          </Button>
+  </Box>
       <Paper>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -312,6 +422,12 @@ const Organizers = () => {
                         <Typography sx={{ fontSize: "12px", fontWeight: "bold" }} onClick={() => handleEdit(row._id)}>
                           Change Answers    
                         </Typography>
+                        <Typography
+                          onClick={() => handleArchive(row._id)}
+                          
+                          sx={{ fontSize: "12px", fontWeight: "bold" }}>
+                          Archived
+                        </Typography>
                         <Typography sx={{ fontSize: "12px", fontWeight: "bold" }} onClick={() => printOrganizerData(row._id)}>
                           Print
                         </Typography>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import "./pipeline.css";
 import { useDrag, DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -49,7 +49,16 @@ import AddJobs from "./AddJobs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { LoginContext } from '../Sidebar/Context/Context'
 const Pipeline = ({ charLimit = 4000 }) => {
+ const { logindata } = useContext(LoginContext);
+ const [loginuserid, setLoginUserId] = useState("");
+
+ useEffect(() => {
+     if (logindata?.user?.id) { // Check if logindata and user.id exist
+      setLoginUserId(logindata.user.id);
+     }
+ }, [logindata]);
   const PIPELINE_API = process.env.REACT_APP_PIPELINE_TEMP_URL;
   const JOBS_API = process.env.REACT_APP_ADD_JOBS_URL;
   const AUTOMATION_API = process.env.REACT_APP_AUTOMATION_API;
@@ -102,6 +111,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
       const response = await fetch(url);
       const data = await response.json();
       setJobs(data.jobList);
+      console.log("result",data.jobList)
     } catch (error) {
       console.error("Error fetching job data:", error);
     }
@@ -395,15 +405,15 @@ const Pipeline = ({ charLimit = 4000 }) => {
         description: invoiceData.description || "",
         invoicetemplate: automationTemp,
         paymentMethod: invoiceData.paymentMethod || "",
-        teammember: "673060953342d61826f80208", // Fill in if required
+        teammember: loginuserid, // Fill in if required
         payInvoicewithcredits: invoiceData.payInvoicewithcredits || false,
         emailinvoicetoclient: invoiceData.sendEmailWhenInvCreated || false,
         reminders: invoiceData.sendReminderstoClients || false,
         daysuntilnextreminder: invoiceData.daysuntilnextreminder || null,
         numberOfreminder: invoiceData.numberOfreminder || null,
         scheduleinvoice: false, // Optional, adjust as needed
-        scheduleinvoicedate: "", // Optional, adjust as needed
-        scheduleinvoicetime: "", // Optional, adjust as needed
+        scheduleinvoicedate: new Date(), // Current date and time
+        scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
         lineItems: invoiceData.lineItems.map((item) => ({
           productorService: item.productorService || "",
           description: item.description || "",

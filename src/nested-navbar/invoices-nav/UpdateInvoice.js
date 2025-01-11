@@ -454,8 +454,8 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
       paymentMethod: paymentMode.value,
       teammember: selecteduser.value,
       emailinvoicetoclient: emailInvoice,
-      scheduleinvoicedate: "Wed May 08 2024 00:00:00 GMT+0530 (India Standard Time)",
-      scheduleinvoicetime: "12.00",
+      scheduleinvoicedate: new Date(), // Current date and time
+      scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
       payInvoicewithcredits: payInvoice,
       reminders: reminders,
       scheduleinvoice: scheduledInvoice,
@@ -969,7 +969,7 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
         <Typography variant="h6">Edit Invoice</Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
-          <Box display="flex" alignItems="center" sx={{ mr: 2, color: "#1976d3" }}>
+        <Box display="flex" alignItems="center" sx={{ mr: 2, color: "#1976d3" }}>
             <FindInPageIcon /> Preview
           </Box>
 
@@ -977,7 +977,7 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
             <AddCircleOutlineIcon /> Link to jobs
           </Box>
 
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={handleNewDrawerClose}>
             <CloseIcon sx={{ color: "#1976d3", fontSize: 30 }} />
           </IconButton>
         </Box>
@@ -1162,7 +1162,7 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
 
             <Box mt={1}>
               <FormControlLabel control={<Switch checked={emailInvoice} onChange={handleEmailInvoiceChange} color="primary" />} label={"Email invoice to client"} />
-              {emailInvoice && (
+              {/* {emailInvoice && (
                 <>
                   <Box mt={2}>
                     <TextField
@@ -1209,7 +1209,7 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
                     </Popover>
                   </Box>
                 </>
-              )}
+              )} */}
             </Box>
             <Box mt={1}>
               <FormControlLabel control={<Switch checked={reminders} onChange={handleRemindersChange} color="primary" />} label={"Reminders"} />

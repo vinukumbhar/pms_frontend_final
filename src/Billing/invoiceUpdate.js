@@ -33,6 +33,7 @@ const Invoices = ({ charLimit = 4000 }) => {
   const INVOICE_NEW = process.env.REACT_APP_INVOICES_URL;
   const CONTACT_API= process.env.REACT_APP_CONTACTS_URL;
   const { _id } = useParams();
+  console.log("new id",_id)
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [payInvoice, setIsPayInvoice] = useState(false);
@@ -462,8 +463,8 @@ const Invoices = ({ charLimit = 4000 }) => {
       paymentMethod: paymentMode.value,
       teammember: selecteduser.value,
       emailinvoicetoclient: emailInvoice,
-      scheduleinvoicedate: "Wed May 08 2024 00:00:00 GMT+0530 (India Standard Time)",
-      scheduleinvoicetime: "12.00",
+      scheduleinvoicedate: new Date(), // Current date and time
+      scheduleinvoicetime: new Date().toLocaleTimeString('en-US', { hour12: false }), 
       payInvoicewithcredits: payInvoice,
       reminders: reminders,
       scheduleinvoice: scheduledInvoice,
@@ -622,6 +623,7 @@ const Invoices = ({ charLimit = 4000 }) => {
   // }
 
   const fetchinvoicebyid = (id) => {
+    console.log("id",id)
     const requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -675,6 +677,7 @@ const Invoices = ({ charLimit = 4000 }) => {
 
           // Set invoice description
           setDescription(result.invoice.description);
+          console.log("test", result.invoice.description)
 
           // Set email invoice to client
           setEmailToClient(result.invoice.emailinvoicetoclient);
@@ -1135,28 +1138,44 @@ const Invoices = ({ charLimit = 4000 }) => {
 
             {/* Summary Section */}
             <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                marginRight: 3,
-                mt: 0
-              }}
+              // sx={{
+              //   display: 'flex',
+              //   flexDirection: 'column',
+              //   alignItems: 'flex-end',
+              //   marginRight: 3,
+              //   mt: 0
+              // }}
             >
-              <Typography sx={{ textAlign: 'right', width: '100%' }}>
-                <strong>Subtotal:</strong> ${subtotal || '0.00'}
-              </Typography>
-              <Typography sx={{ textAlign: 'right', width: '100%' }}>
-                <strong>Tax Rate:</strong> {taxRate || '0.00'}%
-              </Typography>
-              <Typography sx={{ textAlign: 'right', width: '100%' }}>
-                <strong>Tax Total:</strong> ${taxTotal?.toFixed(2) || '0.00'}
-              </Typography>
-              <Typography
-                sx={{ textAlign: 'right', fontWeight: 'bold', width: '100%', marginTop: 1 }}
-              >
-                <strong>Total:</strong> ${totalAmount || '0.00'}
-              </Typography>
+             <Table sx={{ width: "50%", ml: "auto" }}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Subtotal:</strong>
+                      </TableCell>
+                      <TableCell>${subtotal || "0.00"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Tax Rate:</strong>
+                      </TableCell>
+                      <TableCell>{taxRate || "0.00"}%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Tax Total:</strong>
+                      </TableCell>
+                      <TableCell>${taxTotal?.toFixed(2) || "0.00"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        <strong>Total:</strong>
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        ${totalAmount || "0.00"}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
             </Box>
 
             {/* Footer Buttons */}
