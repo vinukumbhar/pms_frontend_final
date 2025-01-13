@@ -97,41 +97,22 @@ const MyAccount = () => {
       setLastName(data.admin[0].lastName);
       setPhoneNumber(data.admin[0].phoneNumber);
       setEmail(data.admin[0].email);
-      
       const profilePicFilename = data.admin[0].profilePicture.split("\\").pop(); // Extract filename
-
       setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
       console.log(profilePicture)
-
-   
     } catch (error) {
       console.error("Error fetching email templates:", error);
     }
   };
-  
- // Function to encode image to base64 (for profile picture)
-const encodeImageToBase64 = (imageFile) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(imageFile); // Read the file as base64
-    reader.onloadend = () => resolve(reader.result); // Resolve with base64 encoded string
-    reader.onerror = reject; // Reject on error
-  });
-};
-  
   const handleSaveButtonClick = async () => {
-   
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-  
     const raw = JSON.stringify({
       firstName: firstName,
       middleName: middleName,
       lastName: lastname,
       phoneNumber: phonenumber,
-    
     });
-  
     const requestOptions = {
       method: "PATCH",
       headers: myHeaders,
@@ -1056,82 +1037,11 @@ const encodeImageToBase64 = (imageFile) => {
           <Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
             
-              {/* <Box className="user-profile-container">
+              <Box className="user-profile-container">
                 <img src={user} alt="" className="user-profile-image" style={{ width: "40px", height: "40px", borderRadius: "50%", marginTop: "25px" }} />
               
-              </Box> */}
-         <Box
-                sx={{
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgb(139, 193, 182)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                  color: "#ffffff",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                {profilePicture && (
-                  <img
-                    src={profilePicture}
-                    alt="Profile"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                ) }
               </Box>
-              <Box sx={{ marginBottom: "20px" }}>
-              {!profilePicture ? (
-                <>
-                  <Button
-                    variant="text"
-                    component="label"
-                    sx={{ color: "#1168bf", textTransform: "none" }}
-                  >
-                    Upload Photo
-                    <input
-                      type="file"
-                      hidden
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                  </Button>
-                </>
-              ) : (
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <Button
-                    variant="text"
-                    component="label"
-                    sx={{ color: "#1168bf", textTransform: "none" }}
-                  >
-                    Edit Photo
-                    <input
-                      type="file"
-                      hidden
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                  </Button>
-                  <Button
-                    variant="text"
-                    onClick={handleDeletePhoto}
-                    sx={{ color: "#ff1744", textTransform: "none" }}
-                  >
-                    Close
-                  </Button>
-                </Box>
-              )}
-              {/* Error message display */}
-              {error && (
-                <Box sx={{ color: "red", marginTop: "10px", fontSize: "14px" }}>
-                  {error}
-                </Box>
-              )}
-            </Box>
+        
             
               <Box className="hr">
                 <BorderColorRoundedIcon sx={{ float: "right", marginBottom: "10px", cursor: "pointer", color: "#1168bf" }} onClick={handleEditClick} />

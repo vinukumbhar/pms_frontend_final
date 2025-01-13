@@ -320,7 +320,7 @@ function Sidebar() {
       if (data.user.role === "Admin") {
         localStorage.setItem("userRole", data.user.role);
         fetchUserData(data.user.id);
-        getadminsignup(data.user.id)
+        // getadminsignup(data.user.id)
         fetchSidebarData()
         navigate("/");
       } else if (data.user.role === "Client") {
@@ -410,26 +410,26 @@ function Sidebar() {
       return str;
     }
   };
-  const getadminsignup = async (id) => {
-    console.log("tset", id)
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
+  // const getadminsignup = async (id) => {
+  //   console.log("tset", id)
+  //   const requestOptions = {
+  //     method: "GET",
+  //     redirect: "follow",
+  //   };
 
-    const url = `${LOGIN_API}/admin/adminsignup/${id}`;
-    console.log(id)
-    fetch(url + loginsData, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("id", result);
-        const profilePicFilename = result.admin.profilePicture.split("\\").pop(); // Extract filename
+  //   const url = `${LOGIN_API}/admin/adminsignup/${id}`;
+  //   console.log(id)
+  //   fetch(url + loginsData, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log("id", result);
+  //       const profilePicFilename = result.admin.profilePicture.split("\\").pop(); // Extract filename
 
-        setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
-        console.log(profilePicture)
+  //       setProfilePicture(`${LOGIN_API}/uploads/${profilePicFilename}`);
+  //       console.log(profilePicture)
 
-      });
-  };
+  //     });
+  // };
 
 
   return (
@@ -548,7 +548,7 @@ function Sidebar() {
                     <div className="info" >
                       <div>
                       <img
-                          src={profilePicture || user}
+                          src={ user}
                           alt="user"
                           className="user-icon"
                           style={{ height: "55px", width: "55px",borderRadius: "50%" }}

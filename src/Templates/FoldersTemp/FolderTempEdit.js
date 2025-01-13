@@ -15,7 +15,7 @@ import UploadDocument from "./UploadDocument";
 import CreateFolder from "./CreateFolder";
 import UploadFolder from "./UploadFolder";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
-function FolderTempEdit({templateId}) {
+function FolderTempEdit({tempName,templateId,}) {
   const [structFolder, setStructFolder] = useState(null);
   const [error, setError] = useState(null);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -164,6 +164,10 @@ console.log("jajavi",structFolder)
     <div>
       
       <Box className="uploads-documents-links" sx={{ display: "flex", gap: 2 }}>
+          {/* <Typography variant="h6">
+                Template Name: <strong>{tempName}</strong>
+              </Typography> */}
+        
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <IconButton
             component="label"

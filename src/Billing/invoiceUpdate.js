@@ -1083,7 +1083,7 @@ const Invoices = ({ charLimit = 4000 }) => {
                     {selectedaccount?.label || 'Default Text'}
                   </Typography>
                   <Typography fontSize={13}>
-                    Invoice number: <Typography component="span" sx={{ color: '#cbd5e1', mr: 2, marginBottom: 2, fontSize: 13 }}>[INVOICE_NUMBER]</Typography>
+                    Invoice number: <Typography component="span" sx={{  mr: 2, marginBottom: 2, fontSize: 13 }}>{invoicenumber || "[INVOICE_NUMBER]"}</Typography>
                   </Typography>
                 </Box>
 

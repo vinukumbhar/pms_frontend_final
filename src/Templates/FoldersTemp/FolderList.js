@@ -301,13 +301,19 @@ function FolderList({ tempName, fetchAllFolders, folderData, templateId }) {
             Create Folder
           </Typography>
         </Box>
-
-        <CreateFolder
+  <CreateFolder
+          isFolderFormOpen={isFolderFormOpen}
+          setIsFolderFormOpen={setIsFolderFormOpen}
+        // handleFormClose={handleFormClose}
+          templateId={templateId}
+         
+        />
+        {/* <CreateFolder
           isFolderFormOpen={isFolderFormOpen}
           setIsFolderFormOpen={setIsFolderFormOpen}
           folderData={folderData}
           templateId={templateId}
-        />
+        /> */}
       </Box>
 
       <FetchFolder
