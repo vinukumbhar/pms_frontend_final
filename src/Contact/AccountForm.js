@@ -48,7 +48,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
   const USER_API = process.env.REACT_APP_USER_URL;
   const TAGS_API = process.env.REACT_APP_TAGS_TEMP_URL;
   const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
-  const API_KEY = process.env.REACT_APP_API_IP;
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
   const theme = useTheme();
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -1041,6 +1041,119 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
   };
 
   console.log(newUserId);
+
+  
+  // const createNewSidebarData = ()=>{
+  //   let data = JSON.stringify({
+  //     "userrole": "client",
+  //     "userstatus": "active",
+  //     "sidebardata": [
+  //       {
+  //         "label": "Inbox +",
+  //         "path": "/inbox",
+  //         "icon": "LiaMoneyBillSolid",
+  //         "permissions": true
+  //       },
+  //       {
+  //         "label": "Templates",
+  //         "path": "/firmtemp/templates/tasks",
+  //         "icon": "LuWorkflow",
+  //         "permissions": false,
+  //         "submenu": [
+  //           {
+  //             "label": "Firm Templates",
+  //             "path": "/firmtemp/templates/tasks",
+  //             "icon": "GoDotFill",
+  //             "permissions": true
+  //           },
+  //           {
+  //             "label": "Services",
+  //             "path": "/firmtemp/service",
+  //             "icon": "GoDotFill",
+  //             "permissions": true
+  //           },
+  //           {
+  //             "label": "Teams & Plans",
+  //             "path": "/firmtemp/teammember",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": true
+  //           },
+  //           {
+  //             "label": "Tags",
+  //             "path": "/firmtemp/tags",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": true
+  //           },
+  //           {
+  //             "label": "Pipeline Templates",
+  //             "path": "/firmtemp/pipelines",
+  //             "icon": "GoDotFill",
+  //             "permissions": true
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "label": "Clients",
+  //         "path": "clients/accounts",
+  //         "icon": "IoPeopleOutline",
+  //         "permissions": true,
+  //         "submenu": [
+  //             {
+  //                 "label": "Accounts",
+  //                 "path": "clients/accounts",
+  //                 "icon": "GoDotFill",
+  //                 "permissions": true
+  //             },
+  //             {
+  //                 "label": "Contacts",
+  //                 "path": "clients/contacts",
+  //                 "icon": "GoDotFill",
+  //                 "permissions": true
+  //             }
+  //         ]
+  //     },
+  //     {
+  //         "label": "Workflow",
+  //         "path": "workflow/tasks",
+  //         "icon": "LuWorkflow",
+  //         "permissions": true,
+  //         "submenu": [
+  //             {
+  //                 "label": "Tasks",
+  //                 "path": "workflow/tasks",
+  //                 "icon": "GoDotFill",
+  //                 "permissions": true
+  //             },
+  //             {
+  //                 "label": "Jobs",
+  //                 "path": "workflow/jobs",
+  //                 "icon": "GoDotFill",
+  //                 "permissions": false
+  //             }
+  //         ]
+  //     }
+  //     ]
+  //   });
+    
+  //   let config = {
+  //     method: 'post',
+  //     maxBodyLength: Infinity,
+  //     url: 'http://127.0.0.1:7000/api/create',
+  //     headers: { 
+  //       'Content-Type': 'application/json'
+  //     },
+  //     data : data
+  //   };
+    
+  //   axios.request(config)
+  //   .then((response) => {
+  //     console.log(JSON.stringify(response.data));
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+    
+  // }
   const clientCreatedmail = (email, personalMessage, userid) => {
     const port = window.location.port;
     const urlportlogin = `${CLIENT_PORT}/updatepassword`;
@@ -1069,6 +1182,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
 
       .then((result) => {
         console.log(result);
+        // createNewSidebarData()
       })
       .catch((error) => console.error(error));
   };
@@ -1654,6 +1768,7 @@ const AccountForm = ({ handleNewDrawerClose, handleDrawerClose }) => {
                       alignItems: "center",
                       justifyContent: "space-between",
                       gap: "5px",
+                      cursor:'pointer'
                     }}
                   >
                     <AddCircleOutlineIcon />

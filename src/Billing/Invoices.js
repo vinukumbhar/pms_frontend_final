@@ -792,6 +792,8 @@ const Invoices = ({ charLimit = 4000 }) => {
   });
 
   const handleDelete = (_id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this invoice? This action cannot be undone.");
+    if (!confirmDelete) return;
     const requestOptions = {
       method: "DELETE",
       redirect: "follow",

@@ -10,6 +10,7 @@ import { SlQuestion } from "react-icons/sl";
 import { ToastContainer, toast } from "react-toastify";
 import { LoginContext } from "../Sidebar/Context/Context";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { unstable_ClassNameGenerator as ClassNameGenerator } from "@mui/material/className"; //autoclassnameGenerator
 ClassNameGenerator.configure((componentName) => `foo-bar-${componentName}`); //autoclassnameGenerator
@@ -76,6 +77,9 @@ const TeamMember = () => {
   const [isCheckedOrgnizerAnswers, setIsCheckedOrgnizerAnswers] = useState(false);
   const [isCheckedDocuments, setIsCheckedDocuments] = useState(false);
 
+
+
+
   const handleSwitchViewReporting = (checked) => {
     setIsCheckedViewReporting(checked);
   };
@@ -126,6 +130,7 @@ const TeamMember = () => {
   };
   const handleSwitchTemplates = (checked) => {
     setIsCheckedTemplates(checked);
+    // updateSidebarData()
   };
   const handleSwitchMarketplace = (checked) => {
     setIsCheckedMarketplace(checked);
@@ -150,6 +155,7 @@ const TeamMember = () => {
   };
   const handleSwitchPayments = (checked) => {
     setIsCheckedPayments(checked);
+
   };
   const handleSwitchPipelines = (checked) => {
     setIsCheckedPipelines(checked);
@@ -229,8 +235,86 @@ const TeamMember = () => {
   const [lastNameValidation, setLastNameValidation] = useState("");
   const [emailValidation, setEmailValidation] = useState("");
   const [teamMemberIdUpdate, setTeamMemberId] = useState("");
+
+
+
+  // const createNewSidebarData = ()=>{
+  //   let data = JSON.stringify({
+  //     "userrole": "admin",
+  //     "userstatus": "active",
+  //     "sidebardata": [
+  //       {
+  //         "label": "Inbox +",
+  //         "path": "/inbox",
+  //         "icon": "LiaMoneyBillSolid",
+  //         "permissions": true
+  //       },
+  //       {
+  //         "label": "Templates",
+  //         "path": "/firmtemp/templates/tasks",
+  //         "icon": "LuWorkflow",
+  //         "permissions": false,
+  //         "submenu": [
+  //           {
+  //             "label": "Firm Templates",
+  //             "path": "/firmtemp/templates/tasks",
+  //             "icon": "GoDotFill",
+  //             "permissions": true
+  //           },
+  //           {
+  //             "label": "Services",
+  //             "path": "/firmtemp/service",
+  //             "icon": "GoDotFill",
+  //             "permissions": true
+  //           },
+  //           {
+  //             "label": "Teams & Plans",
+  //             "path": "/firmtemp/teammember",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": true
+  //           },
+  //           {
+  //             "label": "Tags",
+  //             "path": "/firmtemp/tags",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": true
+  //           },
+  //           {
+  //             "label": "Pipeline Templates",
+  //             "path": "/firmtemp/pipelines",
+  //             "icon": "GoDotFill",
+  //             "permissions": true
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   });
+    
+  //   let config = {
+  //     method: 'post',
+  //     maxBodyLength: Infinity,
+  //     url: 'http://127.0.0.1:7000/api/create',
+  //     headers: { 
+  //       'Content-Type': 'application/json'
+  //     },
+  //     data : data
+  //   };
+    
+  //   axios.request(config)
+  //   .then((response) => {
+  //     console.log(JSON.stringify(response.data));
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+    
+  // }
   //todo handle submit indivisual
   const handleSubmitTeamMember = () => {
+
+
+
+
     if (firstName === "") {
       setFirstNameValidation("First Name can't be blank");
     } else {
@@ -405,6 +489,7 @@ const TeamMember = () => {
       .then((result) => {
         console.log(result);
         toast.success("Team Member saved successfully!");
+        // createNewSidebarData();
         handleNewDrawerClose();
         fetchData();
         navigate("/firmtemp/teammember/activemember");
@@ -550,7 +635,7 @@ const TeamMember = () => {
                 </Select>
               </Box>
 
-              {selectedOption === "employee" && (
+             {selectedOption === "employee" && (
                 <Box className="rights" style={{ marginTop: "10px" }}>
                   <Box style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                     <p>Access Rights</p>
@@ -698,7 +783,7 @@ const TeamMember = () => {
                     </Grid>
                   </Box>
                 </Box>
-              )}
+              )} 
             </Box>
           </form>
 

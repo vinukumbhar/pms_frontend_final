@@ -2021,7 +2021,7 @@ const Pipeline = ({ charLimit = 4000 }) => {
     const [displayCount, setDisplayCount] = useState(3);
     const displayedJobs = stageJobs.slice(0, displayCount);
     const truncatedStageName =
-      stage.name.length > 20 ? `${stage.name.slice(0, 20)}...` : stage.name;
+      stage.name.length > 30 ? `${stage.name.slice(0, 20)}...` : stage.name;
     return (
       <Box ref={drop} className={`stage ${isOver ? "drag-over" : ""}`}>
         <Typography sx={{ marginBottom: "12px" }} className="stage-name">

@@ -2282,7 +2282,7 @@ const PipelineTempUpdate = () => {
                                 Job enters this stage if conditions are met
                               </Typography>
                             )}
-                            {index > 0 && index !== stages.length - 1 && (
+                            {/* {index > 0 && index !== stages.length - 1 && (
                               <Box sx={{ marginTop: "10px" }}>
                                 <Typography
                                   variant="body2"
@@ -2295,7 +2295,7 @@ const PipelineTempUpdate = () => {
                                   Add conditions
                                 </Typography>
                               </Box>
-                            )}
+                            )} */}
 
                             <Typography
                               variant="h6"
@@ -3396,7 +3396,7 @@ const PipelineTempUpdate = () => {
                               )}
                             </Box>
 
-                            <Typography
+                            {/* <Typography
                               variant="h6"
                               sx={{
                                 fontSize: "15px",
@@ -3409,9 +3409,9 @@ const PipelineTempUpdate = () => {
                             <Typography variant="body2">
                               Move jobs automatically when linked actions are
                               completed
-                            </Typography>
+                            </Typography> */}
 
-                            <Box
+                            {/* <Box
                               sx={{
                                 display: "flex",
                                 alignItems: "center",
@@ -3427,7 +3427,7 @@ const PipelineTempUpdate = () => {
                               <Typography sx={{ cursor: "pointer" }}>
                                 Automove jobs
                               </Typography>
-                            </Box>
+                            </Box> */}
                           </Box>
                         </Box>
                       </Paper>

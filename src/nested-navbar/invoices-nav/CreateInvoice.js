@@ -836,7 +836,7 @@ const CreateInvoice = ({ charLimit = 4000, onClose }) => {
 
   return (
     <Box>
-      <Box sx={{display:'flex', alignItems:'center'}}>
+      <Box sx={{display:'flex', alignItems:'center',justifyContent:'space-between',mr:2}}>
       <Typography p={2} variant="h6">
         Create Invoice
       </Typography>
@@ -856,7 +856,7 @@ const CreateInvoice = ({ charLimit = 4000, onClose }) => {
 
    
 
-    <Box onClick={handleClose} sx={{ cursor: "pointer" }}>
+    <Box onClick={onClose} sx={{ cursor: "pointer" }}>
       <CloseIcon />
     </Box>
   </Box>
@@ -963,7 +963,7 @@ const CreateInvoice = ({ charLimit = 4000, onClose }) => {
               </TableContainer>
 
               {/* Summary Section */}
-              <Box
+              {/* <Box
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -986,8 +986,37 @@ const CreateInvoice = ({ charLimit = 4000, onClose }) => {
                 >
                   <strong>Total:</strong> ${totalAmount || '0.00'}
                 </Typography>
-              </Box>
-
+              </Box> */}
+<Table sx={{ width: "50%", ml: "auto" }}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Subtotal:</strong>
+                      </TableCell>
+                      <TableCell>${subtotal || "0.00"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Tax Rate:</strong>
+                      </TableCell>
+                      <TableCell>{taxRate || "0.00"}%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>
+                        <strong>Tax Total:</strong>
+                      </TableCell>
+                      <TableCell>${taxTotal?.toFixed(2) || "0.00"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        <strong>Total:</strong>
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        ${totalAmount || "0.00"}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
 
               {/* Footer Buttons */}
               <Box

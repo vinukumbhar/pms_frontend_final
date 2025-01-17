@@ -388,30 +388,29 @@ const PipelineTemp = () => {
     label: temp.templatename,
   }));
 
+  // folder templates
+  const API_KEY = process.env.REACT_APP_FOLDER_URL;
+  const [folderTemplates, setFolderTemplates] = useState([]);
 
-   // folder templates
-    const API_KEY = process.env.REACT_APP_FOLDER_URL;
-    const [folderTemplates, setFolderTemplates] = useState([]);
-  
-    useEffect(() => {
-      fetchFolderData();
-    }, []);
-  
-    const fetchFolderData = async () => {
-      try {
-        const url = `${API_KEY}/foldertemp/folder`;
-        const response = await fetch(url);
-        const data = await response.json();
-        setFolderTemplates(data.folderTemplates);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-  
-    const optionfolder = folderTemplates.map((folderTemplates) => ({
-      value: folderTemplates._id,
-      label: folderTemplates.templatename,
-    }));
+  useEffect(() => {
+    fetchFolderData();
+  }, []);
+
+  const fetchFolderData = async () => {
+    try {
+      const url = `${API_KEY}/foldertemp/folder`;
+      const response = await fetch(url);
+      const data = await response.json();
+      setFolderTemplates(data.folderTemplates);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const optionfolder = folderTemplates.map((folderTemplates) => ({
+    value: folderTemplates._id,
+    label: folderTemplates.templatename,
+  }));
   const [selectedtemp, setselectedTemp] = useState();
   const handletemp = (selectedOptions) => {
     setselectedTemp(selectedOptions);
@@ -1125,7 +1124,6 @@ const PipelineTemp = () => {
   //       return null;
   //   }
   // };
-
 
   const renderActionContent = (automationSelect, index) => {
     switch (automationSelect) {
@@ -2375,7 +2373,6 @@ const PipelineTemp = () => {
     };
   };
 
-
   const handleSaveTagsAutomation = (index) => {
     return () => {
       const updatedStages = [...stages];
@@ -2499,7 +2496,7 @@ const PipelineTemp = () => {
   //     handleDrawerClose();
   //   };
   // };
-const handleEditSaveAutomation = () => {
+  const handleEditSaveAutomation = () => {
     if (editingStageIndex === null) return; // Ensure the stage index is valid
 
     console.log("Save automation for stage:", editingStageIndex);
@@ -4502,9 +4499,7 @@ const handleEditSaveAutomation = () => {
                       </Paper>
                     ))} */}
 
-
-
-{stages.map((stage, index) => (
+                    {stages.map((stage, index) => (
                       <Paper
                         key={index}
                         sx={{
@@ -4578,7 +4573,7 @@ const handleEditSaveAutomation = () => {
                                 Job enters this stage if conditions are met
                               </Typography>
                             )}
-                            {index > 0 && index !== stages.length - 1 && (
+                            {/* {index > 0 && index !== stages.length - 1 && (
                               <Box sx={{ marginTop: "10px" }}>
                                 <Typography
                                   variant="body2"
@@ -4591,7 +4586,7 @@ const handleEditSaveAutomation = () => {
                                   Add conditions
                                 </Typography>
                               </Box>
-                            )}
+                            )} */}
 
                             <Typography
                               variant="h6"
@@ -4757,8 +4752,6 @@ const handleEditSaveAutomation = () => {
                                 </Box>
 
                                 <Box>
-                                 
-
                                   {selectedAutomationData.length > 0 ? (
                                     selectedAutomationData.map(
                                       (automation, index) => {
@@ -5189,10 +5182,9 @@ const handleEditSaveAutomation = () => {
                                                                 "Send Proposal/Els"
                                                               ? proposalElsOptions
                                                               : automation.type ===
-                                                              "Apply folder template"
-                                                            ? optionfolder
-                                                            :
-                                                               []
+                                                                  "Apply folder template"
+                                                                ? optionfolder
+                                                                : []
                                                     }
                                                     getOptionLabel={(option) =>
                                                       option.label
@@ -5691,7 +5683,7 @@ const handleEditSaveAutomation = () => {
                               )}
                             </Box>
 
-                            <Typography
+                            {/* <Typography
                               variant="h6"
                               sx={{
                                 fontSize: "15px",
@@ -5704,9 +5696,9 @@ const handleEditSaveAutomation = () => {
                             <Typography variant="body2">
                               Move jobs automatically when linked actions are
                               completed
-                            </Typography>
+                            </Typography> */}
 
-                            <Box
+                            {/* <Box
                               sx={{
                                 display: "flex",
                                 alignItems: "center",
@@ -5722,7 +5714,7 @@ const handleEditSaveAutomation = () => {
                               <Typography sx={{ cursor: "pointer" }}>
                                 Automove jobs
                               </Typography>
-                            </Box>
+                            </Box> */}
                           </Box>
                         </Box>
                       </Paper>

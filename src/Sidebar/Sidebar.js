@@ -109,7 +109,7 @@ function Sidebar() {
           }
 
           // If the parent item is NewTags and manageTags is false, exclude it
-          if ((item.label === "NewTags" && !manageTags) ||
+          if ((item.label === "Tags" && !manageTags) ||
             (item.label === "Service" && !manageServices) ||
             (item.label === "Pipeline Templates" && !managePipelines) ||
             (item.label === "Firm Templates" && !manageTemplates) ||

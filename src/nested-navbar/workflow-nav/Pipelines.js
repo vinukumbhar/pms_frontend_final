@@ -770,7 +770,7 @@ const Job = ({ job,onCheckboxChange  }) => {
       sx={{
         padding: 2,
         border: "1px solid #ddd",
-        // marginTop: 2,
+        marginTop: 2,
         width: "160px",
         background: isDragging ? "#f0f0f0" : "#f9f9f9",
         textAlign: "left",
