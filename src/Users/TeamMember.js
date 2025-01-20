@@ -312,9 +312,6 @@ const TeamMember = () => {
   //todo handle submit indivisual
   const handleSubmitTeamMember = () => {
 
-
-
-
     if (firstName === "") {
       setFirstNameValidation("First Name can't be blank");
     } else {
@@ -394,7 +391,7 @@ const TeamMember = () => {
           console.log(result);
           console.log(result.teamMember._id);
           setTeamMemberId(result.teamMember._id);
-
+          // createSidebar(result.teamMember._id)
           newUser(result.teamMember._id);
         })
 
@@ -402,6 +399,174 @@ const TeamMember = () => {
     }
   };
   console.log(teamMemberIdUpdate);
+
+
+
+  // const createSidebar = (newTeamMemberUserid)=>{
+  //   const myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+    
+  //   const raw = JSON.stringify({
+  //     "userrole": "teammember",
+  //     // "userstatus": "active",
+  //     "sidebardata": [
+  //       {
+  //         "label": "Insights",
+  //         "path": "/",
+  //         "icon": "AiOutlineAppstoreAdd",
+  //         "permissions": false
+  //       },
+  //       {
+  //         "label": "Inbox +",
+  //         "path": "/inbox",
+  //         "icon": "LiaMoneyBillSolid",
+  //         "permissions": false
+  //       },
+  //       {
+  //         "label": "Clients",
+  //         "path": "/clients/accounts",
+  //         "icon": "IoPeopleOutline",
+  //         "permissions": false,
+  //         "submenu": [
+  //           {
+  //             "label": "Accounts",
+  //             "path": "/clients/accounts",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+  //           {
+  //             "label": "Contacts",
+  //             "path": "/clients/contacts",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "label": "Workflow",
+  //         "path": "/workflow/tasks",
+  //         "icon": "LuWorkflow",
+  //         "permissions": false,
+  //         "submenu": [
+            
+  //           {
+  //             "label": "Jobs",
+  //             "path": "/workflow/jobs",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+            
+  //           {
+  //             "label": "Pipelines",
+  //             "path": "/workflow/pipelines",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": false
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "label": "Billing",
+  //         "path": "/billing/time",
+  //         "icon": "LiaMoneyBillSolid",
+  //         "permissions": false,
+  //         "submenu": [
+  //           {
+  //             "label": "Time Entries",
+  //             "path": "/billing/time",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+  //           {
+  //             "label": "Invoices",
+  //             "path": "/billing/Invoices",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+  //           {
+  //             "label": "Proposals&Els",
+  //             "path": "/billing/proposalsandels",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": false
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "label": "Settings",
+  //         "path": "/settings/myaccount",
+  //         "icon": "FiSettings",
+  //         "permissions": false,
+  //         "submenu": [
+  //           {
+  //             "label": "My Account",
+  //             "path": "/settings/myaccount",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+            
+  //         ]
+  //       },
+  //       {
+  //         "label": "Templates",
+  //         "path": "/firmtemp/templates/marketplace",
+  //         "icon": "MdFormatListBulletedAdd",
+  //         "permissions": false,
+  //         "submenu": [
+  //           {
+  //             "label": "MarketPlace",
+  //             "path": "/firmtemp/templates/marketplace",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+  //           {
+  //             "label": "Firm Templates",
+  //             "path": "/firmtemp/templates/tasks",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+  //           {
+  //             "label": "Services",
+  //             "path": "/firmtemp/service",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           },
+            
+  //           {
+  //             "label": "Tags",
+  //             "path": "/firmtemp/tags",
+  //             "icon": "LiaMoneyBillSolid",
+  //             "permission": false
+  //           },
+  //           {
+  //             "label": "Pipeline Templates",
+  //             "path": "/firmtemp/pipelines",
+  //             "icon": "GoDotFill",
+  //             "permissions": false
+  //           }
+  //         ]
+  //       }
+  //     ]
+      
+  //   });
+    
+  //   const requestOptions = {
+  //     method: "POST",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow"
+  //   };
+    
+  //   fetch("http://127.0.0.1:7000/api/create", requestOptions)
+  //     .then((response) => response.text())
+  //     .then((result) =>{ 
+  //       console.log("sidebar",result)
+  //       // console.log(result);
+  //       console.log(result.user._id);
+  //       // updateTeammemberNewUserid(result._id, newTeamMemberUserid);
+  //     })
+  //     .catch((error) => console.error(error));
+  // }
+
+
   //************************ */
 
   const newUser = (teammemberuserid) => {
@@ -434,6 +599,7 @@ const TeamMember = () => {
 
       .catch((error) => console.error(error));
   };
+  
   const updateTeammemberUserid = (UserId, teammemberuserid) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");

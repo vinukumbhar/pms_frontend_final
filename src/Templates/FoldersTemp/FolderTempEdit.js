@@ -11,29 +11,34 @@ import {
 } from "@mui/material";
 import { FaRegFolderClosed } from "react-icons/fa6";
 import { HiDocumentArrowUp } from "react-icons/hi2";
-import UploadDocument from "./UploadDocument";
+import UploadDocument from "./uploadDocumentWorking";
 import CreateFolder from "./CreateFolder";
 import UploadFolder from "./UploadFolder";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
-function FolderTempEdit({tempName,templateId,}) {
+
+
+function FolderTempEdit({templateId}) {
+ 
+  const [isSendFolderForm, setIsSendFolderForm] = useState(false);
   const [structFolder, setStructFolder] = useState(null);
   const [error, setError] = useState(null);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderPath, setNewFolderPath] = useState("");
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, folderId: null });
+
+
   //function related to folder 
   const [isFolderFormOpen, setIsFolderFormOpen] = useState(false);
   const handleCreateFolderClick = () => {
     setIsFolderFormOpen(!isFolderFormOpen);
   };
-  const [isLoading, setIsLoading] = useState(false);
-// const handleFormClose = async () => {
-//   setIsFolderFormOpen(false);
-//   // await fetchFolders(); // Ensure folders are fetched after the form is closed
-// };
-
+  const handleFormClose = () => {
+    setIsFolderFormOpen(false);
+  };
   //function related to document 
   const [isDocumentForm, setIsDocumentForm] = useState(false);
-  
+  const [contents, setContents] = useState([]);
   const [file, setFile] = useState(null);
 
   const handleUploadFormClose = () => {
@@ -46,40 +51,42 @@ function FolderTempEdit({tempName,templateId,}) {
     setIsDocumentForm(!isDocumentForm);
   };
   const API_KEY = process.env.REACT_APP_FOLDER_URL;
- 
-  // Function to fetch folders
-  const fetchFolders = async () => {
-    try {
-      const url = `${API_KEY}/allFolders/${templateId}`;
-      const response = await axios.get(url);
 
-      const addIsOpenProperty = (folders, parentId = null) =>
-        folders.map((folder, index) => ({
-          ...folder,
-          isOpen: false,
-          id: parentId ? `${parentId}-${index}` : `${index}`,
-          contents: folder.contents
-            ? addIsOpenProperty(folder.contents, parentId ? `${parentId}-${index}` : `${index}`)
-            : [],
-        }));
-
-      const processedData = {
-        ...response.data,
-        folders: addIsOpenProperty(response.data.folders || []),
-      };
-
-      setStructFolder(processedData);
-    
-    } catch (err) {
-      console.error("Error fetching all folders:", err);
-      setError(err.message || "An error occurred");
-    }
-  };
-console.log("jajavi",structFolder)
-  // Fetch folders on component mount
   useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const url = `${API_KEY}/allFolders/${templateId}`;
+        const response = await axios.get(url);
+  
+        const addIsOpenProperty = (folders, parentId = null) =>
+          folders.map((folder, index) => ({
+            ...folder,
+            isOpen: false, // Set to false to close all folders initially
+            id: `${parentId ? `${parentId}-` : ""}${index}`,
+            contents: folder.contents
+              ? addIsOpenProperty(
+                  folder.contents,
+                  `${parentId ? `${parentId}-` : ""}${index}`
+                )
+              : [],
+          }));
+  
+        const processedData = {
+          ...response.data,
+          folders: addIsOpenProperty(response.data.folders || []),
+        };
+  
+        setStructFolder(processedData);
+      } catch (err) {
+        console.error("Error fetching all folders:", err);
+        setError(err.message || "An error occurred");
+      }
+    };
+  
     fetchFolders();
-  }, [API_KEY, templateId]);
+  }, []);
+  
+
   const handleMenuClick = (e, folderId) => {
     e.stopPropagation(); // Prevent triggering other click events
     setContextMenu({
@@ -89,9 +96,11 @@ console.log("jajavi",structFolder)
       folderId,
     });
   };
+
   const handleCloseMenu = () => {
     setContextMenu({ visible: false, x: 0, y: 0, folderId: null });
   };
+
   const renderContents = (contents, setContents) => {
     return contents.map((item, index) => {
       if (item.folder) {
@@ -131,12 +140,11 @@ console.log("jajavi",structFolder)
             {item.isOpen && item.contents && item.contents.length > 0 && (
               <div>
                 {renderContents(item.contents, (newContents) => {
-  const updatedFolders = contents.map((folder, i) =>
-    i === index ? { ...folder, contents: newContents } : folder
-  );
-  setContents(updatedFolders);
-})}
-
+                  const updatedFolders = contents.map((folder, i) =>
+                    i === index ? { ...folder, contents: newContents } : folder
+                  );
+                  setContents(updatedFolders);
+                })}
               </div>
             )}
           </div>
@@ -152,6 +160,76 @@ console.log("jajavi",structFolder)
     });
   };
 
+  const createFolderAPI = (newFolderPath) => {
+    return axios
+      .get(`${API_KEY}/createFolder/?path=uploads/FolderTemplates/${templateId}/${newFolderPath}&foldername=${newFolderName}`)
+      .then((response) => {
+        console.log("API Response:", response.data);
+        return response.data;
+        setNewFolderName(""); // Clear input field
+      })
+      .catch((error) => {
+        console.log("API Error:", error);
+        throw error;
+      });
+  };
+
+  const handleCreateFolder = () => {
+    if (!newFolderName.trim()) return;
+
+    const addFolderToSelected = (folders, parentPath = "") => {
+      return folders.map((folder) => {
+        if (folder.id === selectedFolderId) {
+          const newFolder = {
+            folder: newFolderName.trim(),
+            isOpen: true,
+            id: `${folder.id}-${folder.contents.length}`,
+            contents: [],
+          };
+
+          const newPath = `${parentPath}/${folder.folder}`;
+          setNewFolderPath(newPath);
+
+          const updatedFolder = {
+            ...folder,
+            contents: [...folder.contents, newFolder],
+          };
+
+          return updatedFolder;
+        }
+
+        return folder.contents
+          ? {
+              ...folder,
+              contents: addFolderToSelected(
+                folder.contents,
+                `${parentPath ? `${parentPath}/` : ""}${folder.folder}`
+              ),
+            }
+          : folder;
+      });
+    };
+
+    const updatedFolderStructure = addFolderToSelected(structFolder.folders);
+
+    setStructFolder((prev) => ({
+      ...prev,
+      folders: updatedFolderStructure,
+    }));
+  };
+
+  useEffect(() => {
+    if (newFolderPath) {
+      createFolderAPI(newFolderPath)
+        .then((data) => {
+          console.log("Folder created successfully:", data);
+        })
+        .catch((error) => {
+          console.log("Error creating folder:", error);
+        });
+    }
+  }, [newFolderPath]);
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -160,14 +238,12 @@ console.log("jajavi",structFolder)
     return <div>Loading...</div>;
   }
 
+
+
   return (
     <div>
       
       <Box className="uploads-documents-links" sx={{ display: "flex", gap: 2 }}>
-          {/* <Typography variant="h6">
-                Template Name: <strong>{tempName}</strong>
-              </Typography> */}
-        
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <IconButton
             component="label"
@@ -200,7 +276,10 @@ console.log("jajavi",structFolder)
           setIsDocumentForm={setIsDocumentForm}
           templateId={templateId}
           handleUploadFormClose={handleUploadFormClose}
-       
+          file={file}
+          
+            setFile={setFile}
+
         /> 
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -222,9 +301,19 @@ console.log("jajavi",structFolder)
             />
           </label>
         </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        {/* <UploadFolder
+          isSendFolderForm={isSendFolderForm}
+          setIsSendFolderForm={setIsSendFolderForm}
+          templateId={templateId}
+          handleUploadFormClose={handleUploadFormClose}
+          contents={contents}
+          setContents={setContents}
+        /> */}
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <IconButton
-                      sx={{ color: "#e87800" }}
+            //onClick={handleCreateFolderClick}
+            sx={{ color: "#e87800" }}
           >
             <FaRegFolderClosed size={20} />
           </IconButton>
@@ -239,11 +328,13 @@ console.log("jajavi",structFolder)
         <CreateFolder
           isFolderFormOpen={isFolderFormOpen}
           setIsFolderFormOpen={setIsFolderFormOpen}
-        // handleFormClose={handleFormClose}
+          handleFormClose={handleFormClose}
           templateId={templateId}
-         
+          
         />
       </Box>
+      
+     
       {renderContents(structFolder.folders, (newFolders) =>
         setStructFolder({ ...structFolder, folders: newFolders })
       )}

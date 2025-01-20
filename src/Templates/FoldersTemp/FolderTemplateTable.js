@@ -13,7 +13,7 @@ function FolderTemplateTbel({ handleCreateTemplate, folderTemplates, handleEdit 
         </Button>
       </Box>
       <Box >
-        <Paper>
+        <Paper sx={{mb:5}}>
         <Table sx={{ width: '100%' }} >
           <TableHead>
             <TableRow>

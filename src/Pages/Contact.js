@@ -321,25 +321,41 @@ const filteredData = useMemo(() => {
   };
   const [filterOption, setFilterOption] = useState("");
   const [menuAnchor, setMenuAnchor] = useState(null);
-  const [isFilterVisible, setIsFilterVisible] = useState(false); 
-  const handleFilterOptionClick = (option) => {
-    setFilterOption(option);
-    setIsFilterVisible(true); // Show the TextField
-    setMenuAnchor(null); // Close the menu after selection
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  // const [isFilterVisible, setIsFilterVisible] = useState(false); 
+  const [filterValues, setFilterValues] = useState({});
+  // const handleFilterOptionClick = (option) => {
+  //   setFilterOption(option);
+  //   setIsFilterVisible(true); // Show the TextField
+  //   setMenuAnchor(null); // Close the menu after selection
+  // };
+  const handleFilterOptionClick = (filter) => {
+    if (!selectedFilters.includes(filter)) {
+      setSelectedFilters([...selectedFilters, filter]);
+    }
+    setMenuAnchor(null);
   };
-
   const handleMenuOpen = (event) => {
     setMenuAnchor(event.currentTarget);
+  };
+  const handleInputChange = (filter, value) => {
+    setFilterValues({ ...filterValues, [filter]: value });
   };
 
   const handleMenuClose = () => {
     setMenuAnchor(null);
   }; 
-  const clearFilter = () => {
-    setFilterOption(""); // Clear filter option
-    setFilterText(""); // Clear filter text
-    setIsFilterVisible(false); // Hide the TextField
-    setSelectedTags([])
+  // const clearFilter = () => {
+  //   setFilterOption(""); // Clear filter option
+  //   setFilterText(""); // Clear filter text
+  //   setIsFilterVisible(false); // Hide the TextField
+  //   setSelectedTags([])
+  // };
+  const clearFilter = (filter) => {
+    setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+    // setFilterValues({ ...filterValues, [filter]: "" });
+    setFilterText(""); 
+    if (filter === "tags") setSelectedTags([]);
   };
   return (
     <>
@@ -380,7 +396,7 @@ const filteredData = useMemo(() => {
 
       {/* Filter Button and Dropdown */}
       <Box display="flex" alignItems="center" mb={2}>
-        <Button variant="contained" onClick={handleMenuOpen}>
+        <Button variant="contained" onClick={handleMenuOpen} sx={{ backgroundColor: '#00ACC1', ':hover': { backgroundColor: '#008C9E' } }}>
           Filter by
         </Button>
         <Menu
@@ -393,24 +409,9 @@ const filteredData = useMemo(() => {
           <MenuItem onClick={() => handleFilterOptionClick("companyName")}>Company Name</MenuItem>
           <MenuItem onClick={() => handleFilterOptionClick("tags")}>Tags</MenuItem>
         </Menu>
-        {/* {isFilterVisible && (
-           <Box display="flex" alignItems="center" ml={2}>
-           <TextField
-             label={`Search by ${filterOption}`}
-             variant="outlined"
-             size="small"
-             value={filterText}
-             onChange={(e) => setFilterText(e.target.value)}
-             style={{ flex: 1 }}
-           />
-           <IconButton onClick={clearFilter} sx={{ ml: 1 }}>
-             <DeleteIcon color="error" />
-           </IconButton>
-         </Box>
-        )} */}
-        {isFilterVisible && (
-          <Box display="flex" alignItems="center" ml={2} width="100%">
-            {filterOption === "tags" ? (
+        {selectedFilters.map((filter) => (
+          <Box display="flex" alignItems="center" ml={2} >
+            {filter === "tags" ? (
              <Autocomplete
              multiple
              size='small'
@@ -445,19 +446,20 @@ const filteredData = useMemo(() => {
            />
             ) : (
               <TextField
-                label={`Search by ${filterOption}`}
-                variant="outlined"
-                size="small"
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
-                style={{ flex: 1 }}
+              label={`Search by ${filter}`}
+              variant="outlined"
+              size="small"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              // style={{ flex: 1 }}
+              sx={{width:'200px'}}
               />
             )}
-            <IconButton onClick={clearFilter} sx={{ ml: 1 }}>
+            <IconButton onClick={() => clearFilter(filter)}  sx={{ ml: 1 }}>
               <DeleteIcon color="error" />
             </IconButton>
           </Box>
-        )}
+         ))}
       </Box>
       <Box display="flex" alignItems="center" mb={2}>
         {/* Only show delete button when contacts are selected */}

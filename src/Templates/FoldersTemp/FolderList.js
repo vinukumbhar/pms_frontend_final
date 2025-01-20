@@ -234,7 +234,7 @@ function FolderList({ tempName, fetchAllFolders, folderData, templateId }) {
       </Typography>
       <Divider sx={{ marginY: 2 }} />
 
-      <Box className="uploads-documents-links" sx={{ display: "flex",  gap: 2 }}>
+      {/* <Box className="uploads-documents-links" sx={{ display: "flex",  gap: 2 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <IconButton component="label" htmlFor="fileInput" sx={{ color: "#e87800" }}>
             <HiDocumentArrowUp size={24} />
@@ -308,13 +308,8 @@ function FolderList({ tempName, fetchAllFolders, folderData, templateId }) {
           templateId={templateId}
          
         />
-        {/* <CreateFolder
-          isFolderFormOpen={isFolderFormOpen}
-          setIsFolderFormOpen={setIsFolderFormOpen}
-          folderData={folderData}
-          templateId={templateId}
-        /> */}
-      </Box>
+       
+      </Box> */}
 
       <FetchFolder
         folderData={folderData}

@@ -15,9 +15,11 @@ height: 100vh;
   /* background-color:#fff; */
   background-color: var(--color-header-bg);
   grid-area: nav;
+  /* padding: 5; */
 /* height: 100%; */
 /* padding: 5px; */
 border-bottom: 1px solid grey;
+/* border: 2px solid red; */
   /* box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.3); */
 }
 
@@ -80,7 +82,7 @@ border-bottom: 1px solid grey;
 .toggle-button {
   position: absolute !important;
   top: 55px !important;
-  right: -25px !important;
+  right: -20px !important;
 
   transition: background-color 0.3s ease;
   z-index: 10;
@@ -89,10 +91,10 @@ border-bottom: 1px solid grey;
 
 .toggle-button .toggle-icon {
   /* background-color: #0000ff; */
-  background-color:#2c85de;
+  background-color:#00ACC1;
   color: #fff;
   border-radius: 50%;
-  font-size: 2rem;
+  font-size: 1.7rem;
   cursor: pointer;
 }
 
@@ -120,8 +122,9 @@ border-bottom: 1px solid grey;
   text-align: center;
 }
 .sidebar-contents .menu-icon{
-  color: #2c85de;
+  color: #00ACC1;
 }
+/*  */
 .sidebar-contents::-webkit-scrollbar{
   display: none;
 }
@@ -143,8 +146,8 @@ border-bottom: 1px solid grey;
 .add-icon {
   cursor: pointer;
   color: green;
-  font-size: 1.8rem;
-  margin: 3px;
+  font-size: 1.7rem;
+  /* margin: 5px; */
   /* border: 1px solid red; */
 }
 .custom-right-drawer {
@@ -180,7 +183,7 @@ gap: 5px;
 .logout-icon {
   font-size: 25px;
   margin-left: 25px;
-  color: #2c85de;
+  color: #00ACC1;
 }
 
 .hidden-text b, 

@@ -263,33 +263,35 @@ const UpdateTeamMember = () => {
   const [firstNameValidation, setFirstNameValidation] = useState("");
   const [lastNameValidation, setLastNameValidation] = useState("");
   const [emailValidation, setEmailValidation] = useState("");
-  const updateSidebarData = (targetLabel, newPermission) => {
-    // console.log("janavi", teamMemberUserId);
-    let data = JSON.stringify({
-      targetLabel: targetLabel,
-      newPermission: newPermission,
+  // const updateSidebarData = (targetLabel, newPermission) => {
+  //   // console.log("janavi", teamMemberUserId);
+  //   let data = JSON.stringify({
+  //     targetLabel: targetLabel,
+  //     newPermission: newPermission,
     
-    });
+  //   });
 
-    let config = {
-      method: "patch",
-      maxBodyLength: Infinity,
-      url: "http://127.0.0.1:7000/api/permissions/678a0f33cee4de78198a70de",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
+  //   let config = {
+  //     method: "patch",
+  //     maxBodyLength: Infinity,
+  //     url: "http://127.0.0.1:7000/api/permissions/678a0f33cee4de78198a70de",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     data: data,
+  //   };
 
-    axios
-      .request(config)
-      .then((response) => {
-        console.log("updtaed sidebar",JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  //   axios
+  //     .request(config)
+  //     .then((response) => {
+  //       console.log("updtaed sidebar",JSON.stringify(response.data));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+
   const handleUpdateTeamMember = () => {
     if (firstName !== "" && firstNameValidation !== "") {
       setFirstNameValidation("First Name can't be blank");
@@ -1105,13 +1107,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      onChange={(checked) => {
-                                        handleSwitchPayments(checked);
-                                        updateSidebarData(
-                                          "Manage payments",
-                                          checked
-                                        );
-                                      }}
+                                    onChange={handleSwitchPayments}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchPayments(checked);
+                                      //   updateSidebarData(
+                                      //     "Manage payments",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedPayments}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1136,14 +1139,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchPipelines}
-                                      onChange={(checked) => {
-                                        handleSwitchPipelines(checked);
-                                        updateSidebarData(
-                                          "Pipeline Templates",
-                                          checked
-                                        );
-                                      }}
+                                      onChange={handleSwitchPipelines}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchPipelines(checked);
+                                      //   updateSidebarData(
+                                      //     "Pipeline Templates",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedPipelines}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1218,14 +1221,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchTags}
-                                      onChange={(checked) => {
-                                        handleSwitchTags(checked);
-                                        updateSidebarData(
-                                          "Tags",
-                                          checked
-                                        );
-                                      }}
+                                      onChange={handleSwitchTags}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchTags(checked);
+                                      //   updateSidebarData(
+                                      //     "Tags",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedTags}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1350,14 +1353,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchServices}
-                                      onChange={(checked) => {
-                                        handleSwitchServices(checked);
-                                        updateSidebarData(
-                                          "Tags",
-                                          checked
-                                        );
-                                      }}
+                                      onChange={handleSwitchServices}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchServices(checked);
+                                      //   updateSidebarData(
+                                      //     "Tags",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedServices}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1407,11 +1410,11 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchTemplates}
-                                      onChange={(checked) => {
-                                        handleSwitchTemplates(checked);
-                                        updateSidebarData("Templates", checked);
-                                      }}
+                                      onChange={handleSwitchTemplates}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchTemplates(checked);
+                                      //   updateSidebarData("Templates", checked);
+                                      // }}
                                       checked={isCheckedTemplates}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1537,14 +1540,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchAllAccounts}
-                                      onChange={(checked) => {
-                                        handleSwitchAllAccounts(checked);
-                                        updateSidebarData(
-                                          "Invoices",
-                                          checked
-                                        );
-                                      }}
+                                      onChange={handleSwitchAllAccounts}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchAllAccounts(checked);
+                                      //   updateSidebarData(
+                                      //     "Invoices",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedAllAccounts}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1619,14 +1622,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchAllContacts}
-                                      onChange={(checked) => {
-                                        handleSwitchAllContacts(checked);
-                                        updateSidebarData(
-                                          "Contacts",
-                                          checked
-                                        );
-                                      }}
+                                      onChange={handleSwitchAllContacts}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchAllContacts(checked);
+                                      //   updateSidebarData(
+                                      //     "Contacts",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedAllContacts}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"
@@ -1651,14 +1654,14 @@ const UpdateTeamMember = () => {
                                     }}
                                   >
                                     <Switch
-                                      // onChange={handleSwitchProposals}
-                                      onChange={(checked) => {
-                                        handleSwitchProposals(checked);
-                                        updateSidebarData(
-                                          "Proposal&Els",
-                                          checked
-                                        );
-                                      }}
+                                      onChange={handleSwitchProposals}
+                                      // onChange={(checked) => {
+                                      //   handleSwitchProposals(checked);
+                                      //   updateSidebarData(
+                                      //     "Proposal&Els",
+                                      //     checked
+                                      //   );
+                                      // }}
                                       checked={isCheckedProposals}
                                       onColor="#3A91F5"
                                       onHandleColor="#FFF"

@@ -47,15 +47,7 @@ const Templates = () => {
          
           <NavLink to="/firmtemp/templates/organizers">Organizers</NavLink>
      
-          {/* <NavLink to="/firmtemp/templates/pipelines">Pipelines</NavLink> */}
-
-        
-     
-
-       
-          {/* <NavLink to='/firmtemp/templates/recurring-invoices'  >Recurring invoices</NavLink>
-                    <NavLink to='/firmtemp/templates/signatures'  >Signatures</NavLink> */}
-       
+         
         </Box>
       </Box>
       <Box sx={{ pt: 5 }}>

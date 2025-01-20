@@ -86,7 +86,23 @@ const Communication = () => {
   const { data } = useParams();
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    // Clear fields
+    // setSelectedAccount([]);
+    setSelectedInvoiceTemp("");
+    setInputText('');
+    setSelectedShortcut('');
+    setDaysuntilNextReminder('');
+    setNoOfReminder('');
+    setSubtasks([]); // Clear subtasks if needed
+    setCheckedSubtasks([]); // Clear selected subtasks
+    setAbsoluteDates(false); // Reset the reminder switch if necessary
+  
+    // Close the drawer
+    setOpen(false);
+  };
+  
   const [activeButton, setActiveButton] = useState("active");
   const [isActiveTrue, setIsActiveTrue] = useState(true);
   //for shortcode

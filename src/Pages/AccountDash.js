@@ -68,16 +68,16 @@ const AccountsDash = () => {
             },
           }}
         >
-          <NavLink to={`/accountsdash/overview/${data}`}> Overview </NavLink>
-          <NavLink to={`/accountsdash/info/${data}`}> Info</NavLink>
-          <NavLink to={`/accountsdash/docs/${data}/documents`}> Docs</NavLink>
-          <NavLink to={`/accountsdash/communication/${data}`}> Communication</NavLink>
-          <NavLink to={`/accountsdash/organizers/${data}`}> Organizers</NavLink>
-          <NavLink to={`/accountsdash/invoices/${data}/invoice`}> Invoices</NavLink>
-          <NavLink to={`/accountsdash/email/${data}`}>Email</NavLink>
-          <NavLink to={`/accountsdash/proposals/${data}`}> Proposals & ELs</NavLink>
-          <NavLink to={`/accountsdash/notes/${data}`}> Notes</NavLink>
-          <NavLink to={`/accountsdash/workflow/${data}/pipelines`}> Workflow</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/overview/${data}`}> Overview </NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/info/${data}`}> Info</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/docs/${data}/documents`}> Docs</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/communication/${data}`}> Communication</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/organizers/${data}`}> Organizers</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/invoices/${data}/invoice`}> Invoices</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/email/${data}`}>Email</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/proposals/${data}`}> Proposals & ELs</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/notes/${data}`}> Notes</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/workflow/${data}/pipelines`}> Workflow</NavLink>
         </Box>
       </Box>
       <Box pl={3} pr={3}>

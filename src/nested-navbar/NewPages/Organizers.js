@@ -156,7 +156,7 @@ useEffect(() => {
 
   const handleCreateInvoiceClick = () => {
     setShowOrganizerTemplateForm(true);
-    navigate(`/accountsdash/organizers/${data}/accountorganizer`);
+    navigate(`/clients/accounts/accountsdash/organizers/${data}/accountorganizer`);
   };
 
   const handleDelete = (_id) => {
@@ -384,7 +384,16 @@ useEffect(() => {
                   </Typography>
                 </TableCell>
                 <TableCell>{row.updatedAt}</TableCell>
-                <TableCell></TableCell>
+                <TableCell>
+                  <Chip
+                    label={row.issubmited ? "Completed" : "Pending"}
+                    color={row.issubmited ? "success" : "default"}
+                    sx={{
+                      backgroundColor: row.issubmited ? "green" : "grey",
+                      color: "white",
+                    }}
+                  />
+                </TableCell>
                 <TableCell>{row.organizertemplateid.sections.length}</TableCell> {/* Show the number of sections */}
                 <TableCell>{row.issealed ? <Chip label="Sealed" color="primary" /> : null}</TableCell>
                 <TableCell sx={{ textAlign: "end" }}>

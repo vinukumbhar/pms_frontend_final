@@ -161,7 +161,7 @@ const App = () => {
 
 
           <Route path="/settings/firmsettings" element={<FirmSettings />} />
-          <Route path="/accountsdash" element={<AccountDash />}>
+          <Route path="/clients/accounts/accountsdash" element={<AccountDash />}>
             <Route path="overview/:data" element={<Overview />} />
             <Route path="info/:data" element={<Info />} />
             <Route path="docs/:data" element={<DashDocs />}>

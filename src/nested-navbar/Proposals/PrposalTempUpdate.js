@@ -317,7 +317,7 @@ const MyStepperUpdate = () => {
     updatesaveProposaltemp();
     setActiveStep(0);
     // navigate(`accountsdash/proposals/${data}`)
-    navigate(`/accountsdash/proposals/${data}`);
+    navigate(`/clients/accounts/accountsdash/proposals/${data}`);
   };
 
 
@@ -1965,7 +1965,7 @@ const MyStepperUpdate = () => {
   };
 
   const handleBackToProposalTable = () => {
-    navigate(`/accountsdash/proposals/${data}`); // Replace with the actual path to your proposal table page
+    navigate(`/clients/accounts/accountsdash/proposals/${data}`); // Replace with the actual path to your proposal table page
   };
 
   return (

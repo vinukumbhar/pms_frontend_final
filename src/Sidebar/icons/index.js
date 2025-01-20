@@ -21,6 +21,8 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
 import { LiaUserTagSolid } from "react-icons/lia";
 import { IoBagAddOutline } from "react-icons/io5";
+import { FaRegUser } from "react-icons/fa6";
+import { RiContactsBook3Line } from "react-icons/ri";
 const iconMapping = {
     AiOutlineAppstoreAdd,
     MdOutlineMail,
@@ -33,7 +35,9 @@ const iconMapping = {
     MdOutlineMailOutline ,
     AiOutlineLogout ,
     LiaUserTagSolid ,
-    IoBagAddOutline 
+    IoBagAddOutline ,
+    FaRegUser  ,
+    RiContactsBook3Line
 };
 
 export default iconMapping;

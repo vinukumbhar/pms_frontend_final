@@ -16,7 +16,7 @@ const Proposals = () => {
   const navigate = useNavigate();
 
   const handleCreateTemplateClick = () => {
-    navigate(`/accountsdash/proposals/${data}/new`)
+    navigate(`/clients/accounts/accountsdash/proposals/${data}/new`)
   };
 
   const [tempIdget, setTempIdGet] = useState("");
@@ -31,7 +31,7 @@ const Proposals = () => {
 
   //delete template
   const handleEdit = (_id) => {
-    navigate(`/accountsdash/proposals/${data}/update/` + _id);
+    navigate(`/clients/accounts/accountsdash/proposals/${data}/update/` + _id);
     console.log(_id);
   };
   useEffect(() => {

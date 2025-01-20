@@ -600,9 +600,9 @@ const FixedColumnTable = () => {
   return (
     <>
       <div style={{ display: "flex", padding: "10px", marginBottom: "20px" }}>
-        <Box className="client-document">
+        <Box >
           <Box
-            className="client-document-nav"
+            // className="client-document-nav"
             sx={{
               display: "flex",
               flexDirection: "row",
@@ -616,13 +616,13 @@ const FixedColumnTable = () => {
                 textDecoration: "none",
                 padding: "10px 16px",
                 borderRadius: "4px",
-                color: "primary.main",
+                // color: "primary.main",
                 "&:hover": {
-                  backgroundColor: "primary.light",
+                  backgroundColor: "#00ACC1",
                   color: "white",
                 },
                 "&.active": {
-                  backgroundColor: "primary.main",
+                  backgroundColor: "#00ACC1",
                   color: "white",
                 },
               },
@@ -632,7 +632,7 @@ const FixedColumnTable = () => {
               <Button
                 style={{
                   backgroundColor:
-                    activeButton === "active" ? "blue" : "transparent",
+                    activeButton === "active" ? "#00ACC1" : "transparent",
                   color: activeButton === "active" ? "white" : "black",
                   fontWeight: activeButton === "active" ? "bold" : "normal",
                 }}
@@ -644,7 +644,7 @@ const FixedColumnTable = () => {
               <Button
                 style={{
                   backgroundColor:
-                    activeButton === "archived" ? "blue" : "transparent",
+                    activeButton === "archived" ? "#00ACC1" : "transparent",
                   color: activeButton === "archived" ? "white" : "black",
                   fontWeight: activeButton === "archived" ? "bold" : "normal",
                 }}
@@ -1189,7 +1189,7 @@ const FixedColumnTable = () => {
                         background: "#fff",
                       }}
                     >
-                      <Link to={`/accountsdash/overview/${row.id}`}>
+                      <Link to={`/clients/accounts/accountsdash/overview/${row.id}`}>
                         {" "}
                         {row.Name}
                       </Link>

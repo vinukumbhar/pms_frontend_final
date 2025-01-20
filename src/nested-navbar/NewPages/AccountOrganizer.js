@@ -123,7 +123,7 @@ const AccountOrganizer = () => {
   }));
 
   const handleOrganizerFormClose = () => {
-    navigate(`/accountsdash/organizers/${data}`);
+    navigate(`/clients/accounts/accountsdash/organizers/${data}`);
   };
 
   //Preview
@@ -572,7 +572,7 @@ fetch(`${ORGANIZER_TEMP_API}/organizersendemail`, requestOptions)
 
   return (
     <Container>
-      <Divider />
+      {/* <Divider /> */}
       <Box mt={3} borderBottom={"2px solid #e2e8f0"} p={2}>
         <Typography fontSize={20}>
           <strong>Create organizer</strong>
