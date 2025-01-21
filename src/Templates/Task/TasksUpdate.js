@@ -1471,9 +1471,32 @@ const Tasks = () => {
 
                                 <Box mt={2} mb={2}><hr /></Box>
                                 <Box sx={{ pt: 2, display: 'flex', alignItems: 'center', gap: 5 }}>
-                                    <Button variant="contained" color="primary" onClick={updatetasktemp} >Save & exit</Button>
-                                    <Button variant="contained" color="primary" onClick={updatesavetasktemp} >Save</Button>
-                                    <Button variant="outlined" onClick={handleTaskTempCancle}>Cancel</Button>
+                                    <Button variant="contained" color="primary" onClick={updatetasktemp} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+borderRadius:'15px'
+              }}>Save & exit</Button>
+                                    <Button variant="contained" color="primary" onClick={updatesavetasktemp} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>Save</Button>
+                                    <Button variant="outlined" onClick={handleTaskTempCancle} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
                                 </Box>
                             </Box>
                         </form>

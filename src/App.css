@@ -6,6 +6,9 @@
   --color-menu-icon: #000000;
   --color-navbar-temp: #1976d2;
   --color-stage-back: #fafafa;
+  --color-save-btn:#00ACC1;
+  --color-save-hover-btn:#4DD0E1;
+  --color-border-cancel-btn:#00ACC1;
 }
 
 .dark-theme {
@@ -16,11 +19,15 @@
   --color-menu-icon: #000000;
   --color-navbar-temp: #ffffff;
   --color-stage-back: #333333;
+  --color-save-btn:#00ACC1;
+  --color-save-hover-btn:#4DD0E1;
+  --color-border-cancel-btn:#00ACC1;
 }
 
 #steps-label {
   color: var(--color-text);
 }
+
 
 .priority-custom-label,
 .pipeline-lable,

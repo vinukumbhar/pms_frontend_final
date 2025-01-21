@@ -16,22 +16,22 @@
 //     const [contactData, setContactData] = useState([]);
    
    
-//     const fetchContacts = async () => {
-//         try {
-//             const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
-//             setContactData(response.data.contactlist);
-//             // console.log(response.data.contactlist);
-//         } catch (error) {
-//             console.error("API Error:", error);
-//             // toast.error('Failed to fetch contacts');
-//         }
-//     };
-//     useEffect(() => {
-//         fetchContacts();
-//     }, []);
-//     const handleContactUpdated = () => {
-//         fetchContacts(); // Refetch contacts when updated
-//     };
+    // const fetchContacts = async () => {
+    //     try {
+    //         const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
+    //         setContactData(response.data.contactlist);
+    //         // console.log(response.data.contactlist);
+    //     } catch (error) {
+    //         console.error("API Error:", error);
+    //         // toast.error('Failed to fetch contacts');
+    //     }
+    // };
+    // useEffect(() => {
+    //     fetchContacts();
+    // }, []);
+    // const handleContactUpdated = () => {
+    //     fetchContacts(); // Refetch contacts when updated
+    // };
 //     const handleSearch = async (query) => {
 //         setSearchQuery(query);
     
@@ -118,47 +118,47 @@
 //             }
 //         }
 //     };
-//     const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for drawer visibility
-//     const [selectedContact, setSelectedContact] = useState(null);
-//     // Handle fetching contact data when a contact option is clicked
-//     const handleClick = async (id) => {
-//         try {
-//             const url = `${CONTACT_API}/contacts/${id}`;
-//             const response = await fetch(url);
-//             if (!response.ok) {
-//                 throw new Error("Failed to fetch data");
-//             }
-//             const data = await response.json();
-//             setSelectedContact(data.contact);
-//             // console.log(data.contact); // Debug: Log the contact data
-//             selectedContacts();
-//             setIsDrawerOpen(true); // Open the drawer after setting the contact data
-//               // Clear the autocomplete input and options
-//       setSearchQuery(""); // Clear search query
-//       setOptions([]); // Clear options list
-//         } catch (error) {
-//             console.error("Error fetching data:", error);
-//         }
-//     };
-//     // Effect for selected contact
-//     useEffect(() => {
-//         if (selectedContact) {
-//             selectedContacts();
-//         }
-//     }, [selectedContact]);
+    // const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for drawer visibility
+    // const [selectedContact, setSelectedContact] = useState(null);
+    // // Handle fetching contact data when a contact option is clicked
+    // const handleClick = async (id) => {
+    //     try {
+    //         const url = `${CONTACT_API}/contacts/${id}`;
+    //         const response = await fetch(url);
+    //         if (!response.ok) {
+    //             throw new Error("Failed to fetch data");
+    //         }
+    //         const data = await response.json();
+    //         setSelectedContact(data.contact);
+    //         // console.log(data.contact); // Debug: Log the contact data
+    //         selectedContacts();
+    //         setIsDrawerOpen(true); // Open the drawer after setting the contact data
+    //           // Clear the autocomplete input and options
+    //   setSearchQuery(""); // Clear search query
+    //   setOptions([]); // Clear options list
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //     }
+    // };
+    // // Effect for selected contact
+    // useEffect(() => {
+    //     if (selectedContact) {
+    //         selectedContacts();
+    //     }
+    // }, [selectedContact]);
 
-//     const selectedContacts = () => {
-//         if (selectedContact) {
-//             console.log("Selected contact:", selectedContact);
-//             // You can add more functionality for when the contact is selected, like updating the UI
-//         }
-//     };
+    // const selectedContacts = () => {
+    //     if (selectedContact) {
+    //         console.log("Selected contact:", selectedContact);
+    //         // You can add more functionality for when the contact is selected, like updating the UI
+    //     }
+    // };
 
-//     // Close the drawer
-//     const handleCloseDrawer = () => {
-//         setIsDrawerOpen(false);
-//         setSelectedContact(null); // Optionally clear selected contact when closing the drawer
-//     };
+    // // Close the drawer
+    // const handleCloseDrawer = () => {
+    //     setIsDrawerOpen(false);
+    //     setSelectedContact(null); // Optionally clear selected contact when closing the drawer
+    // };
 //     return (
 //         <Box sx={{ maxWidth: 600, borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: 'center',gap:2 }}>
 
@@ -223,38 +223,38 @@
 //             {error && <Typography color="error">{error}</Typography>}
 
 //             {/* Drawer for displaying Contact details */}
-//             <Drawer
-//                 anchor="right"
-//                 open={isDrawerOpen}
-//                 onClose={handleCloseDrawer}
-//                 sx={{
-//                     width: 300,
-//                     flexShrink: 0,
-//                     "& .MuiDrawer-paper": {
-//                         width: 300,
-//                         padding: 2,
-//                         display: "flex",
-//                         flexDirection: "column",
-//                     },
-//                 }}
-//             >
-//                 {selectedContact && (
-//                     <ContactForm
-//                         selectedContact={selectedContact}
-//                         // uniqueTags={uniqueTags}
-//                         // Pass additional props needed by ContactForm
-//                         handleTagChange={() => { }}
-//                         handlePhoneNumberChange={() => { }}
-//                         handleDeletePhoneNumber={() => { }}
-//                         handleAddPhoneNumber={() => { }}
-//                         handleCountryChange={() => { }}
-//                         sendingData={() => { }}
-//                         handleClose={() => setIsDrawerOpen(false)}
-//                         // isSmallScreen={isMobile}
-//                         onContactUpdated={handleContactUpdated}
-//                     />
-//                 )}
-//             </Drawer>
+            // <Drawer
+            //     anchor="right"
+            //     open={isDrawerOpen}
+            //     onClose={handleCloseDrawer}
+            //     sx={{
+            //         width: 300,
+            //         flexShrink: 0,
+            //         "& .MuiDrawer-paper": {
+            //             width: 300,
+            //             padding: 2,
+            //             display: "flex",
+            //             flexDirection: "column",
+            //         },
+            //     }}
+            // >
+            //     {selectedContact && (
+            //         <ContactForm
+            //             selectedContact={selectedContact}
+            //             // uniqueTags={uniqueTags}
+            //             // Pass additional props needed by ContactForm
+            //             handleTagChange={() => { }}
+            //             handlePhoneNumberChange={() => { }}
+            //             handleDeletePhoneNumber={() => { }}
+            //             handleAddPhoneNumber={() => { }}
+            //             handleCountryChange={() => { }}
+            //             sendingData={() => { }}
+            //             handleClose={() => setIsDrawerOpen(false)}
+            //             // isSmallScreen={isMobile}
+            //             onContactUpdated={handleContactUpdated}
+            //         />
+            //     )}
+            // </Drawer>
 //         </Box>
 //     );
 // };
@@ -263,48 +263,301 @@
 
 
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   TextField,
+//   CircularProgress,
+//   Typography,
+//   Divider,
+//   List,
+//   ListItem,
+//   ListItemAvatar,
+//   Avatar,
+//   ListItemText,
+//   Button,
+//   Stack,
+// } from "@mui/material";
+// import SearchIcon from "@mui/icons-material/Search";
+
+// const SearchComponent = () => {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [options, setOptions] = useState([
+//     { label: "John Doe", subLabel: "john@example.com", type: "Accounts", id: 1 },
+//     { label: "Jane Smith", subLabel: "jane@example.com", type: "Contacts", id: 2 },
+//     { label: "Tax Document", subLabel: "2023 Tax Report", type: "Documents", id: 3 },
+//     { label: "Acme Corp", subLabel: "info@acme.com", type: "Accounts", id: 4 },
+//     { label: "Customer Support", subLabel: "support@example.com", type: "Contacts", id: 5 },
+//     { label: "Report", subLabel: "Annual Report 2023", type: "Documents", id: 6 },
+//   ]); // Replace with fetched data
+//   const [error, setError] = useState(null);
+//   const [filterType, setFilterType] = useState("All"); // "All", "Accounts", "Contacts", "Documents"
+
+//   const handleSearchChange = (event) => {
+//     const query = event.target.value;
+//     setSearchQuery(query);
+//     // Simulate data fetching and update the options state based on query
+//   };
+
+//   const filteredOptions =
+//     filterType === "All"
+//       ? options
+//       : options.filter((option) => option.type === filterType);
+
+//   return (
+//     <Box sx={{ position: "relative", width: 400, margin: "0 auto" }}>
+//       {/* Search Input */}
+//       <TextField
+//         value={searchQuery}
+//         onChange={handleSearchChange}
+//         placeholder="Search..."
+//         variant="outlined"
+//         size="small"
+//         fullWidth
+//         InputProps={{
+//           startAdornment: <SearchIcon sx={{ mr: 1, color: "gray" }} />,
+//           endAdornment: loading ? <CircularProgress size={20} /> : null,
+//         }}
+//       />
+
+//       {/* Search Dropdown */}
+//       {searchQuery && (
+//         <Box
+//           sx={{
+//             position: "absolute",
+//             top: "100%",
+//             left: 0,
+//             right: 0,
+//             bgcolor: "white",
+//             border: "1px solid #ddd",
+//             borderRadius: "8px",
+//             boxShadow: 2,
+//             mt: 1,
+//             zIndex: 10,
+//             maxHeight: 400,
+//             overflowY: "auto",
+//           }}
+//         >
+//           {/* Filter Buttons */}
+//           <Stack direction="row" spacing={1} sx={{ p: 2, justifyContent: "center" }}>
+//             {["All", "Accounts", "Contacts", ].map((type) => (
+//               <Typography
+//                 key={type}
+//                 // variant={filterType === type ? "contained" : "outlined"}
+//                 size="small"
+//                 onClick={() => setFilterType(type)}
+              
+//                 sx={{
+//                     fontWeight: filterType === type ? "bold" : "light"
+//                 }}
+//               >
+//                 {type} 
+//               </Typography>
+//             ))}
+//           </Stack>
+//           <Divider />
+
+//           {filteredOptions.length > 0 ? (
+//             <>
+//               <List>
+//                 {filteredOptions.map((option) => (
+//                   <ListItem
+//                     key={option.id}
+//                     button
+//                     onClick={() => console.log(`Selected ${option.label}`)}
+//                   >
+//                     <ListItemAvatar>
+//                       <Avatar>{option.label.charAt(0).toUpperCase()}</Avatar>
+//                     </ListItemAvatar>
+//                     <ListItemText
+//                       primary={option.label}
+//                       secondary={option.subLabel}
+//                       primaryTypographyProps={{ fontWeight: "bold" }}
+//                     />
+//                   </ListItem>
+//                 ))}
+//               </List>
+
+//               {/* Global Search Link */}
+//               <Box sx={{ p: 2, textAlign: "center" }}>
+//                 <Button
+//                   variant="text"
+//                   color="primary"
+//                   onClick={() => console.log("Global search clicked")}
+//                 >
+//                   Global search
+//                 </Button>
+//               </Box>
+//             </>
+//           ) : (
+//             <Typography sx={{ p: 2, color: "gray", textAlign: "center" }}>
+//               No results found
+//             </Typography>
+//           )}
+//         </Box>
+//       )}
+//     </Box>
+//   );
+// };
+
+// export default SearchComponent;
+
+
+import React, { useState,useEffect } from "react";
 import {
   Box,
   TextField,
-  CircularProgress,
+  Stack,
   Typography,
   Divider,
+  CircularProgress,
   List,
   ListItem,
   ListItemAvatar,
   Avatar,
   ListItemText,
   Button,
-  Stack,
+  Drawer,
+  Chip,
+  IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
+import axios from "axios";
+import { RxCross2 } from "react-icons/rx";
+import ContactForm from "../Pages/UpdateContact"
+import { useNavigate } from "react-router-dom";
 const SearchComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [options, setOptions] = useState([
-    { label: "John Doe", subLabel: "john@example.com", type: "Accounts", id: 1 },
-    { label: "Jane Smith", subLabel: "jane@example.com", type: "Contacts", id: 2 },
-    { label: "Tax Document", subLabel: "2023 Tax Report", type: "Documents", id: 3 },
-    { label: "Acme Corp", subLabel: "info@acme.com", type: "Accounts", id: 4 },
-    { label: "Customer Support", subLabel: "support@example.com", type: "Contacts", id: 5 },
-    { label: "Report", subLabel: "Annual Report 2023", type: "Documents", id: 6 },
-  ]); // Replace with fetched data
+  const [options, setOptions] = useState([]);
+  const [filterType, setFilterType] = useState("All"); // "All", "Accounts", "Contacts"
   const [error, setError] = useState(null);
-  const [filterType, setFilterType] = useState("All"); // "All", "Accounts", "Contacts", "Documents"
-
-  const handleSearchChange = (event) => {
-    const query = event.target.value;
+  const navigate = useNavigate();
+  const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
+  const CONTACT_API = process.env.REACT_APP_CONTACTS_URL;
+  const [contactData, setContactData] = useState([]);
+  const handleSearchChange = async (event) => {
+    const query = event.target.value.trim();
     setSearchQuery(query);
-    // Simulate data fetching and update the options state based on query
+
+    if (!query) {
+      setOptions([]);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Fetch data from both APIs
+      const [accountsResponse, contactsResponse] = await Promise.all([
+        axios.get(`${ACCOUNT_API}/accounts/nameandid/accountdetails`, {
+          params: { search: query },
+        }),
+        axios.get(`${CONTACT_API}/contacts/nameandid`, {
+          params: { search: query },
+        }),
+      ]);
+
+      const accountsData = accountsResponse.data.accounts || [];
+      const contactsData = contactsResponse.data.contacts || [];
+
+      // Combine and map options
+      const combinedOptions = [
+        ...accountsData.map((account) => ({
+          label: account.accountName,
+          // subLabel: account.email || "No Email",
+          type: "Accounts",
+          id: account._id,
+        })),
+        ...contactsData.map((contact) => ({
+          label: contact.contactName,
+          subLabel: contact.email || "No Email",
+          type: "Contacts",
+          id: contact._id,
+        })),
+      ];
+
+      setOptions(combinedOptions);
+    } catch (err) {
+      setError("Failed to fetch data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filteredOptions =
-    filterType === "All"
-      ? options
-      : options.filter((option) => option.type === filterType);
+  // const filteredOptions =
+  //   filterType === "All"
+  //     ? options
+  //     : options.filter((option) => option.type === filterType);
 
+  const filteredOptions = options
+  .filter((option) => {
+    const labelMatch = option.label?.toLowerCase().includes(searchQuery.toLowerCase());
+    const subLabelMatch = option.subLabel?.toLowerCase().includes(searchQuery.toLowerCase());
+    return labelMatch || subLabelMatch;
+  })
+  .filter((option) => filterType === "All" || option.type === filterType);
+
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for drawer visibility
+  const [selectedContact, setSelectedContact] = useState(null);
+  // Handle fetching contact data when a contact option is clicked
+  const handleClick = async (id) => {
+      try {
+          const url = `${CONTACT_API}/contacts/${id}`;
+          const response = await fetch(url);
+          if (!response.ok) {
+              throw new Error("Failed to fetch data");
+          }
+          const data = await response.json();
+          setSelectedContact(data.contact);
+          // console.log(data.contact); // Debug: Log the contact data
+          selectedContacts();
+          setIsDrawerOpen(true); // Open the drawer after setting the contact data
+            // Clear the autocomplete input and options
+    setSearchQuery(""); // Clear search query
+    setOptions([]); // Clear options list
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      }
+  };
+  // Effect for selected contact
+  useEffect(() => {
+      if (selectedContact) {
+          selectedContacts();
+      }
+  }, [selectedContact]);
+
+  const selectedContacts = () => {
+      if (selectedContact) {
+          console.log("Selected contact:", selectedContact);
+          // You can add more functionality for when the contact is selected, like updating the UI
+      }
+  };
+
+  // Close the drawer
+  const handleCloseDrawer = () => {
+      setIsDrawerOpen(false);
+      setSelectedContact(null); // Optionally clear selected contact when closing the drawer
+  };
+  const fetchContacts = async () => {
+    try {
+        const response = await axios.get(`${CONTACT_API}/contacts/contactlist/list/`);
+        setContactData(response.data.contactlist);
+        // console.log(response.data.contactlist);
+    } catch (error) {
+        console.error("API Error:", error);
+        // toast.error('Failed to fetch contacts');
+    }
+};
+useEffect(() => {
+    fetchContacts();
+}, []);
+const handleContactUpdated = () => {
+    fetchContacts(); // Refetch contacts when updated
+};
   return (
     <Box sx={{ position: "relative", width: 400, margin: "0 auto" }}>
       {/* Search Input */}
@@ -314,10 +567,31 @@ const SearchComponent = () => {
         placeholder="Search..."
         variant="outlined"
         size="small"
+
         fullWidth
+        // InputProps={{
+        //   startAdornment: <SearchIcon sx={{ mr: 1, color: "gray" }} />,
+        //   endAdornment: loading ? <CircularProgress size={20} /> : null,
+        // }}
         InputProps={{
           startAdornment: <SearchIcon sx={{ mr: 1, color: "gray" }} />,
-          endAdornment: loading ? <CircularProgress size={20} /> : null,
+          endAdornment: (
+            <>
+              {loading ? (
+                <CircularProgress size={20} />
+              ) : (
+                searchQuery && (
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearchQuery("")}
+                    sx={{ color: "gray" }}
+                  >
+                    <RxCross2  />
+                  </IconButton>
+                )
+              )}
+            </>
+          ),
         }}
       />
 
@@ -340,22 +614,68 @@ const SearchComponent = () => {
           }}
         >
           {/* Filter Buttons */}
-          <Stack direction="row" spacing={1} sx={{ p: 2, justifyContent: "center" }}>
-            {["All", "Accounts", "Contacts", ].map((type) => (
+          {/* <Stack direction="row" spacing={1} sx={{ p: 2, justifyContent: "center" }}>
+            {["All", "Accounts", "Contacts"].map((type) => (
               <Typography
                 key={type}
-                // variant={filterType === type ? "contained" : "outlined"}
-                size="small"
                 onClick={() => setFilterType(type)}
-              
                 sx={{
-                    fontWeight: filterType === type ? "bold" : "light"
+                  fontWeight: filterType === type ? "bold" : "light",
+                  cursor: "pointer",
                 }}
               >
-                {type} 
+                {type} ({options.filter((opt) => opt.type === type || type === "All").length})
               </Typography>
             ))}
-          </Stack>
+          </Stack> */}
+          <Stack direction="row" spacing={1} sx={{ p: 2, justifyContent: "center" }}>
+  {["All", "Accounts", "Contacts"].map((type) => {
+    const count = options
+      .filter((opt) => {
+        const labelMatch = opt.label?.toLowerCase().includes(searchQuery.toLowerCase());
+        const subLabelMatch = opt.subLabel?.toLowerCase().includes(searchQuery.toLowerCase());
+        return labelMatch || subLabelMatch;
+      })
+      .filter((opt) => type === "All" || opt.type === type).length;
+
+    return (
+      <Box sx={{display:'flex', gap:1, alignItems:'center'}}>
+      <Typography
+        key={type}
+        onClick={() => setFilterType(type)}
+        sx={{
+          fontWeight: filterType === type ? "bold" : "light",
+          cursor: "pointer",
+        }}
+      >
+        {type}  
+
+      </Typography>
+      {/* <Chip
+      label={count}
+      size="small"
+      sx={{
+        backgroundColor:  "#00ACC1" ,
+        color: "white" ,
+        fontWeight: "bold",
+      }}
+    /> */}
+    {count > 0 && (
+    <Chip
+      label={count}
+      size="small"
+      sx={{
+        backgroundColor: '#00ACC1',
+        color: 'white',
+        fontWeight: 'bold',
+      }}
+    />
+  )}
+    </Box>
+    );
+  })}
+</Stack>
+
           <Divider />
 
           {filteredOptions.length > 0 ? (
@@ -365,7 +685,17 @@ const SearchComponent = () => {
                   <ListItem
                     key={option.id}
                     button
-                    onClick={() => console.log(`Selected ${option.label}`)}
+                    // onClick={() => console.log(`Selected ${option.label}`)}
+                    onClick={() => {
+                      if (option.type === "Accounts") {
+                        // Navigate to the Accounts dashboard
+                        navigate(`/clients/accounts/accountsdash/overview/${option.id}`);
+                        setSearchQuery("")
+                      } else if (option.type === "Contacts") {
+                        // Open the drawer
+                        handleClick(option.id); // Function to handle opening the drawer
+                      }
+                    }}
                   >
                     <ListItemAvatar>
                       <Avatar>{option.label.charAt(0).toUpperCase()}</Avatar>
@@ -397,6 +727,38 @@ const SearchComponent = () => {
           )}
         </Box>
       )}
+                  <Drawer
+                anchor="right"
+                open={isDrawerOpen}
+                onClose={handleCloseDrawer}
+                sx={{
+                    width: 300,
+                    flexShrink: 0,
+                    "& .MuiDrawer-paper": {
+                        width: 300,
+                        padding: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                    },
+                }}
+            >
+                {selectedContact && (
+                    <ContactForm
+                        selectedContact={selectedContact}
+                        // uniqueTags={uniqueTags}
+                        // Pass additional props needed by ContactForm
+                        handleTagChange={() => { }}
+                        handlePhoneNumberChange={() => { }}
+                        handleDeletePhoneNumber={() => { }}
+                        handleAddPhoneNumber={() => { }}
+                        handleCountryChange={() => { }}
+                        sendingData={() => { }}
+                        handleClose={() => setIsDrawerOpen(false)}
+                        // isSmallScreen={isMobile}
+                        onContactUpdated={handleContactUpdated}
+                    />
+                )}
+            </Drawer>
     </Box>
   );
 };

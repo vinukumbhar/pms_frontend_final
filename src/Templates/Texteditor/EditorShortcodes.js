@@ -536,7 +536,14 @@ export default function Editor({ initialContent, onChange }) {
                 />
             </div>
             <Box sx={{mt:3}}>
-                <Button onClick={handleOpenDropdown} variant="contained" sx={{ mt: 7 }}>
+                <Button onClick={handleOpenDropdown} variant="contained"  sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mt:7
+                                    }}>
                     Shortcode
                 </Button>
                 <Popover

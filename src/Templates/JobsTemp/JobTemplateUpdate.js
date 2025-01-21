@@ -295,7 +295,7 @@ const JobTemplateUpdate = ({ charLimit = 4000 }) => {
     setClientFacingStatus(tempvalues.showinclientportal);
     setInputText(tempvalues.jobnameforclient);
     setClientDescription(tempvalues.clientfacingDescription);
-    setSelectedJob(tempvalues.clientfacingstatus.clientfacingName)
+    // setSelectedJob(tempvalues.clientfacingstatus.clientfacingName)
   };
 
   // client facing integration

@@ -354,7 +354,14 @@ const Service = () => {
       });
     return (
         <Box>
-            <Button onClick={setIsNewDrawerOpen} variant="contained" color="primary" sx={{ mb: 3 }}>
+            <Button onClick={setIsNewDrawerOpen} variant="contained" color="primary"  sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mb:3
+                                    }}>
                 Create Service
             </Button>
             <Box>
@@ -514,7 +521,15 @@ const Service = () => {
                                     variant="contained"
                                     color="primary"
                                     onClick={setCategoryFormOpen}
-                                    sx={{ mt: 4, ml: 1 }}
+                                    // sx={{ mt: 4, ml: 1 }}
+                                    sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mt:4,ml:1
+                                    }}
                                 >
                                     Create category
                                 </Button>
@@ -553,14 +568,46 @@ const Service = () => {
                                         />
                                     </Box>
                                     <Box sx={{ pt: 2, display: 'flex', alignItems: 'center', gap: 5, margin: "8px", ml: 3 }}>
-                                        <Button variant="contained" color="primary" onClick={createCategory} >Create</Button>
-                                        <Button variant="outlined" onClick={handleCategoryFormClose}>Cancel</Button>
+                                        <Button variant="contained" color="primary" onClick={createCategory} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }} >Create</Button>
+                                        <Button variant="outlined" onClick={handleCategoryFormClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
                                     </Box>
                                 </Drawer >
                             </Box>
                             <Box sx={{ pt: 5, display: 'flex', alignItems: 'center', gap: 5, ml: 1 }}>
-                                <Button variant="contained" color="primary" onClick={createservicetemp}>Save</Button>
-                                <Button variant="outlined" onClick={handleNewDrawerClose}>Cancel</Button>
+                                <Button variant="contained" color="primary" onClick={createservicetemp} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>Save</Button>
+                                <Button variant="outlined" onClick={handleNewDrawerClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
                             </Box>
                         </Box>
 

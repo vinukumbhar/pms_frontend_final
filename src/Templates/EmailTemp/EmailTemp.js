@@ -602,7 +602,14 @@ console.log(selectedFiles)
         <Container>
             {!showForm ? (
                 <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" color="primary" onClick={handleCreateTemplate} sx={{ mb: 3 }}>
+                    <Button variant="contained" color="primary" onClick={handleCreateTemplate} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mb:3
+                                    }}>
                         Create Template
                     </Button>
                     {/* <MaterialReactTable columns={columns} table={table} /> */}
@@ -755,7 +762,15 @@ console.log(selectedFiles)
                                             variant="contained"
                                             color="primary"
                                             onClick={toggleDropdown}
-                                            sx={{ mt: 2 }}
+                                            // sx={{ mt: 2 }}
+                                            sx={{
+                                                backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                               
+                                                '&:hover': {
+                                                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                                },
+                                             mt:2
+                                              }}
                                         >
                                             Add Shortcode
                                         </Button>
@@ -798,11 +813,34 @@ console.log(selectedFiles)
                                         <EditorShortcodes onChange={handleEditorChange} />
                                     </Box>
                                     <Box sx={{ mt: 5, display: 'flex', gap: 2 }}>
-                                        <Button variant="contained" color="primary" onClick={handleSaveExitTemplate}>
+                                        <Button variant="contained" color="primary" onClick={handleSaveExitTemplate} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+borderRadius:'15px'
+              }}>
                                             Save & Exit
                                         </Button>
-                                        <Button variant="contained" color="primary" onClick={handleSaveTemplate}>Save</Button>
-                                        <Button variant="outlined" onClick={handleTempCancle}>Cancel</Button>
+                                        <Button variant="contained" color="primary" onClick={handleSaveTemplate} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>Save</Button>
+                                        <Button variant="outlined" onClick={handleTempCancle} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
                                     </Box>
                                 </form>
                             </Box>
@@ -849,7 +887,14 @@ console.log(selectedFiles)
                                     />
                                     <Typography variant="h6">Drag & drop file here</Typography>
                                     <Typography variant="body2">or</Typography>
-                                    <Button variant="contained" color="primary" onClick={handleButtonClick}>
+                                    <Button variant="contained" color="primary" onClick={handleButtonClick} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+
+                                    }}>
                                         Browse Files
                                     </Button>
                                     <Typography variant="body2" sx={{ marginTop: '8px' }}>

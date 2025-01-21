@@ -1,0 +1,12 @@
+
+@import url("../App.css");
+
+.savebtn{
+    background-color: var(--color-save-btn);
+    }
+    .savebtn:hover{
+        background-color: var(--color-save-hover-btn);
+    }
+    .cancelbtn{
+        border-color: var(--color-border-cancel-btn);
+    }

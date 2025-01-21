@@ -687,7 +687,15 @@ const EmailTempUpdate = () => {
                                         variant="contained"
                                         color="primary"
                                         onClick={toggleDropdown}
-                                        sx={{ mt: 2 }}
+                                        // sx={{ mt: 2 }}
+                                        sx={{
+                                            backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                           
+                                            '&:hover': {
+                                              backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                            },
+                                         mt:2
+                                          }}
                                     >
                                         Add Shortcode
                                     </Button>
@@ -729,11 +737,34 @@ const EmailTempUpdate = () => {
                                     <EditorShortcodes onChange={handleEditorChange} initialContent={emailBody} />
                                 </Box>
                                 <Box sx={{ mt: 5, display: 'flex', gap: 2 }}>
-                                    <Button variant="contained" color="primary" onClick={handleSaveExitTemplate}>
+                                    <Button variant="contained" color="primary" onClick={handleSaveExitTemplate} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+borderRadius:'15px'
+              }}>
                                         Save & exit
                                     </Button>
-                                    <Button onClick={saveTemp} variant="contained" color="primary"> Save</Button>
-                                    <Button variant="outlined" onClick={handleTempCancle}>Cancel</Button>
+                                    <Button onClick={saveTemp} variant="contained" color="primary" sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}> Save</Button>
+                                    <Button variant="outlined" onClick={handleTempCancle} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
                                 </Box>
                             </form>
                         </Box>
@@ -780,7 +811,14 @@ const EmailTempUpdate = () => {
                                 />
                                 <Typography variant="h6">Drag & drop file here</Typography>
                                 <Typography variant="body2">or</Typography>
-                                <Button variant="contained" color="primary" onClick={handleButtonClick}>
+                                <Button variant="contained" color="primary" onClick={handleButtonClick} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+
+                                    }}>
                                     Browse Files
                                 </Button>
                                 <Typography variant="body2" sx={{ marginTop: '8px' }}>

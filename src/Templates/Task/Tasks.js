@@ -617,7 +617,14 @@ checked: checkedSubtasks.includes(id), // Check if ID is in the checkedSubtasks 
       <Container>
         {!showForm ? (
           <Box sx={{ mt: 2 }}>
-            <Button variant="contained" color="primary" onClick={handleCreateTask} sx={{ mb: 3 }}>
+            <Button variant="contained" color="primary" onClick={handleCreateTask}  sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mb:3
+                                    }}>
               Create Task Template
             </Button>
             {loading ? (
@@ -949,9 +956,32 @@ checked: checkedSubtasks.includes(id), // Check if ID is in the checkedSubtasks 
                   </Grid>
                   <Box mt={2} mb={2}><hr /></Box>
                   <Box sx={{ pt: 2, display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <Button variant="contained" color="primary" onClick={createTaskTemp}>Save & exit</Button>
-                    <Button variant="contained" color="primary" onClick={createSaveTaskTemp}>Save</Button>
-                    <Button variant="outlined" onClick={handleTaskCancel}>Cancel</Button>
+                    <Button variant="contained" color="primary" onClick={createTaskTemp} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+borderRadius:'15px'
+              }}>Save & exit</Button>
+                    <Button variant="contained" color="primary" onClick={createSaveTaskTemp} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>Save</Button>
+                    <Button variant="outlined" onClick={handleTaskCancel} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
                   </Box>
                 </Box>
               </form>
