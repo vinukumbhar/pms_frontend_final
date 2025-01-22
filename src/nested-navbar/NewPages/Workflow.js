@@ -21,11 +21,11 @@ const Workflow = () => {
           borderRadius: '4px',
           // color: 'primary.main',
           '&:hover': {
-            backgroundColor: 'primary.light',
+            backgroundColor: "#00ACC1",
             color: 'white'
           },
           '&.active': {
-            backgroundColor: 'primary.main',
+            backgroundColor: "#00ACC1",
             color: 'white'
           }
         }

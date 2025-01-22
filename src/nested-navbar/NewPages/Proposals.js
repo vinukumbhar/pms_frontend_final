@@ -171,7 +171,14 @@ const Proposals = () => {
   return (
 
     <Box sx={{ mt: 2 }}>
-      <Button variant="contained" onClick={handleCreateTemplateClick}>
+      <Button variant="contained" onClick={handleCreateTemplateClick} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mb:3
+                                    }}>
         New Proposals 
       </Button>
       <Paper>

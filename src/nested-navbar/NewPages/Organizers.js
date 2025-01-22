@@ -324,16 +324,24 @@ useEffect(() => {
 
   return (
     <Box sx={{ mt: 2 }}>
-      <Button variant="contained" onClick={handleCreateInvoiceClick} sx={{ mb: 3 }}>
+      <Button variant="contained" onClick={handleCreateInvoiceClick} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mb:3
+                                    }}>
         New Organizer
       </Button>
       {/* <MaterialReactTable columns={columns} table={table} /> */}
       <Box>
   <Button
             style={{
-              backgroundColor: activeButton === "active" ? "blue" : "transparent",
-              color: activeButton === "active" ? "white" : "black",
-              fontWeight: activeButton === "active" ? "bold" : "normal",
+              backgroundColor:
+                    activeButton === "active" ? "#00ACC1" : "transparent",
+                  color: activeButton === "active" ? "white" : "black",
+                  fontWeight: activeButton === "active" ? "bold" : "normal",
             }}
             onClick={handleActiveClick}
           >
@@ -342,9 +350,10 @@ useEffect(() => {
 
           <Button
             style={{
-              backgroundColor: activeButton === "archived" ? "blue" : "transparent",
-              color: activeButton === "archived" ? "white" : "black",
-              fontWeight: activeButton === "archived" ? "bold" : "normal",
+              backgroundColor:
+                    activeButton === "archived" ? "#00ACC1" : "transparent",
+                  color: activeButton === "archived" ? "white" : "black",
+                  fontWeight: activeButton === "archived" ? "bold" : "normal",
             }}
             onClick={handleArchivedClick}
           >

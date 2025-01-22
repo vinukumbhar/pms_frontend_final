@@ -24,7 +24,7 @@ import axios from "axios";
 import "./Sidebar.css";
 import iconMapping from "./icons/index";
 import Logo from "../Images/Logo.svg";
-import { FaBars } from "react-icons/fa6";
+import { FaBars, FaPlus } from "react-icons/fa6";
 // import { AiOutlinePlusCircle } from "react-icons/ai";
 import { FaPlusCircle } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
@@ -39,9 +39,41 @@ import { useLocation } from "react-router-dom";
 import { IoMoonOutline } from "react-icons/io5";
 import { MdOutlineWbSunny } from "react-icons/md";
 import { VscColorMode } from "react-icons/vsc";
-import user from "../Images/user.jpg";
+import user from "../Images/Avatar.png";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 import SearchComponent from "./Search";
 function Sidebar() {
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    "& .MuiBadge-badge": {
+      backgroundColor: "#44b700",
+      color: "#44b700",
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      "&::after": {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        animation: "ripple 1.2s infinite ease-in-out",
+        border: "1px solid currentColor",
+        content: '""',
+      },
+    },
+    "@keyframes ripple": {
+      "0%": {
+        transform: "scale(.8)",
+        opacity: 1,
+      },
+      "100%": {
+        transform: "scale(2.4)",
+        opacity: 0,
+      },
+    },
+  }));
   const location = useLocation();
   const navigate = useNavigate();
   const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
@@ -504,7 +536,7 @@ function Sidebar() {
               <FaPlusCircle className="add-icon" onClick={handleDrawerOpen} />
             </Box>
 
-            <Box
+            {/* <Box
               onClick={toggleTheme}
               style={{
                 // display: "inline-block",
@@ -514,7 +546,7 @@ function Sidebar() {
               }}
             >
               <VscColorMode fontSize="1.5rem" />
-            </Box>
+            </Box> */}
           </Box>
 
           <Box>
@@ -527,16 +559,16 @@ function Sidebar() {
                   onClick={toggleDropdown}
                   style={{ display: "flex", alignItems: "center", gap: "2px" }}
                 >
-                  <img
-                    src={user}
-                    alt="user"
-                    className="user-icon"
-                    style={{
-                      height: "55px",
-                      width: "55px",
-                      borderRadius: "50%",
-                    }}
-                  />
+                  
+                  <Stack direction="row" spacing={2}>
+                    <StyledBadge
+                      overlap="circular"
+                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                      variant="dot"
+                    >
+                      <Avatar alt="Remy Sharp" src={user} />
+                    </StyledBadge>
+                  </Stack>
                   <Box>
                     <Typography style={{ fontWeight: "bold" }}>
                       {username}
@@ -1005,8 +1037,11 @@ function Sidebar() {
               alignItems: "center",
             }}
           >
-            <Typography variant="h6" fontWeight="bold">
-              {/* New Sidebar Content */}
+            <Typography
+              fontWeight="bold"
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
+              <FaPlus /> New
             </Typography>
             <RxCross2
               onClick={handleDrawerClose}

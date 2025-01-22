@@ -23,7 +23,7 @@ const UploadDocument = ({
   useEffect(() => {
     const fetchFolders = async () => {
       try {
-        const url = `${API_KEY}/allFolders/${templateId}`;
+        const url = `${API_KEY}:8005/allFolders/${templateId}`;
         const response = await axios.get(url);
         const addIsOpenProperty = (folders, parentId = null) =>
           folders.map((folder, index) => ({
@@ -123,7 +123,7 @@ const UploadDocument = ({
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${API_KEY}/uploadfile/`,
+      url: `${API_KEY}:8005/uploadfile/`,
       data: data,
       
     };

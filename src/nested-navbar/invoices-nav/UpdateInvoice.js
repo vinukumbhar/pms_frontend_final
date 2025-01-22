@@ -1186,7 +1186,14 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
                   variant="contained"
                   color="primary"
                   onClick={createinvoice}
-
+                  sx={{
+                    backgroundColor: 'var(--color-save-btn)',  // Normal background
+                   
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                    },
+                  
+                  }}
                 >
                   Save & Exit
                 </Button>
@@ -1317,7 +1324,14 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
             />
           </Box>
           <Box>
-            <Button variant="contained" color="primary" onClick={toggleDropdown} sx={{ mt: 2 }}>
+            <Button variant="contained" color="primary" onClick={toggleDropdown} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mt:2
+                                    }}>
               Add Shortcode
             </Button>
             <Popover
@@ -1586,15 +1600,31 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
           </Box>
           <Box sx={{ pt: 4, display: "flex", alignItems: "center", gap: 5, justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", gap: 2 }}>
-              <Button variant="contained" color="primary" onClick={createinvoice}>
+              <Button variant="contained" color="primary" onClick={createinvoice} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
                 Save
               </Button>
-              <Button variant="outlined" onClick={onClose}>
+              <Button variant="outlined" onClick={onClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
                 Cancel
               </Button>
             </Box>
             <Typography>
-              Total:<strong> {totalAmount} </strong>
+              Total:<strong> ${totalAmount} </strong>
             </Typography>
           </Box>
         </Box>
@@ -1768,7 +1798,14 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
                   </Box>
                 </Box>
                 <Box>
-                  <Button variant="contained" color="primary" onClick={setCategoryFormOpen} sx={{ mt: 4, ml: 1 }}>
+                  <Button variant="contained" color="primary" onClick={setCategoryFormOpen} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mt:4,ml:1
+                                    }}>
                     Create category
                   </Button>
 
@@ -1797,20 +1834,52 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
                       <TextField fullWidth name="Rate" placeholder="Category Name" size="small" margin="normal" value={categorycreate} onChange={(e) => setcategorycreate(e.target.value)} />
                     </Box>
                     <Box sx={{ pt: 2, display: "flex", alignItems: "center", gap: 5, margin: "8px", ml: 3 }}>
-                      <Button variant="contained" color="primary" onClick={createCategory}>
+                      <Button variant="contained" color="primary" onClick={createCategory} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
                         Create
                       </Button>
-                      <Button variant="outlined" onClick={handleCategoryFormClose}>
+                      <Button variant="outlined" onClick={handleCategoryFormClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
                         Cancel
                       </Button>
                     </Box>
                   </Drawer>
                 </Box>
                 <Box sx={{ pt: 5, display: "flex", alignItems: "center", gap: 5, ml: 1 }}>
-                  <Button variant="contained" color="primary" onClick={createservicetemp}>
+                  <Button variant="contained" color="primary" onClick={createservicetemp} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
                     Save
                   </Button>
-                  <Button variant="outlined" onClick={handleNewDrawerClose}>
+                  <Button variant="outlined" onClick={handleNewDrawerClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
                     Cancel
                   </Button>
                 </Box>
@@ -1843,10 +1912,26 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
             <TextField fullWidth name="Rate" placeholder="Category Name" size="small" margin="normal" value={categorycreate} onChange={(e) => setcategorycreate(e.target.value)} />
           </Box>
           <Box sx={{ pt: 2, display: "flex", alignItems: "center", gap: 5, margin: "8px", ml: 3 }}>
-            <Button variant="contained" color="primary" onClick={createCategory}>
+            <Button variant="contained" color="primary" onClick={createCategory} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
               Create
             </Button>
-            <Button variant="outlined" onClick={handleCategoryFormClose}>
+            <Button variant="outlined" onClick={handleCategoryFormClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
               Cancel
             </Button>
           </Box>
@@ -1898,10 +1983,26 @@ const InvoicesUpdate = ({ charLimit = 4000, onClose, invoiceData }) => {
                   <FormControlLabel control={<Switch checked={selectedRowData?.tax} onChange={(event) => handleServiceWitch(event.target.checked)} color="primary" />} label={"Tax"} />
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 2 }}>
-                  <Button variant="contained" onClick={handleSaveChanges}>
+                  <Button variant="contained" onClick={handleSaveChanges} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
                     Save
                   </Button>
-                  <Button variant="outlined" onClick={handleEditDrawerClose}>
+                  <Button variant="outlined" onClick={handleEditDrawerClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
                     {" "}
                     Cancel
                   </Button>

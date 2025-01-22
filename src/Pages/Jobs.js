@@ -1086,9 +1086,10 @@ const Example = ({ charLimit = 4000 }) => {
           <Box>
             <Button
               style={{
-                backgroundColor: activeButton === "active" ? "blue" : "transparent",
-                color: activeButton === "active" ? "white" : "black",
-                fontWeight: activeButton === "active" ? "bold" : "normal",
+                backgroundColor:
+                    activeButton === "active" ? "#00ACC1" : "transparent",
+                  color: activeButton === "active" ? "white" : "black",
+                  fontWeight: activeButton === "active" ? "bold" : "normal",
               }}
               onClick={handleActiveClick}
             >
@@ -1097,9 +1098,10 @@ const Example = ({ charLimit = 4000 }) => {
 
             <Button
               style={{
-                backgroundColor: activeButton === "archived" ? "blue" : "transparent",
-                color: activeButton === "archived" ? "white" : "black",
-                fontWeight: activeButton === "archived" ? "bold" : "normal",
+                backgroundColor:
+                    activeButton === "archived" ? "#00ACC1" : "transparent",
+                  color: activeButton === "archived" ? "white" : "black",
+                  fontWeight: activeButton === "archived" ? "bold" : "normal",
               }}
               onClick={handleArchivedClick}
             >

@@ -45,7 +45,7 @@ export default function CreateFolder({
 
   const fetchFolders = async () => {
     try {
-      const url = `${API_KEY}/allFolders/${templateId}`;
+      const url = `${API_KEY}:8005/allFolders/${templateId}`;
       const response = await axios.get(url);
 
       const addIsOpenProperty = (folders, parentId = null) =>
@@ -126,7 +126,7 @@ export default function CreateFolder({
 
   const createFolderAPI = (newFolderPath) => {
     return axios
-      .get(`${API_KEY}/createFolder/?path=uploads/FolderTemplates/${templateId}/${newFolderPath}&foldername=${newFolderName}`)
+      .get(`${API_KEY}:8005/createFolder/?path=uploads/FolderTemplates/${templateId}/${newFolderPath}&foldername=${newFolderName}`)
       .then((response) => {
         console.log("API Response:", response.data);
         //fetchFolders();

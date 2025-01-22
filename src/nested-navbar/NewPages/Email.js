@@ -20,17 +20,17 @@ const Email = () => {
             borderRadius: '4px',
             // color: 'primary.main',
             '&:hover': {
-              backgroundColor: 'primary.light',
+              backgroundColor: "#00ACC1",
               color: 'white'
             },
             '&.active': {
-              backgroundColor: 'primary.main',
+              backgroundColor: "#00ACC1",
               color: 'white'
             }
           }
         }}>
-          <NavLink to={`/accountsdash/email/${accountid}/inbox`}>Inbox</NavLink>
-          <NavLink to={`/accountsdash/email/${accountid}/sent`} >Sent</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/email/${accountid}/inbox`}>Inbox</NavLink>
+          <NavLink to={`/clients/accounts/accountsdash/email/${accountid}/sent`} >Sent</NavLink>
         </Box>
 
       </Box>

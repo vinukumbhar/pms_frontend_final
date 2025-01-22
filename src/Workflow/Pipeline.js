@@ -2209,15 +2209,33 @@ const Pipeline = ({ charLimit = 4000 }) => {
                   variant="outlined"
                   color="primary"
                   onClick={handleBackToPipelineList}
-                  sx={{ mt: 2 }}
+                  // sx={{ mt: 2 }}
+                  sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                     mt:2
+                  }}
                 >
                   Back to Pipeline List
                 </Button>
                 <Button
                   variant="contained"
                   color="primary"
-                  sx={{ mt: 2 }}
+                  // sx={{ mt: 2 }}
                   onClick={handleDrawerOpen}
+                  sx={{
+                    backgroundColor: 'var(--color-save-btn)',  // Normal background
+                   
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                    },
+               mt:2
+                  }}
                 >
                   Add Jobs
                 </Button>

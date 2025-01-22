@@ -639,7 +639,14 @@ fetch(`${ORGANIZER_TEMP_API}/organizersendemail`, requestOptions)
       </Box>
 
       <Box mt={2}>
-        <Button variant="contained" onClick={handlePreview}>
+        <Button variant="contained" onClick={handlePreview} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                  //  mb:3
+                                    }}>
           Preview Mode
         </Button>
       </Box>
@@ -686,13 +693,29 @@ fetch(`${ORGANIZER_TEMP_API}/organizersendemail`, requestOptions)
 
       <Box display={"flex"} gap={2} alignItems={"center"} mt={2}>
         <Box>
-          <Button onClick={createOrganizerOfAccount} variant="contained">
+          <Button onClick={createOrganizerOfAccount} variant="contained" sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
             Create
           </Button>
         </Box>
 
         <Box>
-          <Button onClick={handleOrganizerFormClose} variant="outlined">
+          <Button onClick={handleOrganizerFormClose} variant="outlined" sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
             Cancel
           </Button>
         </Box>
@@ -877,10 +900,24 @@ fetch(`${ORGANIZER_TEMP_API}/organizersendemail`, requestOptions)
                   )}
 
                   <Box mt={3} display="flex" gap={3} alignItems="center">
-                    <Button disabled={activeStep === 0} onClick={handleBack} variant="contained">
+                    <Button disabled={activeStep === 0} onClick={handleBack} variant="contained" sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
                       Back
                     </Button>
-                    <Button onClick={handleNext} disabled={activeStep === totalSteps - 1} variant="contained">
+                    <Button onClick={handleNext} disabled={activeStep === totalSteps - 1} variant="contained" sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
                       Next
                     </Button>
                   </Box>

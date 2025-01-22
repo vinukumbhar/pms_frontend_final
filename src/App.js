@@ -106,7 +106,7 @@ const App = () => {
           <Route path="stages" element={<Stages />} />
           <Route path="firmtemp/tags" element={<NewTag/>}/>
           <Route path="firmtemp/pipelines" element={<PipelineTemp/>}/>
-          <Route path="/firmtemp/templates/marketplace" element={<MarketPlaces/>}/>
+          <Route path="/firmtemp/marketplace" element={<MarketPlaces/>}/>
           <Route path="/PipelineTemplateUpdate/:id" element={<PipelineTempUpdate />} />
           <Route path="addJobs" element={<CreateJob />} />
           <Route path="billing/time" element={<TimeEntry />} />
@@ -117,7 +117,7 @@ const App = () => {
           <Route path="workflow/jobs" element={<Jobs />} />
           <Route path="workflow/pipelines" element={<Pipeline />} />
           <Route path="/organizerpreview" element={<PreviewOrganizer />} />
-          <Route path="firmtemp/templates" element={<Templates />}>
+          <Route path="/firmtemp/templates" element={<Templates />}>
           {/* <Route path="tags" element={<Tags />} /> */}
        
             <Route path="tasks" element={<Tasks />} />

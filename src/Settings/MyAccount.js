@@ -3,7 +3,7 @@ import "./myaccount.css";
 import Box from "@mui/material/Box";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { OutlinedInput, InputAdornment, Typography, useMediaQuery, Button, Select, MenuItem, TextField } from "@mui/material";
+import { OutlinedInput, InputAdornment, Typography, useMediaQuery, Button, Select, MenuItem, TextField, Drawer } from "@mui/material";
 import { unstable_ClassNameGenerator as ClassNameGenerator } from "@mui/material/className";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import { useTheme } from "@mui/material/styles";
@@ -138,10 +138,14 @@ const MyAccount = () => {
       toast.error("An error occurred!");
     }
   };
-  
+  const [newDrawer,setNewDrawer]= useState(false)
+  const handleDrawerClose =()=>{
+    setNewDrawer(false)
+  }
   const handleEditClick = () => {
     setIsEditable(true);
     setShowSaveButtons(true);
+    setNewDrawer(true);
   };
   const handleCancelButtonClick = () => {
     setShowSaveButtons(false);
@@ -2010,6 +2014,32 @@ const MyAccount = () => {
           </Box>
         </Box>
       </Box>
+      {/* newDrawer */}
+      <Drawer
+              anchor="right"
+              open={newDrawer}
+              onClose={handleDrawerClose}
+              PaperProps={{
+                id: "tag-drawer",
+                sx: {
+                  borderRadius: isSmallScreen ? "0" : "10px 0 0 10px",
+                  width: isSmallScreen ? "100%" : 600,
+                  maxWidth: "100%",
+                  [theme.breakpoints.down("sm")]: {
+                    width: "100%",
+                  },
+                },
+              }}
+            >
+              <Box
+                sx={{ borderRadius: isSmallScreen ? "0" : "15px" }}
+                role="presentation"
+              >
+                <Box>
+                  
+                </Box>
+              </Box>
+            </Drawer>
     </>
   );
 };

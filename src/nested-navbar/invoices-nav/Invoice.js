@@ -397,7 +397,14 @@ const Invoice = () => {
 
   return (
     <Box sx={{ mt: 2 }}>
-      <Button variant="contained" onClick={handleCreateInvoiceClick} sx={{ mb: 3 }}>
+      <Button variant="contained" onClick={handleCreateInvoiceClick} sx={{
+                                      backgroundColor: 'var(--color-save-btn)',  // Normal background
+                                     
+                                      '&:hover': {
+                                        backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                                      },
+                                   mb:3
+                                    }} >
         New Invoice
       </Button>
       <Paper>

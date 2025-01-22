@@ -23,17 +23,17 @@ const DashInvoices = () => {
             borderRadius: '4px',
             // color: 'primary.main',
             '&:hover': {
-              backgroundColor: 'primary.light',
+              backgroundColor: "#00ACC1",
               color: 'white'
             },
             '&.active': {
-              backgroundColor: 'primary.main',
+              backgroundColor: "#00ACC1",
               color: 'white'
             }
           }
         }}>
-             <NavLink to={`/accountsdash/invoices/${data}/invoice`} >Invoice</NavLink >
-             <NavLink to={`/accountsdash/invoices/${data}/payments`} >Payments</NavLink>
+             <NavLink to={`/clients/accounts/accountsdash/invoices/${data}/invoice`} >Invoice</NavLink >
+             <NavLink to={`/clients/accounts/accountsdash/invoices/${data}/payments`} >Payments</NavLink>
         </Box>
 
       </Box>

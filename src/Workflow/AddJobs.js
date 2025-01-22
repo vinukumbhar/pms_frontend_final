@@ -982,10 +982,26 @@ const assignfoldertemp = (automationAccountId, automationTemp) => {
           })}
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 5 }}>
-        <Button variant="contained" onClick={handleMove}>
+        <Button variant="contained" onClick={handleMove} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
           Move
         </Button>
-          <Button variant="outlined" onClick={() => setIsDrawerOpen(false)}>
+          <Button variant="outlined" onClick={() => setIsDrawerOpen(false)} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>
             Close
           </Button>
         </Box>
@@ -1439,10 +1455,26 @@ const assignfoldertemp = (automationAccountId, automationTemp) => {
             </Box>
           </Box>
           <Box mt={2} display={"flex"} gap={2} alignItems={"center"} mb={2}>
-            <Button variant="contained" color="primary" onClick={createjob}>
+            <Button variant="contained" color="primary" onClick={createjob} sx={{
+                backgroundColor: 'var(--color-save-btn)',  // Normal background
+               
+                '&:hover': {
+                  backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                },
+               width:'80px',borderRadius:'15px'
+              }}>
               Save
             </Button>
-            <Button variant="outlined" onClick={handleDrawerClose}>Cancel</Button>
+            <Button variant="outlined" onClick={handleDrawerClose} sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px'
+                  }}>Cancel</Button>
           </Box>
         </Box>
       </LocalizationProvider>
@@ -1452,7 +1484,7 @@ const assignfoldertemp = (automationAccountId, automationTemp) => {
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       >
-        <Box sx={{ width: 500 }}>
+        <Box sx={{ width: 600 }}>
           <DrawerContent selectedAccounts={combinedaccountValues} />
         </Box>
       </Drawer>

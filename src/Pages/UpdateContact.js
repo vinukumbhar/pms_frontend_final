@@ -429,10 +429,28 @@ setPhoneNumbers(
         <Button
           variant="contained"
           onClick={handleSave} // Attach the save handler
+          sx={{
+            backgroundColor: 'var(--color-save-btn)',  // Normal background
+           
+            '&:hover': {
+              backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+            },
+           width:'80px',borderRadius:'15px'
+          }}
+        
         >
           Save
         </Button>
-        <Button variant="outlined" onClick={handleClose} sx={{ ml: 2 }}>
+        <Button variant="outlined" onClick={handleClose}  sx={{
+                    borderColor: 'var(--color-border-cancel-btn)',  // Normal background
+                   color:'var(--color-save-btn)',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-save-hover-btn)',  // Hover background color
+                      color:'#fff',
+                      border:"none"
+                    },
+                    width:'80px',borderRadius:'15px',ml:2
+                  }}>
           Cancel
         </Button>
       </Box>
